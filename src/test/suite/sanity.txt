@@ -1,0 +1,13 @@
+---
+desc: Sanity
+---
+
+should show a chessboard
+.
+```chess
+fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+```
+.
+<pre><code class="language-chess">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+</code></pre>
+.
