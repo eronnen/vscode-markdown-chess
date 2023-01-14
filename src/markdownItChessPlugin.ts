@@ -4,7 +4,8 @@ import Renderer = require('markdown-it/lib/renderer');
 
 function markdownItChessRenderer(tokens: Token[], idx : number, options: MarkdownIt.Options, env: any, self: Renderer) {
   console.log(`FUCK2: token ${idx}`);
-  return '<script type="module">import {Chessground} from "chessground";ground = Chessground(document.body, {});</script>';
+  return  `<div id="chessboard${idx}" style="width: 500px; height: 500px"></div>\n` +
+          `<script type="module">import {Chessground} from "chessground";const board = Chessground(document.getElementById("chessboard${idx}"), {});</script>\n`;
 }
 
 export function markdownItChessPlugin(md: MarkdownIt) {

@@ -8,6 +8,6 @@ should show a chessboard
 fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 ```
 .
-<pre><code class="language-chess">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-</code></pre>
+<div id="chessboard0" style="width: 500px; height: 500px"></div>
+<script type="module">import {Chessground} from "chessground";const board = Chessground(document.getElementById("chessboard0"), {});</script>
 .
