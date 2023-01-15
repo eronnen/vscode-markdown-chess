@@ -3,8 +3,6 @@ import MarkdownIt = require('markdown-it');
 const chessgroundClass = 'chessground-markdown';
 
 export function markdownItChessgroundPlugin(md: MarkdownIt) {
-  console.log('FUCK1');
-
   const highlight = md.options.highlight;
   md.options.highlight = (code: string, lang: string, attrs: string) => {
     if (lang === 'chess') {
