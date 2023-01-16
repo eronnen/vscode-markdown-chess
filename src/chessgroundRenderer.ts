@@ -11,6 +11,8 @@ import "chessground/assets/chessground.cburnett.css";
 const chessgroundClass = 'chessground-markdown';
 const configDefaultArrowColor = 'green';
 const configDefaultSquareColor = 'blue';
+const configMaxBoardSize = 80;
+const configMinBoardSize = 20;
 
 function parseSquares(line: string) : Key[] {
   const result : Key[] = [];
@@ -33,7 +35,24 @@ function parseSquares(line: string) : Key[] {
   return result;
 }
 
-function parseChessBlock(element: HTMLElement, config: Config) : DrawShape[] {
+function renderChessgroundBlock(element: HTMLElement) {
+  element.style.width = "50%";
+  element.style.aspectRatio = "1/1";
+
+  const config : Config = {
+    disableContextMenu: true,
+    draggable: {
+      enabled: false
+    },
+    selectable: {
+      enabled: false
+    },
+    drawable: {
+      enabled: false,
+      shapes: []
+    }
+  };
+
   const shapes : DrawShape[] = [];
 
   // I think yaml library here is an overkill
@@ -96,31 +115,15 @@ function parseChessBlock(element: HTMLElement, config: Config) : DrawShape[] {
           config.drawable!.enabled = true;
         }
         break;
+      case "size":
+        if (value.match(/^\d+/g)) {
+          const boardSize = Math.max(configMinBoardSize, Math.min(configMaxBoardSize, parseFloat(value)));
+          element.style.width = boardSize.toString() + '%';
+        }
+        break;
     }
   }
-
-  return shapes;
-}
-
-function renderChessgroundBlock(element: HTMLElement) {
-  element.style.width = "50%";
-  element.style.aspectRatio = "1/1";
-
-  const config : Config = {
-    disableContextMenu: true,
-    draggable: {
-      enabled: false
-    },
-    selectable: {
-      enabled: false
-    },
-    drawable: {
-      enabled: false,
-      shapes: []
-    }
-  };
   
-  const shapes = parseChessBlock(element, config);
   const boardApi = Chessground(element, config);
 
   if (shapes.length > 0) {
@@ -128,6 +131,7 @@ function renderChessgroundBlock(element: HTMLElement) {
   }
 
   if (!config.drawable!.enabled && !config.selectable!.enabled && !config.draggable!.enabled) {
+    // readonly board, makes more sense to have it with regular cursor.
     boardApi.state.dom.elements.board.style.cursor = "default";
   }
 }
