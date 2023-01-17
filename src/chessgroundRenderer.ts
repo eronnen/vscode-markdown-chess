@@ -1,5 +1,8 @@
 import { Chessground } from "chessground";
-import { colors} from "chessground/types";
+import { colors } from "chessground/types";
+import { Chess, DEFAULT_POSITION } from "chess.js";
+import { getTurnColor, getLegalMoves } from "./chessjsUtils";
+
 import type { Config } from "chessground/config";
 import type {Color, Key} from 'chessground/types';
 import type { DrawShape } from "chessground/draw";
@@ -63,7 +66,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
     },
     drawable: {
       enabled: false,
-    }
+    },
   };
 
   const shapes : DrawShape[] = [];
@@ -138,16 +141,8 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
   // drawable if specified and if not then only if no drawing supplied
   drawable = (drawable === true) || (shapes.length === 0 && drawable !== false);
 
-  if (movable) {
-    config.draggable!.enabled = true;
-    config.selectable!.enabled = true;
-  }
-
-  if (drawable) {
-    config.drawable!.enabled = true;
-  }
-
   let boardApi: Api | null = null;
+  let chess: Chess | null = null;
 
   // If the user can move or draw then track the moves/shapes that he user does 
   // and show them in a right column to the board.
@@ -177,8 +172,8 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
 
     const updateInfoElementCallback = function(shapes: DrawShape[]) {
       let infoText = '';
-      if (movable && boardApi) {
-        infoText += `fen: ${boardApi.getFen()}\n`;
+      if (movable && chess) {
+        infoText += `fen: ${chess.fen()}\n`;
       }
       if (drawable && shapes.length > 0) {
         let arrows = '';
@@ -205,14 +200,43 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
       if (updatedText) {
         copyButton.hidden = false;
       }
+      else {
+        copyButton.hidden = true;
+      }
     };
 
     if (movable) {
-      config.events = {
-        change: function() {updateInfoElementCallback([]);}
+      // Allow only legal moves
+      config.draggable!.showGhost = true;
+      chess = new Chess(config.fen || DEFAULT_POSITION);
+      config.turnColor = getTurnColor(chess);
+      config.movable = {
+        color: getTurnColor(chess),
+        free: false,
+        dests: getLegalMoves(chess),
+        events: {
+          after: (orig, dest) => {
+            chess!.move({from: orig, to: dest});
+            updateInfoElementCallback([]);
+
+            if (boardApi) {
+              boardApi.set({
+                turnColor: getTurnColor(chess!),
+                movable: {
+                  color: getTurnColor(chess!),
+                  dests: getLegalMoves(chess!)
+                }
+              });
+            }
+          }
+        }
       };
+
+      config.draggable!.enabled = true;
+      config.selectable!.enabled = true;
     }
     if (drawable) {
+      config.drawable!.enabled = true;
       config.drawable!.onChange = updateInfoElementCallback;
     }
   }
