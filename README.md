@@ -16,6 +16,12 @@ For example if there is an image subfolder under your extension project workspac
 
 If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
+## TODO
+
+- [ ] Add a copy button from the info element
+- [ ] Make files and columns text unselectable
+- [ ] Add multiple piece sets
+
 ## Known Issues
 
 ---
