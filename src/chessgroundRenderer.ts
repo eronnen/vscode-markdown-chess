@@ -11,7 +11,7 @@ import "chessground/assets/chessground.cburnett.css";
 
 const chessgroundClass = 'chessground-markdown';
 const configDefaultArrowColor = 'green';
-const configDefaultSquareColor = 'blue';
+const configDefaultSquareColor = 'green';
 const configMaxBoardSize = 80;
 const configMinBoardSize = 20;
 
@@ -149,20 +149,34 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
 
   if (movable || drawable) {
     // track moves/shapes that the user does and show them in a right column to the board.
-    const infoElement = document.createElement('p');
-    infoElement.style.width = (95 - parseFloat(chessElement.style.width)).toString() + "%";
-    infoElement.style.paddingLeft = '5%';
-    infoElement.style.float = 'left';
-    infoElement.style.fontSize = '0.8em';
+    const rightColumn = document.createElement('div');
+    rightColumn.style.width = (95 - parseFloat(chessElement.style.width)).toString() + "%";
+    rightColumn.style.paddingLeft = '5%';
+    rightColumn.style.float = 'left';
+    rightColumn.style.fontSize = '0.8em';
     chessElement.style.float = 'left';
     chessElement.parentElement!.style.display = 'flex';
     chessElement.parentElement!.style.flexDirection = 'row';
-    chessElement.parentElement!.appendChild(infoElement); // we add empty parent div in the markdown parser
+    
+    const infoElement = document.createElement('p');
+    const copyButton = document.createElement('button');
+    copyButton.innerHTML = 'Copy';
+    copyButton.hidden = true;
+    copyButton.onclick = () => {
+      const info = infoElement.innerText;
+      if (info) {
+        navigator.clipboard.writeText(info); 
+      }
+    };
+
+    rightColumn.appendChild(infoElement);
+    rightColumn.appendChild(copyButton);
+    chessElement.parentElement!.appendChild(rightColumn); // we add empty parent div in the markdown parser
 
     const updateInfoElementCallback = function(shapes: DrawShape[]) {
       let infoText = '';
       if (movable && boardApi) {
-        infoText += `fen: ${boardApi.getFen()}<br>`;
+        infoText += `fen: ${boardApi.getFen()}\n`;
       }
       if (drawable && shapes.length > 0) {
         let arrows = '';
@@ -177,13 +191,18 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         }
 
         if (arrows) {
-          infoText += `arrows: ${arrows.trim()}<br>`;
+          infoText += `arrows: ${arrows.trim()}\n`;
         }
         if (squares) {
           infoText += `squares: ${squares.trim()}`;
         }
       }
-      infoElement.innerHTML = infoText.trim();
+
+      const updatedText = infoText.trim();
+      infoElement.innerText = updatedText;
+      if (updatedText) {
+        copyButton.hidden = false;
+      }
     };
 
     if (movable) {
@@ -207,7 +226,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
   // for some reason giving shapes in config doesn't work when configured a fen too
   if (shapes.length > 0) {
     boardApi.setShapes(shapes);
-  } 
+  }
 }
 
 export function renderAllChessBlocksInElement(root: HTMLElement) {
