@@ -55,11 +55,11 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
-- [ ] Add a copy button from the info element
-- [ ] Make files and columns text unselectable
 - [ ] Allow only legal moves when movable
+- [ ] Make files and columns text unselectable
 - [ ] Show check automatically
 - [ ] Add multiple piece sets
+- [ ] Add extension config
 
 ## Known Issues
 

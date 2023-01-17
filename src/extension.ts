@@ -5,8 +5,7 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "vscode-markdown-chess" is now active!');
 	return {
 		extendMarkdownIt(md: any) {
-				md.use(markdownItChessgroundPlugin);
-				return md;
+				return md.use(markdownItChessgroundPlugin);
 		}
 	};
 }

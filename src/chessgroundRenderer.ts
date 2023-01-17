@@ -9,6 +9,8 @@ import "chessground/assets/chessground.base.css";
 import "chessground/assets/chessground.brown.css";
 import "chessground/assets/chessground.cburnett.css";
 
+import "./css/markdownChess.css";
+
 const chessgroundClass = 'chessground-markdown';
 const configDefaultArrowColor = 'green';
 const configDefaultSquareColor = 'green';
@@ -147,13 +149,13 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
 
   let boardApi: Api | null = null;
 
+  // If the user can move or draw then track the moves/shapes that he user does 
+  // and show them in a right column to the board.
   if (movable || drawable) {
-    // track moves/shapes that the user does and show them in a right column to the board.
     const rightColumn = document.createElement('div');
-    rightColumn.style.width = (95 - parseFloat(chessElement.style.width)).toString() + "%";
-    rightColumn.style.paddingLeft = '5%';
-    rightColumn.style.float = 'left';
-    rightColumn.style.fontSize = '0.8em';
+    rightColumn.classList.add('chess-info');
+    rightColumn.style.width = (97 - parseFloat(chessElement.style.width)).toString() + "%";
+    rightColumn.style.paddingLeft = '3%';
     chessElement.style.float = 'left';
     chessElement.parentElement!.style.display = 'flex';
     chessElement.parentElement!.style.flexDirection = 'row';
