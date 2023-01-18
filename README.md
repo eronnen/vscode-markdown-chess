@@ -56,7 +56,6 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 ## TODO
 
 - [ ] Make files and columns text unselectable
-- [ ] Show check automatically
 - [ ] Add multiple piece sets
 - [ ] Add extension config
 

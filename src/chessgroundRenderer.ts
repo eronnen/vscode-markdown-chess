@@ -142,7 +142,10 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
   drawable = (drawable === true) || (shapes.length === 0 && drawable !== false);
 
   let boardApi: Api | null = null;
-  let chess: Chess | null = null;
+  const chess = new Chess(config.fen || DEFAULT_POSITION);
+
+  config.turnColor = getTurnColor(chess);
+  config.check = chess.inCheck();
 
   // If the user can move or draw then track the moves/shapes that he user does 
   // and show them in a right column to the board.
@@ -208,23 +211,23 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
     if (movable) {
       // Allow only legal moves
       config.draggable!.showGhost = true;
-      chess = new Chess(config.fen || DEFAULT_POSITION);
-      config.turnColor = getTurnColor(chess);
       config.movable = {
         color: getTurnColor(chess),
         free: false,
         dests: getLegalMoves(chess),
         events: {
           after: (orig, dest) => {
-            chess!.move({from: orig, to: dest});
+            chess.move({from: orig, to: dest});
             updateInfoElementCallback([]);
 
+            // TODO: change state instead of whole config?
             if (boardApi) {
               boardApi.set({
-                turnColor: getTurnColor(chess!),
+                turnColor: getTurnColor(chess),
+                check: chess.inCheck(),
                 movable: {
-                  color: getTurnColor(chess!),
-                  dests: getLegalMoves(chess!)
+                  color: getTurnColor(chess),
+                  dests: getLegalMoves(chess)
                 }
               });
             }
