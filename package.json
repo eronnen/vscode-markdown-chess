@@ -3,6 +3,7 @@
   "displayName": "vscode-markdown-chess",
   "description": "Display chess boards in vscode builtin markdown preview",
   "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
   "engines": {
     "vscode": "^1.74.0"
   },
