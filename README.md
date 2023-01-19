@@ -26,16 +26,16 @@ size: 35%
 
 Full list of supported properties:
 
-| Property    | Description                              | Possible values        | Default                             |
-| --------    | ---------------------------------------- | ---------------------- | ----------------------------------- |
-| fen         | The initial position                     | Any valid FEN string   | Initial                             |
-| arrows      | Series of arrows to draw                 | e2->e4 d2->d4          | Empty                               |
-| squares     | Series of squares to mark                | e5 d5                  | Empty                               |
-| orientation | Which side to view the board             | white / black          | white                               | 
-| size        | % of the page width to use for the board | 20% - 80%              | 50%                                 |
-| movable     | Force to enable/disable movement         | true / false           | false if FEN supplied               |
-| drawable    | Force to enable/disable drawing          | true / false           | false if arrows or sqaures supplied |
-| lastMove    | Highlight last move                      | e2 e4                  | Undefined                           |
+| **Property**    | **Description**                          | **Possible values**    | **Default**                         |
+| --------------- | ---------------------------------------- | ---------------------- | ----------------------------------- |
+| **fen**         | The initial position                     | Any valid FEN string   | Initial                             |
+| **arrows**      | Series of arrows to draw                 | e2->e4 d2->d4          | Empty                               |
+| **squares**     | Series of squares to mark                | e5 d5                  | Empty                               |
+| **orientation** | Which side to view the board             | white / black          | white                               | 
+| **size**        | % of the page width to use for the board | 20% - 80%              | 50%                                 |
+| **movable**     | Force to enable/disable movement         | true / false           | false if FEN supplied               |
+| **drawable**    | Force to enable/disable drawing          | true / false           | false if arrows or sqaures supplied |
+| **lastMove**    | Highlight last move                      | e2 e4                  | Undefined                           |
 
 ## License
 
