@@ -39,7 +39,7 @@ Full list of supported properties:
 
 ## License
 
-This project is based on the [Chessground](https://github.com/lichess-org/chessground) library by lichess in order to render chess board, so I had to use the GPL-3.0 license for this project too.
+This project is based on the [Chessground](https://github.com/lichess-org/chessground) and [Chessops](https://github.com/niklasf/chessops) libraries by lichess in order to render the chess board and play moves, so I had to use the GPL-3.0 license for this project too.
 
 ## TODO
 
