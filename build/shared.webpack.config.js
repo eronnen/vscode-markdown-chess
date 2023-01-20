@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
   target: 'web',
@@ -29,6 +30,12 @@ module.exports = {
         type: 'asset/inline'
       }
     ],
+  },
+  optimization: {
+    minimizer: [
+      `...`,
+      new CssMinimizerPlugin(),
+    ]
   },
   plugins: [
     new MiniCssExtractPlugin()
