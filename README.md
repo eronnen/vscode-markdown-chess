@@ -45,7 +45,11 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 - [ ] Add multiple piece sets
 - [ ] Add extension config
-- [ ] Webpack optimize dist file sizes
+- [ ] Webpack optimize runtime and size
+- [ ] use style-loader to lazy load chess css
+- [ ] use prettier for ts code
+- [ ] build web ext
+- [ ] build notebook ext
 - [ ] Support non svg backgrounds
 - [ ] Support 3d boards
 

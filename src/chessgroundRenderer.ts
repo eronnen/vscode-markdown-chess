@@ -159,7 +159,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         (_) => null  // TODO: log FEN error
       ),
       (_) => null // TODO: log FEN error
-    )
+    );
   }
   else {
     chess = Chess.default();
@@ -241,8 +241,10 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
           dests: chessgroundDests(chess),
           events: {
             after: (orig, dest) => {
-              if (chess)
-                chess.play({from: parseSquare(orig) || 0, to: parseSquare(dest) || 0})
+              if (chess) {
+                chess.play({from: parseSquare(orig) || 0, to: parseSquare(dest) || 0});
+              }
+              
               updateInfoElementCallback([]);
   
               // TODO: change state instead of whole config?
@@ -258,7 +260,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
               }
             }
           }
-      }
+        };
       };
 
       config.draggable!.enabled = true;
@@ -269,14 +271,12 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
       config.drawable!.onChange = updateInfoElementCallback;
     }
   }
+  
+  if (!movable && !drawable) {
+    config.viewOnly = true;
+  }
 
   boardApi = Chessground(chessElement, config);
-
-  // if it's readonly board it makes more sense to have it with regular cursor.
-  if (!movable && !drawable) {
-    // TODO: find non internal way to change it
-    boardApi.state.dom.elements.board.style.cursor = "default";
-  }
 
   // for some reason giving shapes in config doesn't work when configured a fen too
   if (shapes.length > 0) {
