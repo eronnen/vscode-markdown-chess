@@ -43,10 +43,11 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
-- [ ] Make files and columns text unselectable
 - [ ] Add multiple piece sets
 - [ ] Add extension config
 - [ ] Webpack optimize dist file sizes
+- [ ] Support non svg backgrounds
+- [ ] Support 3d boards
 
 ## Known Issues
 

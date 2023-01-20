@@ -11,17 +11,20 @@ import type {Color, Key} from 'chessground/types';
 import type { DrawShape } from "chessground/draw";
 import type { Api } from "chessground/api";
 
-import "chessground/assets/chessground.base.css";
-import "chessground/assets/chessground.brown.css";
-import "chessground/assets/chessground.cburnett.css";
-
+import "./css/chessboard/_coords.scss";
+import "./css/chessboard/_chessground.scss";
+import "./css/chessground.cburnett.css";
 import "./css/markdownChess.css";
 
 const chessgroundClass = 'chessground-markdown';
+
+const configBoardGeometry = 'is2d';
+const configBoardTheme = 'brown';
 const configDefaultArrowColor = 'green';
 const configDefaultSquareColor = 'green';
 const configMaxBoardSize = 80;
 const configMinBoardSize = 20;
+const configDefaultBoardSize = 50;
 
 function parseBoolean(value: string) : boolean | null {
   if (value.toLowerCase() === "true") {
@@ -56,7 +59,9 @@ function parseSquares(line: string) : Key[] {
 }
 
 function renderChessgroundBlock(chessElement: HTMLElement) {
-  chessElement.style.width = "50%";
+  chessElement.parentElement!.classList.add(configBoardTheme);
+  chessElement.parentElement!.classList.add(configBoardGeometry);
+  chessElement.style.width = `${configDefaultBoardSize}%`;
   chessElement.style.aspectRatio = "1/1";
 
   const config : Config = {

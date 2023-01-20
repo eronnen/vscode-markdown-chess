@@ -13,9 +13,21 @@ module.exports = {
         test: /\.css$/,
         use: [
             MiniCssExtractPlugin.loader,
-            "css-loader"
+            "css-loader",
         ]
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "sass-loader",
+        ]
+      },
+      {
+        test: /\.svg/,
+        type: 'asset/inline'
+      }
     ],
   },
   plugins: [
