@@ -14,7 +14,7 @@ async function fetchAllBoards() {
 
     const svgDataOptimized = optimize(svgData);
     fs.writeFile(path.join(localBoardsDir, `${boardName}.svg`), svgDataOptimized.data, 'utf-8', (err) => {
-      if (err) console.error(`got errpr while writing board ${boardName}: ${err}`);
+      if (err) console.error(`got error while writing board ${boardName}: ${err}`);
     });
   }
 }

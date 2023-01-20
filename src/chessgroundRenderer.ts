@@ -13,7 +13,7 @@ import type { Api } from "chessground/api";
 
 import "./css/chessboard/_coords.scss";
 import "./css/chessboard/_chessground.scss";
-import "./css/chessground.cburnett.css";
+import "./css/chessboard/assets/pieces/merida.css";
 import "./css/markdownChess.css";
 
 const chessgroundClass = 'chessground-markdown';

@@ -4,8 +4,9 @@
   "type": "module",
   "description": "Tools for vscode-markdown-chess",
   "scripts": {
-    "build": "tsc -p .",
-    "fetch-boards": "node dist/fetch-boards.js"
+    "compile": "tsc -p .",
+    "fetch-boards": "node dist/fetch-boards.js",
+    "fetch-pieces": "node dist/fetch-pieces.js"
   },
   "devDependencies": {
     "node-fetch": "^3.3.0",
