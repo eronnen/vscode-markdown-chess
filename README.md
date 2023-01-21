@@ -2,6 +2,8 @@
 
 Adds support to displaying chess boards in vscode builtin markdown preview.
 
+![vscode-markdown-chess demo](./images/demo.gif)
+
 ## Usage
 
 Create an empty chess board by writing a chess code block:
