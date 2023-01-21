@@ -46,6 +46,7 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
+- [ ] Add code-line to chessboard
 - [ ] Support jpg/png board backgrounds
 - [ ] Support 3d pieces
 
