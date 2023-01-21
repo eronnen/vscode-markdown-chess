@@ -2,7 +2,7 @@
   "name": "vscode-markdown-chess",
   "displayName": "Markdown Chess",
   "description": "Display Chess boards in markdown preview",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {

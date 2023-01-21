@@ -14,7 +14,7 @@ export function markdownItChessgroundPlugin(
     if (lang === "chess") {
       // wrapping in another div so we can later add a column right to the chess board
       const config = configGetter();
-      return `<pre style="all:unset;"><div class="${config.boardTheme} ${
+      return `<pre style="all:unset;"><div class="code-line ${config.boardTheme} ${
         config.pieceSet
       }" data-pieceset="${
         config.pieceSet
