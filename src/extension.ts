@@ -3,6 +3,7 @@ import { markdownItChessgroundPlugin } from './markdownItChessgroundPlugin';
 import type { ChessgroundConfig, ChessgroundConfigGetter } from './markdownItChessgroundPlugin';
 
 const configSection = 'markdown-chess';
+const openSettingsCommand = `${configSection}.openSettings`;
 
 const validBoardThemes = [
 	"brown",
@@ -26,6 +27,12 @@ function sanitizePieceSet(theme: string | undefined) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	context.subscriptions.push(
+		vscode.commands.registerCommand(openSettingsCommand, () => {
+			vscode.commands.executeCommand('workbench.action.openSettings', configSection);
+		})
+	);
+
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
 		if (e.affectsConfiguration(configSection)) {
 				vscode.commands.executeCommand('markdown.preview.refresh');
