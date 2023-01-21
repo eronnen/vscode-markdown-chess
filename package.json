@@ -57,9 +57,9 @@
     ]
   },
   "scripts": {
-    "compile": "webpack --mode production --config ./build/webpack.config.js && webpack --mode production --config ./build/markdownPreview.webpack.config.js",
-    "watch": "webpack --watch --config ./build/webpack.config.js",
-    "package": "webpack --mode production --devtool hidden-source-map --config ./build/webpack.config.js",
+    "compile": "webpack --mode production --config ./webpack/extension.webpack.config.ts && webpack --mode production --config ./webpack/markdownPreview.webpack.config.ts",
+    "watch": "webpack --watch --config ./webpack/extension.webpack.config.ts",
+    "package": "webpack --mode production --devtool hidden-source-map --config ./webpack/extension.webpack.config.ts",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "lint": "eslint src --ext ts",
@@ -73,8 +73,9 @@
     "@types/glob": "^8.0.0",
     "@types/markdown-it": "^12.2.3",
     "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
+    "@types/node": "^16.18.11",
     "@types/vscode": "^1.74.0",
+    "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.0",
@@ -91,7 +92,8 @@
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
     "ts-loader": "^9.4.1",
-    "typescript": "^4.9.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0"
   }
