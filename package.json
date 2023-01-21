@@ -1,14 +1,21 @@
 {
   "name": "vscode-markdown-chess",
-  "displayName": "vscode-markdown-chess",
-  "description": "Display chess boards in vscode builtin markdown preview",
-  "version": "0.1.0",
+  "displayName": "Markdown Chess",
+  "description": "Display Chess boards in markdown preview",
+  "version": "0.1.1",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {
     "type": "git",
     "url": "https://github.com/eronnen/vscode-markdown-chess"
   },
+  "icon": "images/icon.png",
+  "keywords": [
+    "chess",
+    "markdown",
+    "preview",
+    "lichess"
+  ],
   "engines": {
     "vscode": "^1.74.0"
   },
