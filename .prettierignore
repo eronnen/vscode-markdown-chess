@@ -1,2 +1,4 @@
 dist/
 out/
+.vscode-test-web/
+.vscode-test/

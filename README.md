@@ -44,10 +44,8 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
-- [ ] build web ext
-- [ ] build notebook ext
-- [ ] Support non svg backgrounds
-- [ ] Support 3d boards
+- [ ] Support jpg/png board backgrounds
+- [ ] Support 3d pieces
 
 ## Known Issues
 

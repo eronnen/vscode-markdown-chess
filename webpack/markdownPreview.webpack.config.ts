@@ -1,14 +1,50 @@
 import { join } from "path";
-import shared from "./markdown.shared.webpack.config";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 
-module.exports = {
-  ...shared,
+const markdownConfig = {
+  target: "web",
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        exclude: /\.lazy\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+      {
+        test: /\.lazy\.css$/i,
+        use: [
+          { loader: "style-loader", options: { injectType: "lazyStyleTag" } },
+          "css-loader",
+        ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+      {
+        test: /\.svg/,
+        type: "asset/inline",
+      },
+    ],
+  },
+  optimization: {
+    minimizer: [`...`, new CssMinimizerPlugin()],
+  },
+  plugins: [new MiniCssExtractPlugin()],
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
+  },
   entry: {
     markdownPreview: join(
       __dirname,
       "..",
       "src",
-      "markdownPreview",
       "markdownPreview.ts"
     ),
   },
@@ -17,3 +53,5 @@ module.exports = {
     filename: "[name].bundle.js",
   },
 };
+
+export default markdownConfig;
