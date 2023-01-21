@@ -11,10 +11,20 @@ import type {Color, Key} from 'chessground/types';
 import type { DrawShape } from "chessground/draw";
 import type { Api } from "chessground/api";
 
+import "./css/markdownChess.css";
+
 import "./css/chessboard/_coords.scss";
 import "./css/chessboard/_chessground.scss";
-import "./css/chessboard/assets/pieces/merida.css";
-import "./css/markdownChess.css";
+
+import alphaPieces from "./css/chessboard/assets/pieces/alpha.lazy.css";
+import cburnettPieces from "./css/chessboard/assets/pieces/cburnett.lazy.css";
+import meridaPieces from "./css/chessboard/assets/pieces/merida.lazy.css";
+
+const pieceSetsStyles : Record<PieceSet, any> = {
+  'alpha': alphaPieces,
+  'cburnett': cburnettPieces,
+  'merida': meridaPieces,
+};
 
 const chessgroundClass = 'chessground-markdown';
 
@@ -283,12 +293,27 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
 }
 
 export function renderAllChessBlocksInElement(root: HTMLElement) {
+  var chessExists = false;
+  var usedPieces = false;
   for (const chessgroundContainer of root.getElementsByClassName(chessgroundClass)) {
     if (chessgroundContainer instanceof HTMLElement) {
+      chessExists = true;
+      if (!usedPieces) {
+        const pieceSet = chessgroundContainer.parentElement!.dataset.pieceset;
+        if (pieceSet) {
+          usedPieces = true;
+          pieceSetsStyles[pieceSet as PieceSet].use();
+        }
+      }
+
       renderChessgroundBlock(chessgroundContainer);
     }
     else {
       console.error('Non-HTML chessground object');
     }
+  }
+
+  if (chessExists && !usedPieces) {
+    pieceSetsStyles['cburnett'].use();
   }
 }

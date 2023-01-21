@@ -43,7 +43,6 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
-- [ ] use style-loader to lazy load chess css
 - [ ] use prettier for ts code
 - [ ] build web ext
 - [ ] build notebook ext

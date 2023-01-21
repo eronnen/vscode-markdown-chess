@@ -10,7 +10,7 @@ async function fetchAllBoards() {
   for (const pieceSetName of availablePiecesSets) {
     const response = await fetch(`${lilaPiecesDir}${pieceSetName}.css`);
     const pieceCssData = await response.text();
-    fs.writeFile(path.join(localPiecesDir, `${pieceSetName}.css`), pieceCssData, 'utf-8', (err) => {
+    fs.writeFile(path.join(localPiecesDir, `${pieceSetName}.lazy.css`), pieceCssData, 'utf-8', (err) => {
       if (err) console.error(`got error while writing board ${pieceSetName}: ${err}`);
     });
   }

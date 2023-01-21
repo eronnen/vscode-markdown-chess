@@ -12,10 +12,18 @@ const config = {
       },
       {
         test: /\.css$/,
+        exclude: /\.lazy\.css$/i,
         use: [
             MiniCssExtractPlugin.loader,
             "css-loader",
         ]
+      },
+      {
+        test: /\.lazy\.css$/i,
+        use: [
+          { loader: "style-loader", options: { injectType: "lazyStyleTag" } },
+          "css-loader",
+        ],
       },
       {
         test: /\.s[ac]ss$/i,

@@ -8,5 +8,5 @@ should show a chessboard
 fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 ```
 .
-<pre style="all:unset;"><div class="brown"><div class="chessground-markdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></pre>
+<pre style="all:unset;"><div class="brown cburnett" data-pieceset="cburnett"><div class="chessground-markdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></pre>
 .

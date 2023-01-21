@@ -16,7 +16,7 @@ export function markdownItChessgroundPlugin(md: MarkdownIt, configGetter: Chessg
     if (lang === 'chess') {
       // wrapping in another div so we can later add a column right to the chess board
       const config = configGetter();
-      return `<pre style="all:unset;"><div class="${config.boardTheme}"><div class="${chessgroundClass}">${code.trim()}</div></div></pre>`;
+      return `<pre style="all:unset;"><div class="${config.boardTheme} ${config.pieceSet}" data-pieceset="${config.pieceSet}"><div class="${chessgroundClass}">${code.trim()}</div></div></pre>`;
     }
     else if (highlight) {
       return highlight(code, lang, attrs);
