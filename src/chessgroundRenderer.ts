@@ -1,3 +1,8 @@
+import type { Config } from "chessground/config";
+import type {Color, Key} from 'chessground/types';
+import type { DrawShape } from "chessground/draw";
+import type { Api } from "chessground/api";
+
 import { Chessground } from "chessground";
 import { colors } from "chessground/types";
 
@@ -5,11 +10,6 @@ import { makeFen, parseFen } from 'chessops/fen';
 import { Chess } from 'chessops/chess';
 import { chessgroundDests } from 'chessops/compat';
 import { parseSquare } from 'chessops/util';
-
-import type { Config } from "chessground/config";
-import type {Color, Key} from 'chessground/types';
-import type { DrawShape } from "chessground/draw";
-import type { Api } from "chessground/api";
 
 import "./css/markdownChess.css";
 
@@ -20,7 +20,7 @@ import alphaPieces from "./css/chessboard/assets/pieces/alpha.lazy.css";
 import cburnettPieces from "./css/chessboard/assets/pieces/cburnett.lazy.css";
 import meridaPieces from "./css/chessboard/assets/pieces/merida.lazy.css";
 
-const pieceSetsStyles : Record<PieceSet, any> = {
+const pieceSetsStyles : Record<PieceSet, StyleLoaderImport> = {
   'alpha': alphaPieces,
   'cburnett': cburnettPieces,
   'merida': meridaPieces,
@@ -135,6 +135,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
             brush: configDefaultSquareColor
           });
         }
+        break;
       }
       case "movable":
         movable = parseBoolean(value);
@@ -164,9 +165,9 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
     chess = parseFen(config.fen).unwrap(
       (setup) => Chess.fromSetup(setup).unwrap(
         (value) => value,
-        (_) => null  // TODO: log FEN error
+        () => null  // TODO: log FEN error
       ),
-      (_) => null // TODO: log FEN error
+      () => null // TODO: log FEN error
     );
   }
   else {
@@ -269,7 +270,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
             }
           }
         };
-      };
+      }
 
       config.draggable!.enabled = true;
       config.selectable!.enabled = true;
@@ -293,8 +294,8 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
 }
 
 export function renderAllChessBlocksInElement(root: HTMLElement) {
-  var chessExists = false;
-  var usedPieces = false;
+  let chessExists = false;
+  let usedPieces = false;
   for (const chessgroundContainer of root.getElementsByClassName(chessgroundClass)) {
     if (chessgroundContainer instanceof HTMLElement) {
       chessExists = true;

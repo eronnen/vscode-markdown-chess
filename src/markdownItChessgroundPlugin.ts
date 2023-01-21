@@ -1,11 +1,4 @@
-import MarkdownIt = require('markdown-it');
-
-export interface ChessgroundConfig {
-  boardTheme: string;
-  pieceSet: string;
-}
-
-export type ChessgroundConfigGetter = () => ChessgroundConfig;
+import MarkdownIt from 'markdown-it';
 
 const chessgroundClass = 'chessground-markdown';
 const chessgroundConfigDefaultGetter = () => { return {boardTheme: 'brown', pieceSet: 'cburnett'}; };

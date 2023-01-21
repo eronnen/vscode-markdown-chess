@@ -1,6 +1,6 @@
-import * as vscode from 'vscode';
+import type MarkdownIt from 'markdown-it';
+import vscode from 'vscode';
 import { markdownItChessgroundPlugin } from './markdownItChessgroundPlugin';
-import type { ChessgroundConfig, ChessgroundConfigGetter } from './markdownItChessgroundPlugin';
 
 const configSection = 'markdown-chess';
 const openSettingsCommand = `${configSection}.openSettings`;
@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	return {
-		extendMarkdownIt(md: any) {
+		extendMarkdownIt(md: MarkdownIt) {
 			const configGetter: ChessgroundConfigGetter = () => {
 				const boardTheme = sanitizeBoardTheme(vscode.workspace.getConfiguration(configSection).get('boardTheme'));
 				const pieceSet = sanitizePieceSet(vscode.workspace.getConfiguration(configSection).get('pieceSet'));
@@ -56,4 +56,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+// export function deactivate() {}
