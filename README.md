@@ -43,8 +43,6 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
-- [ ] Add extension config
-- [ ] Webpack optimize runtime and size
 - [ ] use style-loader to lazy load chess css
 - [ ] use prettier for ts code
 - [ ] build web ext

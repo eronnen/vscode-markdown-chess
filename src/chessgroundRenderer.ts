@@ -19,7 +19,6 @@ import "./css/markdownChess.css";
 const chessgroundClass = 'chessground-markdown';
 
 const configBoardGeometry = 'is2d';
-const configBoardTheme = 'brown';
 const configDefaultArrowColor = 'green';
 const configDefaultSquareColor = 'green';
 const configMaxBoardSize = 80;
@@ -59,7 +58,6 @@ function parseSquares(line: string) : Key[] {
 }
 
 function renderChessgroundBlock(chessElement: HTMLElement) {
-  chessElement.parentElement!.classList.add(configBoardTheme);
   chessElement.parentElement!.classList.add(configBoardGeometry);
   chessElement.style.width = `${configDefaultBoardSize}%`;
   chessElement.style.aspectRatio = "1/1";

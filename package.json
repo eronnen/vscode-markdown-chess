@@ -19,7 +19,36 @@
     ],
     "markdown.previewStyles": [
       "./dist/markdownPreview.css"
-    ]
+    ],
+    "configuration": {
+      "title": "Markdown Chess",
+      "properties": {
+        "markdown-chess.boardTheme": {
+          "order": 0,
+          "type": "string",
+          "enum": [
+            "blue",
+            "brown",
+            "green",
+            "ic",
+            "purple"
+          ],
+          "default": "brown",
+          "description": "Default board theme for chess in markdown"
+        },
+        "markdown-chess.pieceSet": {
+          "order": 1,
+          "type": "string",
+          "enum": [
+            "alpha",
+            "cburnett",
+            "merida"
+          ],
+          "default": "cburnett",
+          "description": "Default piece set for chess in markdown"
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "webpack --mode production --config ./build/webpack.config.js && webpack --mode production --config ./build/markdownPreview.webpack.config.js",

@@ -1,13 +1,22 @@
 import MarkdownIt = require('markdown-it');
 
-const chessgroundClass = 'chessground-markdown';
+export interface ChessgroundConfig {
+  boardTheme: string;
+  pieceSet: string;
+}
 
-export function markdownItChessgroundPlugin(md: MarkdownIt) {
+export type ChessgroundConfigGetter = () => ChessgroundConfig;
+
+const chessgroundClass = 'chessground-markdown';
+const chessgroundConfigDefaultGetter = () => { return {boardTheme: 'brown', pieceSet: 'cburnett'}; };
+
+export function markdownItChessgroundPlugin(md: MarkdownIt, configGetter: ChessgroundConfigGetter = chessgroundConfigDefaultGetter) {
   const highlight = md.options.highlight;
   md.options.highlight = (code: string, lang: string, attrs: string) => {
     if (lang === 'chess') {
       // wrapping in another div so we can later add a column right to the chess board
-      return `<pre style="all:unset;"><div><div class="${chessgroundClass}">${code.trim()}</div></div></pre>`;
+      const config = configGetter();
+      return `<pre style="all:unset;"><div class="${config.boardTheme}"><div class="${chessgroundClass}">${code.trim()}</div></div></pre>`;
     }
     else if (highlight) {
       return highlight(code, lang, attrs);
