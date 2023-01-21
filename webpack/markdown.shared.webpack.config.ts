@@ -1,22 +1,19 @@
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 
 const config = {
-  target: 'web',
+  target: "web",
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
       {
         test: /\.css$/,
         exclude: /\.lazy\.css$/i,
-        use: [
-            MiniCssExtractPlugin.loader,
-            "css-loader",
-        ]
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.lazy\.css$/i,
@@ -27,30 +24,21 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader",
-          "sass-loader",
-        ]
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
         test: /\.svg/,
-        type: 'asset/inline'
-      }
+        type: "asset/inline",
+      },
     ],
   },
   optimization: {
-    minimizer: [
-      `...`,
-      new CssMinimizerPlugin(),
-    ]
+    minimizer: [`...`, new CssMinimizerPlugin()],
   },
-  plugins: [
-    new MiniCssExtractPlugin()
-  ],
+  plugins: [new MiniCssExtractPlugin()],
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: [".tsx", ".ts", ".js"],
   },
-}
+};
 
 export default config;

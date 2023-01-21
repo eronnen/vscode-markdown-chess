@@ -1,15 +1,15 @@
 import type { Config } from "chessground/config";
-import type {Color, Key} from 'chessground/types';
+import type { Color, Key } from "chessground/types";
 import type { DrawShape } from "chessground/draw";
 import type { Api } from "chessground/api";
 
 import { Chessground } from "chessground";
 import { colors } from "chessground/types";
 
-import { makeFen, parseFen } from 'chessops/fen';
-import { Chess } from 'chessops/chess';
-import { chessgroundDests } from 'chessops/compat';
-import { parseSquare } from 'chessops/util';
+import { makeFen, parseFen } from "chessops/fen";
+import { Chess } from "chessops/chess";
+import { chessgroundDests } from "chessops/compat";
+import { parseSquare } from "chessops/util";
 
 import "./css/markdownChess.css";
 
@@ -20,44 +20,42 @@ import alphaPieces from "./css/chessboard/assets/pieces/alpha.lazy.css";
 import cburnettPieces from "./css/chessboard/assets/pieces/cburnett.lazy.css";
 import meridaPieces from "./css/chessboard/assets/pieces/merida.lazy.css";
 
-const pieceSetsStyles : Record<PieceSet, StyleLoaderImport> = {
-  'alpha': alphaPieces,
-  'cburnett': cburnettPieces,
-  'merida': meridaPieces,
+const pieceSetsStyles: Record<PieceSet, StyleLoaderImport> = {
+  alpha: alphaPieces,
+  cburnett: cburnettPieces,
+  merida: meridaPieces,
 };
 
-const chessgroundClass = 'chessground-markdown';
+const chessgroundClass = "chessground-markdown";
 
-const configBoardGeometry = 'is2d';
-const configDefaultArrowColor = 'green';
-const configDefaultSquareColor = 'green';
+const configBoardGeometry = "is2d";
+const configDefaultArrowColor = "green";
+const configDefaultSquareColor = "green";
 const configMaxBoardSize = 80;
 const configMinBoardSize = 20;
 const configDefaultBoardSize = 50;
 
-function parseBoolean(value: string) : boolean | null {
+function parseBoolean(value: string): boolean | null {
   if (value.toLowerCase() === "true") {
     return true;
-  }
-  else if  (value.toLowerCase() === "false") {
+  } else if (value.toLowerCase() === "false") {
     return false;
   }
 
   return null;
 }
 
-function parseSquares(line: string) : Key[] {
-  const result : Key[] = [];
+function parseSquares(line: string): Key[] {
+  const result: Key[] = [];
 
-  let currentFile : string | null = null;
+  let currentFile: string | null = null;
   for (const char of line) {
     if (currentFile === null) {
-      if (char.toLowerCase() >= 'a' && char.toLowerCase() <= 'h') {
+      if (char.toLowerCase() >= "a" && char.toLowerCase() <= "h") {
         currentFile = char.toLowerCase();
       }
-    }
-    else {
-      if (char >= '1' && char <= '8') {
+    } else {
+      if (char >= "1" && char <= "8") {
         result.push(`${currentFile}${char}` as Key);
         currentFile = null;
       }
@@ -72,26 +70,26 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
   chessElement.style.width = `${configDefaultBoardSize}%`;
   chessElement.style.aspectRatio = "1/1";
 
-  const config : Config = {
+  const config: Config = {
     disableContextMenu: true,
     draggable: {
-      enabled: false
+      enabled: false,
     },
     selectable: {
-      enabled: false
+      enabled: false,
     },
     drawable: {
       enabled: false,
     },
   };
 
-  const shapes : DrawShape[] = [];
-  let movable : boolean | null = null;
-  let drawable : boolean | null = null;
+  const shapes: DrawShape[] = [];
+  let movable: boolean | null = null;
+  let drawable: boolean | null = null;
 
   // I think yaml library here is an overkill
-  for (const line of (chessElement.textContent || '').split('\n')) {
-    const delimeterPosition = line.indexOf(':');
+  for (const line of (chessElement.textContent || "").split("\n")) {
+    const delimeterPosition = line.indexOf(":");
     if (-1 === delimeterPosition) {
       // ignore invalid lines
       continue;
@@ -121,8 +119,8 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         for (let i = 0; i < arrowSquares.length - 1; i += 2) {
           shapes.push({
             orig: arrowSquares[i],
-            dest: arrowSquares[i+1],
-            brush: configDefaultArrowColor
+            dest: arrowSquares[i + 1],
+            brush: configDefaultArrowColor,
           });
         }
         break;
@@ -132,7 +130,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         for (const square of squares) {
           shapes.push({
             orig: square,
-            brush: configDefaultSquareColor
+            brush: configDefaultSquareColor,
           });
         }
         break;
@@ -145,32 +143,35 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         break;
       case "size":
         if (value.match(/^\d+/g)) {
-          const boardSize = Math.max(configMinBoardSize, Math.min(configMaxBoardSize, parseFloat(value)));
-          chessElement.style.width = boardSize.toString() + '%';
+          const boardSize = Math.max(
+            configMinBoardSize,
+            Math.min(configMaxBoardSize, parseFloat(value))
+          );
+          chessElement.style.width = boardSize.toString() + "%";
         }
         break;
     }
   }
-  
+
   // movable if specified and if not then only if no fen supplied
-  movable = (movable === true) || (!config.fen && movable !== false);
+  movable = movable === true || (!config.fen && movable !== false);
 
   // drawable if specified and if not then only if no drawing supplied
-  drawable = (drawable === true) || (shapes.length === 0 && drawable !== false);
+  drawable = drawable === true || (shapes.length === 0 && drawable !== false);
 
   let boardApi: Api | null = null;
   let chess: Chess | null = null;
 
   if (config.fen) {
     chess = parseFen(config.fen).unwrap(
-      (setup) => Chess.fromSetup(setup).unwrap(
-        (value) => value,
-        () => null  // TODO: log FEN error
-      ),
+      (setup) =>
+        Chess.fromSetup(setup).unwrap(
+          (value) => value,
+          () => null // TODO: log FEN error
+        ),
       () => null // TODO: log FEN error
     );
-  }
-  else {
+  } else {
     chess = Chess.default();
   }
 
@@ -179,25 +180,26 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
     config.check = chess.isCheck();
   }
 
-  // If the user can move or draw then track the moves/shapes that he user does 
+  // If the user can move or draw then track the moves/shapes that he user does
   // and show them in a right column to the board.
   if (movable || drawable) {
-    const rightColumn = document.createElement('div');
-    rightColumn.classList.add('chess-info');
-    rightColumn.style.width = (97 - parseFloat(chessElement.style.width)).toString() + "%";
-    rightColumn.style.paddingLeft = '3%';
-    chessElement.style.float = 'left';
-    chessElement.parentElement!.style.display = 'flex';
-    chessElement.parentElement!.style.flexDirection = 'row';
-    
-    const infoElement = document.createElement('p');
-    const copyButton = document.createElement('button');
-    copyButton.innerHTML = 'Copy';
+    const rightColumn = document.createElement("div");
+    rightColumn.classList.add("chess-info");
+    rightColumn.style.width =
+      (97 - parseFloat(chessElement.style.width)).toString() + "%";
+    rightColumn.style.paddingLeft = "3%";
+    chessElement.style.float = "left";
+    chessElement.parentElement!.style.display = "flex";
+    chessElement.parentElement!.style.flexDirection = "row";
+
+    const infoElement = document.createElement("p");
+    const copyButton = document.createElement("button");
+    copyButton.innerHTML = "Copy";
     copyButton.hidden = true;
     copyButton.onclick = () => {
       const info = infoElement.innerText;
       if (info) {
-        navigator.clipboard.writeText(info); 
+        navigator.clipboard.writeText(info);
       }
     };
 
@@ -205,19 +207,18 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
     rightColumn.appendChild(copyButton);
     chessElement.parentElement!.appendChild(rightColumn); // we add empty parent div in the markdown parser
 
-    const updateInfoElementCallback = function(shapes: DrawShape[]) {
-      let infoText = '';
+    const updateInfoElementCallback = function (shapes: DrawShape[]) {
+      let infoText = "";
       if (movable && chess) {
         infoText += `fen: ${makeFen(chess.toSetup())}\n`;
       }
       if (drawable && shapes.length > 0) {
-        let arrows = '';
-        let squares = '';
+        let arrows = "";
+        let squares = "";
         for (const shape of shapes) {
           if (shape.orig && shape.dest) {
             arrows += `${shape.orig}->${shape.dest} `;
-          }
-          else {
+          } else {
             squares += `${shape.orig} `;
           }
         }
@@ -234,8 +235,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
       infoElement.innerText = updatedText;
       if (updatedText) {
         copyButton.hidden = false;
-      }
-      else {
+      } else {
         copyButton.hidden = true;
       }
     };
@@ -251,11 +251,14 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
           events: {
             after: (orig, dest) => {
               if (chess) {
-                chess.play({from: parseSquare(orig) || 0, to: parseSquare(dest) || 0});
+                chess.play({
+                  from: parseSquare(orig) || 0,
+                  to: parseSquare(dest) || 0,
+                });
               }
-              
+
               updateInfoElementCallback([]);
-  
+
               // TODO: change state instead of whole config?
               if (boardApi && chess) {
                 boardApi.set({
@@ -263,12 +266,12 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
                   check: chess.isCheck(),
                   movable: {
                     color: chess.turn,
-                    dests: chessgroundDests(chess)
-                  }
+                    dests: chessgroundDests(chess),
+                  },
                 });
               }
-            }
-          }
+            },
+          },
         };
       }
 
@@ -280,7 +283,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
       config.drawable!.onChange = updateInfoElementCallback;
     }
   }
-  
+
   if (!movable && !drawable) {
     config.viewOnly = true;
   }
@@ -296,7 +299,9 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
 export function renderAllChessBlocksInElement(root: HTMLElement) {
   let chessExists = false;
   let usedPieces = false;
-  for (const chessgroundContainer of root.getElementsByClassName(chessgroundClass)) {
+  for (const chessgroundContainer of root.getElementsByClassName(
+    chessgroundClass
+  )) {
     if (chessgroundContainer instanceof HTMLElement) {
       chessExists = true;
       if (!usedPieces) {
@@ -308,13 +313,12 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
       }
 
       renderChessgroundBlock(chessgroundContainer);
-    }
-    else {
-      console.error('Non-HTML chessground object');
+    } else {
+      console.error("Non-HTML chessground object");
     }
   }
 
   if (chessExists && !usedPieces) {
-    pieceSetsStyles['cburnett'].use();
+    pieceSetsStyles["cburnett"].use();
   }
 }

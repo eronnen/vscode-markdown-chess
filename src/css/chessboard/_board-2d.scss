@@ -1,4 +1,4 @@
-@import 'themes';
+@import "themes";
 
 @each $name, $theme in $board-themes-2d {
   .#{$name}.is2d {
@@ -6,9 +6,9 @@
       $file-ext: map-get($theme, file-ext);
       $name-override: map-get($theme, name-override);
       $file-name: if($name-override, $name-override, $name);
-      $dir-name: 'assets/boards';
+      $dir-name: "assets/boards";
 
-      background-image: url('#{$dir-name}/#{$file-name}.#{$file-ext}');
+      background-image: url("#{$dir-name}/#{$file-name}.#{$file-ext}");
     }
 
     $coord-color-white: map-get($theme, coord-color-white);

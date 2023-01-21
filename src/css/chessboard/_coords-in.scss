@@ -1,4 +1,4 @@
-@import 'fluid-size';
+@import "fluid-size";
 
 .cg-wrap coords {
   /* handle hidden coords */
@@ -11,7 +11,7 @@
   display: flex;
   pointer-events: none;
 
-  @include fluid-size('font-size', 8px, 12px);
+  @include fluid-size("font-size", 8px, 12px);
 
   user-select: none;
   color: #fff;
@@ -54,4 +54,4 @@
   }
 }
 
-@import 'coords-colors';
+@import "coords-colors";
