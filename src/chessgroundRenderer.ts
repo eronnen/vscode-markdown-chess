@@ -66,7 +66,7 @@ function parseSquares(line: string): Key[] {
 }
 
 function renderChessgroundBlock(chessElement: HTMLElement) {
-  chessElement.parentElement!.style.marginBottom = "0.7em";
+  chessElement.parentElement!.style.marginBottom = "1em";
   chessElement.parentElement!.classList.add(configBoardGeometry);
   chessElement.style.width = `${configDefaultBoardSize}%`;
   chessElement.style.aspectRatio = "1/1";
