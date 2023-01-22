@@ -29,11 +29,12 @@ const pieceSetsStyles: Record<PieceSet, StyleLoaderImport> = {
 const chessgroundClass = "chessground-markdown";
 
 const configBoardGeometry = "is2d";
+const configDefaultPieceSet: PieceSet = "merida";
 const configDefaultArrowColor = "green";
 const configDefaultSquareColor = "green";
-const configMaxBoardSize = 80;
-const configMinBoardSize = 20;
-const configDefaultBoardSize = 50;
+const configMaxBoardSize = 600;
+const configMinBoardSize = 200;
+const configDefaultBoardSize = 400;
 
 function parseBoolean(value: string): boolean | null {
   if (value.toLowerCase() === "true") {
@@ -68,7 +69,7 @@ function parseSquares(line: string): Key[] {
 function renderChessgroundBlock(chessElement: HTMLElement) {
   chessElement.parentElement!.style.marginBottom = "1em";
   chessElement.parentElement!.classList.add(configBoardGeometry);
-  chessElement.style.width = `${configDefaultBoardSize}%`;
+  chessElement.style.width = `${configDefaultBoardSize}px`;
   chessElement.style.aspectRatio = "1/1";
 
   const config: Config = {
@@ -146,9 +147,9 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         if (value.match(/^\d+/g)) {
           const boardSize = Math.max(
             configMinBoardSize,
-            Math.min(configMaxBoardSize, parseFloat(value))
+            Math.min(configMaxBoardSize, parseFloat(value) * 10)
           );
-          chessElement.style.width = boardSize.toString() + "%";
+          chessElement.style.width = boardSize.toString() + "px";
         }
         break;
     }
@@ -320,6 +321,6 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
   }
 
   if (chessExists && !usedPieces) {
-    pieceSetsStyles["cburnett"].use();
+    pieceSetsStyles[configDefaultPieceSet].use();
   }
 }
