@@ -1,6 +1,6 @@
-# vscode-markdown-chess
+# VSCode Markdown Chess Viewer
 
-Adds support to displaying chess boards in vscode builtin markdown preview.
+Display chess boards in vscode markdown viewer.
 
 ![vscode-markdown-chess demo](./images/demo.gif)
 

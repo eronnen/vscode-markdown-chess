@@ -41,12 +41,7 @@ const markdownConfig = {
     extensions: [".tsx", ".ts", ".js"],
   },
   entry: {
-    markdownPreview: join(
-      __dirname,
-      "..",
-      "src",
-      "markdownPreview.ts"
-    ),
+    markdownPreview: join(__dirname, "..", "src", "markdownPreview.ts"),
   },
   output: {
     path: join(__dirname, "..", "dist"),

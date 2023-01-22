@@ -1,5 +1,6 @@
-import MarkdownIt from "markdown-it";
+import type MarkdownIt from "markdown-it";
 
+const vscodeElementClass = "code-line";
 const chessgroundClass = "chessground-markdown";
 const chessgroundConfigDefaultGetter = () => {
   return { boardTheme: "brown", pieceSet: "cburnett" };
@@ -14,9 +15,9 @@ export function markdownItChessgroundPlugin(
     if (lang === "chess") {
       // wrapping in another div so we can later add a column right to the chess board
       const config = configGetter();
-      return `<pre style="all:unset;"><div class="code-line ${config.boardTheme} ${
-        config.pieceSet
-      }" data-pieceset="${
+      return `<pre style="all:unset;"><div class="${vscodeElementClass} ${
+        config.boardTheme
+      } ${config.pieceSet}" data-pieceset="${
         config.pieceSet
       }"><div class="${chessgroundClass}">${code.trim()}</div></div></pre>`;
     } else if (highlight) {
