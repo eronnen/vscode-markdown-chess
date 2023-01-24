@@ -24,7 +24,7 @@ You can supply an initial FEN, and arrows/squares to mark on the board, and a bo
 fen: r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
 arrows: f3->e5 b5->c6
 squares: g5 f7
-size: 35%
+size: 350px
 ```
 ````
 
@@ -36,7 +36,7 @@ Full list of supported properties:
 | **arrows**      | Series of arrows to draw         | e2->e4 d2->d4        | Empty                               |
 | **squares**     | Series of squares to mark        | e5 d5                | Empty                               |
 | **orientation** | Which side to view the board     | white / black        | white                               |
-| **size**        | Board width size in 10px units   | 20 - 60              | 40                                  |
+| **size**        | Board width size in px or %      | 300px, 50%           | 400px                               |
 | **movable**     | Force to enable/disable movement | true / false         | false if FEN supplied               |
 | **drawable**    | Force to enable/disable drawing  | true / false         | false if arrows or sqaures supplied |
 | **lastMove**    | Highlight last move              | e2 e4                | Undefined                           |

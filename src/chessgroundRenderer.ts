@@ -32,9 +32,6 @@ const configBoardGeometry = "is2d";
 const configDefaultPieceSet: PieceSet = "merida";
 const configDefaultArrowColor = "green";
 const configDefaultSquareColor = "green";
-const configMaxBoardSize = 600;
-const configMinBoardSize = 200;
-const configDefaultBoardSize = 400;
 
 function parseBoolean(value: string): boolean | null {
   if (value.toLowerCase() === "true") {
@@ -69,8 +66,6 @@ function parseSquares(line: string): Key[] {
 function renderChessgroundBlock(chessElement: HTMLElement) {
   chessElement.parentElement!.style.marginBottom = "1em";
   chessElement.parentElement!.classList.add(configBoardGeometry);
-  chessElement.style.width = `${configDefaultBoardSize}px`;
-  chessElement.style.aspectRatio = "1/1";
 
   const config: Config = {
     disableContextMenu: true,
@@ -144,12 +139,10 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         drawable = parseBoolean(value);
         break;
       case "size":
-        if (value.match(/^\d+/g)) {
-          const boardSize = Math.max(
-            configMinBoardSize,
-            Math.min(configMaxBoardSize, parseFloat(value) * 10)
-          );
-          chessElement.style.width = boardSize.toString() + "px";
+        if (value.match(/^\d+%$/g)) {
+          chessElement.style.width = parseFloat(value) + "%";
+        } else if (value.match(/^\d+/g)) {
+          chessElement.style.width = parseFloat(value) * 10 + "px";
         }
         break;
     }
@@ -187,9 +180,8 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
   if (movable || drawable) {
     const rightColumn = document.createElement("div");
     rightColumn.classList.add("chess-info");
-    rightColumn.style.width =
-      (97 - parseFloat(chessElement.style.width)).toString() + "%";
-    rightColumn.style.paddingLeft = "3%";
+    // rightColumn.style.width = (97 - parseFloat(chessElement.style.width)).toString() + "%";
+    rightColumn.style.paddingLeft = "5px";
     chessElement.style.float = "left";
     chessElement.parentElement!.style.display = "flex";
     chessElement.parentElement!.style.flexDirection = "row";

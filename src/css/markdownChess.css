@@ -1,6 +1,8 @@
 .chess-info {
   float: left;
   font-size: 0.9em;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .chess-info button {
@@ -17,4 +19,11 @@
 
 .chess-info button:hover {
   filter: brightness(0.9);
+}
+
+.chessground-markdown {
+  width: 400px;
+  min-width: 200px;
+  max-width: 600px;
+  aspect-ratio: 1 / 1;
 }
