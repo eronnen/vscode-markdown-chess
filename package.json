@@ -2,7 +2,7 @@
   "name": "vscode-markdown-chess",
   "displayName": "Markdown Chess Viewer",
   "description": "Chess Boards in Markdown Viewer",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {
@@ -57,7 +57,7 @@
             "cburnett",
             "merida"
           ],
-          "default": "cburnett",
+          "default": "merida",
           "description": "Default piece set for chess in markdown"
         }
       }

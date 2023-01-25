@@ -11,6 +11,15 @@ import { Chess } from "chessops/chess";
 import { chessgroundDests } from "chessops/compat";
 import { parseSquare } from "chessops/util";
 
+import {
+  CHESSGROUND_CLASS,
+  CHESSGROUND_INFO_CLASS,
+  DEFAULT_BOARD_GEOMETRY,
+  DEFAULT_PIECE_SET,
+  DEFAULT_ARROW_COLOR,
+  DEFAULT_SQUARE_COLOR,
+} from "./constants";
+
 import "./css/markdownChess.css";
 
 import "./css/chessboard/_coords.scss";
@@ -25,15 +34,6 @@ const pieceSetsStyles: Record<PieceSet, StyleLoaderImport> = {
   cburnett: cburnettPieces,
   merida: meridaPieces,
 };
-
-const chessgroundClass = "chessground-markdown";
-
-const configBoardGeometry = "is2d";
-const configDefaultArrowColor = "green";
-const configDefaultSquareColor = "green";
-const configMaxBoardSize = 80;
-const configMinBoardSize = 20;
-const configDefaultBoardSize = 50;
 
 function parseBoolean(value: string): boolean | null {
   if (value.toLowerCase() === "true") {
@@ -66,10 +66,7 @@ function parseSquares(line: string): Key[] {
 }
 
 function renderChessgroundBlock(chessElement: HTMLElement) {
-  chessElement.parentElement!.style.marginBottom = "1em";
-  chessElement.parentElement!.classList.add(configBoardGeometry);
-  chessElement.style.width = `${configDefaultBoardSize}%`;
-  chessElement.style.aspectRatio = "1/1";
+  chessElement.parentElement!.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
 
   const config: Config = {
     disableContextMenu: true,
@@ -121,7 +118,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
           shapes.push({
             orig: arrowSquares[i],
             dest: arrowSquares[i + 1],
-            brush: configDefaultArrowColor,
+            brush: DEFAULT_ARROW_COLOR,
           });
         }
         break;
@@ -131,7 +128,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         for (const square of squares) {
           shapes.push({
             orig: square,
-            brush: configDefaultSquareColor,
+            brush: DEFAULT_SQUARE_COLOR,
           });
         }
         break;
@@ -144,11 +141,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
         break;
       case "size":
         if (value.match(/^\d+/g)) {
-          const boardSize = Math.max(
-            configMinBoardSize,
-            Math.min(configMaxBoardSize, parseFloat(value))
-          );
-          chessElement.style.width = boardSize.toString() + "%";
+          chessElement.style.width = parseFloat(value) + "px";
         }
         break;
     }
@@ -185,13 +178,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
   // and show them in a right column to the board.
   if (movable || drawable) {
     const rightColumn = document.createElement("div");
-    rightColumn.classList.add("chess-info");
-    rightColumn.style.width =
-      (97 - parseFloat(chessElement.style.width)).toString() + "%";
-    rightColumn.style.paddingLeft = "3%";
-    chessElement.style.float = "left";
-    chessElement.parentElement!.style.display = "flex";
-    chessElement.parentElement!.style.flexDirection = "row";
+    rightColumn.classList.add(CHESSGROUND_INFO_CLASS);
 
     const infoElement = document.createElement("p");
     const copyButton = document.createElement("button");
@@ -301,7 +288,7 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
   let chessExists = false;
   let usedPieces = false;
   for (const chessgroundContainer of root.getElementsByClassName(
-    chessgroundClass
+    CHESSGROUND_CLASS
   )) {
     if (chessgroundContainer instanceof HTMLElement) {
       chessExists = true;
@@ -320,6 +307,6 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
   }
 
   if (chessExists && !usedPieces) {
-    pieceSetsStyles["cburnett"].use();
+    pieceSetsStyles[DEFAULT_PIECE_SET].use();
   }
 }
