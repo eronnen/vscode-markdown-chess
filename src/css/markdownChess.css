@@ -1,11 +1,26 @@
-.chess-info {
+.chessgroundMarkdownContainer {
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: row;
+}
+
+.chessgroundMarkdown {
+  width: 300px;
+  min-width: 150px;
+  max-width: 600px;
+  aspect-ratio: 1 / 1;
+}
+
+.chessgroundInfo {
   float: left;
+  min-width: 100px;
+  padding-left: 10px;
   font-size: 0.9em;
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
-.chess-info button {
+.chessgroundInfo button {
   margin-top: 0.8em;
   height: 1.5em;
   font-size: 1.1em;
@@ -17,13 +32,6 @@
   cursor: pointer;
 }
 
-.chess-info button:hover {
+.chessgroundInfo button:hover {
   filter: brightness(0.9);
-}
-
-.chessground-markdown {
-  width: 400px;
-  min-width: 200px;
-  max-width: 600px;
-  aspect-ratio: 1 / 1;
 }

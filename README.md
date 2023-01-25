@@ -36,7 +36,7 @@ Full list of supported properties:
 | **arrows**      | Series of arrows to draw         | e2->e4 d2->d4        | Empty                               |
 | **squares**     | Series of squares to mark        | e5 d5                | Empty                               |
 | **orientation** | Which side to view the board     | white / black        | white                               |
-| **size**        | Board width size in px or %      | 300px, 50%           | 400px                               |
+| **size**        | Board width size in px (150-600) | 200px                | 300px                               |
 | **movable**     | Force to enable/disable movement | true / false         | false if FEN supplied               |
 | **drawable**    | Force to enable/disable drawing  | true / false         | false if arrows or sqaures supplied |
 | **lastMove**    | Highlight last move              | e2 e4                | Undefined                           |
