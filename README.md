@@ -1,6 +1,5 @@
 # VSCode Markdown Chess Viewer
 
-[![](https://vsmarketplacebadges.dev/version/bierner.markdown-mermaid.svg)](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid)
 Display chess boards in vscode markdown viewer.
 
 ![vscode-markdown-chess demo](./images/demo.gif)
