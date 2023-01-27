@@ -40,6 +40,24 @@ Full list of supported properties:
 | **drawable**    | Force to enable/disable drawing  | true / false         | false if arrows or sqaures supplied |
 | **lastMove**    | Highlight last move              | e2 e4                | Undefined                           |
 
+## Themes
+
+Multiple board themes and piece sets are supported. Currently the extension has limited resources available, because they already increase the extension's size significantly.
+
+You can change themes in the extension's settings, or via the `Markdown: Open Chess Settings` command.
+
+### Piece sets
+* [merida](https://github.com/lichess-org/lila/blob/master/public/piece/merida/bK.svg) (default)
+* [cburnett](https://github.com/lichess-org/lila/blob/master/public/piece/cburnett/bK.svg)
+* [alpha](https://github.com/lichess-org/lila/blob/master/public/piece/alpha/bK.svg)
+
+### Boards
+* [brown](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/brown.svg) (default)
+* [blue](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/blue.svg)
+* [green](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/green.svg)
+* [ic](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/ic.svg)
+* [purple](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/purple.svg) 
+
 ## License
 
 This project is based on the [Chessground](https://github.com/lichess-org/chessground) and [Chessops](https://github.com/niklasf/chessops) libraries by lichess in order to render the chess board and play moves, so I had to use the GPL-3.0 license for this project too.
