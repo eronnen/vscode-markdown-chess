@@ -155,6 +155,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
 
   let boardApi: Api | null = null;
   let chess: Chess | null = null;
+  let lastMove: string | null = null;
 
   if (config.fen) {
     chess = parseFen(config.fen).unwrap(
@@ -199,6 +200,10 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
       let infoText = "";
       if (movable && chess) {
         infoText += `fen: ${makeFen(chess.toSetup())}\n`;
+
+        if (lastMove) {
+          infoText += `lastMove: ${lastMove}`;
+        }
       }
       if (drawable && shapes.length > 0) {
         let arrows = "";
@@ -239,6 +244,7 @@ function renderChessgroundBlock(chessElement: HTMLElement) {
           events: {
             after: (orig, dest) => {
               if (chess) {
+                lastMove = `${orig} ${dest}`;
                 chess.play({
                   from: parseSquare(orig) || 0,
                   to: parseSquare(dest) || 0,
