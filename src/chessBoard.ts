@@ -18,19 +18,19 @@ import {
   DEFAULT_BOARD_GEOMETRY,
 } from "./constants";
 
-export class Chessboard {
-  chessElement: HTMLElement;
-  containerElement: HTMLElement;
-  infoElement: HTMLElement | null;
-  infoCopyElement: HTMLElement | null;
+class Chessboard {
+  private chessElement: HTMLElement;
+  private containerElement: HTMLElement;
+  private infoElement: HTMLElement | null;
+  private infoCopyElement: HTMLElement | null;
 
-  movable: boolean | null;
-  drawable: boolean | null;
+  private movable: boolean | null;
+  private drawable: boolean | null;
 
-  boardApi: Api | null;
-  chess: Chess | null;
-  lastMove: [Key, Key] | null;
-  initialShapes: DrawShape[];
+  private boardApi: Api | null;
+  private chess: Chess | null;
+  private lastMove: [Key, Key] | null;
+  private initialShapes: DrawShape[];
 
   constructor(chessElement: HTMLElement) {
     this.chessElement = chessElement;
@@ -53,7 +53,7 @@ export class Chessboard {
     this.createHTMLBoard(config);
   }
 
-  parseChessCodeblock(): Config {
+  private parseChessCodeblock(): Config {
     const config: Config = {
       disableContextMenu: true,
     };
@@ -135,7 +135,7 @@ export class Chessboard {
     return config;
   }
 
-  initializeChessPosition(config: Config) {
+  private initializeChessPosition(config: Config) {
     if (config.fen) {
       this.chess = parseFen(config.fen).unwrap(
         (setup) =>
@@ -155,7 +155,7 @@ export class Chessboard {
     }
   }
 
-  createInfoElement() {
+  private createInfoElement() {
     // Only if the user can move or draw then track the moves/shapes that he user does
     // and show them in a right column to the board.
     if (!this.movable && !this.drawable) {
@@ -180,7 +180,7 @@ export class Chessboard {
     this.containerElement.appendChild(infoContainer);
   }
 
-  setBoardCallbacks(config: Config) {
+  private setBoardCallbacks(config: Config) {
     if (this.movable && this.chess) {
       // Allow only legal moves, I think it's more convenient for the user
       // because the typical use case of the extension is opening notes and not random boards.
@@ -200,7 +200,7 @@ export class Chessboard {
     }
   }
 
-  createHTMLBoard(config: Config) {
+  private createHTMLBoard(config: Config) {
     this.containerElement.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
     this.boardApi = Chessground(this.chessElement, config);
 
@@ -212,7 +212,7 @@ export class Chessboard {
     }
   }
 
-  updateChessMove(orig: Key, dest: Key) {
+  private updateChessMove(orig: Key, dest: Key) {
     if (this.chess) {
       this.lastMove = [orig, dest];
       this.chess.play({
@@ -235,7 +235,7 @@ export class Chessboard {
     }
   }
 
-  updateInfoElementText(shapes: DrawShape[]) {
+  private updateInfoElementText(shapes: DrawShape[]) {
     let infoText = "";
 
     if (this.movable && this.chess) {
@@ -273,4 +273,8 @@ export class Chessboard {
       this.infoCopyElement!.hidden = true;
     }
   }
+}
+
+export function createChessboard(chessElement: HTMLElement) {
+  new Chessboard(chessElement);
 }

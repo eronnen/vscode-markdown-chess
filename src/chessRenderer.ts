@@ -1,4 +1,4 @@
-import { Chessboard } from "./chessBoard";
+import { createChessboard } from "./chessBoard";
 
 import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "./constants";
 
@@ -31,7 +31,7 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
         }
       }
 
-      new Chessboard(chessElement);
+      createChessboard(chessElement);
     } else {
       console.error("Non-HTML chess object");
     }

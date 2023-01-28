@@ -1,6 +1,5 @@
 import { join } from "path";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 
 const markdownConfig = {
   target: "web",
@@ -8,7 +7,11 @@ const markdownConfig = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
+        loader: "esbuild-loader",
+        options: {
+          loader: "ts",
+          target: "es2022",
+        },
         exclude: /node_modules/,
       },
       {
@@ -19,8 +22,20 @@ const markdownConfig = {
       {
         test: /\.lazy\.css$/i,
         use: [
-          { loader: "style-loader", options: { injectType: "lazyStyleTag" } },
+          {
+            loader: "style-loader",
+            options: {
+              injectType: "lazyStyleTag",
+            },
+          },
           "css-loader",
+          {
+            loader: "esbuild-loader",
+            options: {
+              loader: "css",
+              minify: true,
+            },
+          },
         ],
       },
       {
@@ -34,7 +49,7 @@ const markdownConfig = {
     ],
   },
   optimization: {
-    minimizer: [`...`, new CssMinimizerPlugin()],
+    minimize: true,
   },
   plugins: [new MiniCssExtractPlugin()],
   resolve: {
