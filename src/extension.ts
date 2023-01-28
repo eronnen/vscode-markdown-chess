@@ -7,6 +7,7 @@ const openSettingsCommand = `${configSection}.openSettings`;
 
 const validBoardThemes = ["brown", "blue", "green", "ic", "purple"];
 const validPieceSets = ["cburnett", "alpha", "merida"];
+const validBrushed = ["green", "red", "blue", "yellow"]; // TODO: use chessground type when available in next version
 
 function sanitizeBoardTheme(theme: string | undefined) {
   return typeof theme === "string" && validBoardThemes.includes(theme)
@@ -18,6 +19,12 @@ function sanitizePieceSet(theme: string | undefined) {
   return typeof theme === "string" && validPieceSets.includes(theme)
     ? theme
     : validPieceSets[0];
+}
+
+function sanitizeBrushColor(color: string | undefined) {
+  return typeof color === "string" && validBrushed.includes(color)
+    ? color
+    : validBrushed[0]; 
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -47,9 +54,18 @@ export function activate(context: vscode.ExtensionContext) {
         const pieceSet = sanitizePieceSet(
           vscode.workspace.getConfiguration(configSection).get("pieceSet")
         );
+        const arrowsBrushColor = sanitizeBrushColor(
+          vscode.workspace.getConfiguration(configSection).get("arrowsBrushColor")
+        );
+        const squaresBrushColor = sanitizeBrushColor(
+          vscode.workspace.getConfiguration(configSection).get("squaresBrushColor")
+        );
+
         return {
           boardTheme: boardTheme,
           pieceSet: pieceSet,
+          arrowsBrushColor: arrowsBrushColor,
+          squaresBrushColor: squaresBrushColor
         };
       };
 

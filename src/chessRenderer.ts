@@ -1,6 +1,7 @@
 import { Chessboard } from "./chessBoard";
 
-import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "./constants";
+import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET, DEFAULT_ARROW_COLOR,
+  DEFAULT_SQUARE_COLOR, } from "./constants";
 
 import "./css/markdownChess.css";
 
@@ -31,7 +32,9 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
         }
       }
 
-      new Chessboard(chessElement);
+      const arrowsBrushColor = chessElement.parentElement!.dataset.arrowsBrushColor || DEFAULT_ARROW_COLOR;
+      const squaresBrushColor = chessElement.parentElement!.dataset.squaresBrushColor || DEFAULT_SQUARE_COLOR;
+      new Chessboard(chessElement, arrowsBrushColor, squaresBrushColor);
     } else {
       console.error("Non-HTML chess object");
     }

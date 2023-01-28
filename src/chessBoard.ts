@@ -12,8 +12,6 @@ import { parseSquare } from "chessops/util";
 
 import { parseBoolean, parseSquaresString } from "./chessUtils";
 import {
-  DEFAULT_ARROW_COLOR,
-  DEFAULT_SQUARE_COLOR,
   CHESSGROUND_INFO_CLASS,
   DEFAULT_BOARD_GEOMETRY,
 } from "./constants";
@@ -26,13 +24,15 @@ export class Chessboard {
 
   movable: boolean | null;
   drawable: boolean | null;
+  arrowsBrushColor: string;
+  squaresBrushColor: string;
 
   boardApi: Api | null;
   chess: Chess | null;
   lastMove: [Key, Key] | null;
   initialShapes: DrawShape[];
 
-  constructor(chessElement: HTMLElement) {
+  constructor(chessElement: HTMLElement, arrowsBrushColor: string, squaresBrushColor: string) {
     this.chessElement = chessElement;
     this.containerElement = chessElement.parentElement!;
     this.infoElement = null;
@@ -40,6 +40,8 @@ export class Chessboard {
 
     this.movable = null;
     this.drawable = null;
+    this.arrowsBrushColor = arrowsBrushColor;
+    this.squaresBrushColor = squaresBrushColor;
 
     this.boardApi = null;
     this.chess = null;
@@ -91,7 +93,7 @@ export class Chessboard {
             this.initialShapes.push({
               orig: arrowSquares[i],
               dest: arrowSquares[i + 1],
-              brush: DEFAULT_ARROW_COLOR,
+              brush: this.arrowsBrushColor,
             });
           }
           break;
@@ -101,7 +103,7 @@ export class Chessboard {
           for (const square of squares) {
             this.initialShapes.push({
               orig: square,
-              brush: DEFAULT_SQUARE_COLOR,
+              brush: this.squaresBrushColor,
             });
           }
           break;

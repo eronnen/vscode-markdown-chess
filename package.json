@@ -59,6 +59,30 @@
           ],
           "default": "merida",
           "description": "Default piece set for chess in markdown"
+        },
+        "markdown-chess.arrowsBrushColor": {
+          "order": 2,
+          "type": "string",
+          "enum": [
+            "green",
+            "red",
+            "blue",
+            "yellow"
+          ],
+          "default": "green",
+          "description": "Default color to draw chess arrows"
+        },
+        "markdown-chess.squaresBrushColor": {
+          "order": 3,
+          "type": "string",
+          "enum": [
+            "green",
+            "red",
+            "blue",
+            "yellow"
+          ],
+          "default": "green",
+          "description": "Default color to draw selected squares"
         }
       }
     },

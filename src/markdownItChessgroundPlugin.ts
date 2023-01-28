@@ -1,10 +1,10 @@
 import type MarkdownIt from "markdown-it";
 
-import { CHESSGROUND_CONTAINER_CLASS, CHESSGROUND_CLASS } from "./constants";
+import { CHESSGROUND_CONTAINER_CLASS, CHESSGROUND_CLASS, DEFAULT_ARROW_COLOR, DEFAULT_SQUARE_COLOR, DEFAULT_PIECE_SET, DEFAULT_BOARD_THEME } from "./constants";
 
 const vscodeElementClass = "code-line";
-const chessgroundConfigDefaultGetter = () => {
-  return { boardTheme: "brown", pieceSet: "cburnett" };
+const chessgroundConfigDefaultGetter : ChessgroundConfigGetter = () => {
+  return { boardTheme: DEFAULT_BOARD_THEME, pieceSet: DEFAULT_PIECE_SET, arrowsBrushColor: DEFAULT_ARROW_COLOR, squaresBrushColor: DEFAULT_SQUARE_COLOR };
 };
 
 export function markdownItChessgroundPlugin(
@@ -20,7 +20,7 @@ export function markdownItChessgroundPlugin(
         config.boardTheme
       } ${config.pieceSet}" data-pieceset="${
         config.pieceSet
-      }"><div class="${CHESSGROUND_CLASS}">${code.trim()}</div></div></pre>`;
+      }" data-arrows-brush-color="${config.arrowsBrushColor}" data-squares-brush-color="${config.squaresBrushColor}"><div class="${CHESSGROUND_CLASS}">${code.trim()}</div></div></pre>`;
     } else if (highlight) {
       return highlight(code, lang, attrs);
     } else {

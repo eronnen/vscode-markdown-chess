@@ -15,6 +15,8 @@ declare interface StyleLoaderImport {
 declare interface ChessgroundConfig {
   boardTheme: string;
   pieceSet: string;
+  arrowsBrushColor: string; // TODO: define as BrushColor when chessground package updates
+  squaresBrushColor: string;
 }
 
 declare type ChessgroundConfigGetter = () => ChessgroundConfig;
