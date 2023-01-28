@@ -1,4 +1,4 @@
-import { renderAllChessBlocksInElement } from "./chessgroundRenderer";
+import { renderAllChessBlocksInElement } from "./chessRenderer";
 
 function initializeChessGroundInMarkdown() {
   renderAllChessBlocksInElement(document.body);

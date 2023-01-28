@@ -47,16 +47,18 @@ Multiple board themes and piece sets are supported. Currently the extension has 
 You can change themes in the extension's settings, or via the `Markdown: Open Chess Settings` command.
 
 ### Piece sets
-* [merida](https://github.com/lichess-org/lila/blob/master/public/piece/merida/bK.svg) (default)
-* [cburnett](https://github.com/lichess-org/lila/blob/master/public/piece/cburnett/bK.svg)
-* [alpha](https://github.com/lichess-org/lila/blob/master/public/piece/alpha/bK.svg)
+
+- [merida](https://github.com/lichess-org/lila/blob/master/public/piece/merida/bK.svg) (default)
+- [cburnett](https://github.com/lichess-org/lila/blob/master/public/piece/cburnett/bK.svg)
+- [alpha](https://github.com/lichess-org/lila/blob/master/public/piece/alpha/bK.svg)
 
 ### Boards
-* [brown](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/brown.svg) (default)
-* [blue](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/blue.svg)
-* [green](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/green.svg)
-* [ic](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/ic.svg)
-* [purple](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/purple.svg) 
+
+- [brown](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/brown.svg) (default)
+- [blue](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/blue.svg)
+- [green](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/green.svg)
+- [ic](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/ic.svg)
+- [purple](https://github.com/lichess-org/lila/blob/master/public/images/board/svg/purple.svg)
 
 ## License
 
