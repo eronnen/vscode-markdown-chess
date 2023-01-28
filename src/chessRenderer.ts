@@ -1,9 +1,6 @@
 import { Chessboard } from "./chessBoard";
 
-import {
-  CHESSGROUND_CLASS,
-  DEFAULT_PIECE_SET,
-} from "./constants";
+import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "./constants";
 
 import "./css/markdownChess.css";
 
@@ -23,9 +20,7 @@ const pieceSetsStyles: Record<PieceSet, StyleLoaderImport> = {
 export function renderAllChessBlocksInElement(root: HTMLElement) {
   let chessExists = false;
   let usedPieces = false;
-  for (const chessElement of root.getElementsByClassName(
-    CHESSGROUND_CLASS
-  )) {
+  for (const chessElement of root.getElementsByClassName(CHESSGROUND_CLASS)) {
     if (chessElement instanceof HTMLElement) {
       chessExists = true;
       if (!usedPieces) {

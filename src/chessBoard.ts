@@ -10,8 +10,13 @@ import { chessgroundDests } from "chessops/compat";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseSquare } from "chessops/util";
 
-import { parseBoolean, parseSquaresString } from "./chessUtils"
-import { DEFAULT_ARROW_COLOR, DEFAULT_SQUARE_COLOR, CHESSGROUND_INFO_CLASS, DEFAULT_BOARD_GEOMETRY } from "./constants";
+import { parseBoolean, parseSquaresString } from "./chessUtils";
+import {
+  DEFAULT_ARROW_COLOR,
+  DEFAULT_SQUARE_COLOR,
+  CHESSGROUND_INFO_CLASS,
+  DEFAULT_BOARD_GEOMETRY,
+} from "./constants";
 
 export class Chessboard {
   chessElement: HTMLElement;
@@ -21,7 +26,7 @@ export class Chessboard {
 
   movable: boolean | null;
   drawable: boolean | null;
-  
+
   boardApi: Api | null;
   chess: Chess | null;
   lastMove: [Key, Key] | null;
@@ -32,10 +37,10 @@ export class Chessboard {
     this.containerElement = chessElement.parentElement!;
     this.infoElement = null;
     this.infoCopyElement = null;
-    
+
     this.movable = null;
     this.drawable = null;
-    
+
     this.boardApi = null;
     this.chess = null;
     this.lastMove = null;
@@ -43,7 +48,7 @@ export class Chessboard {
 
     const config = this.parseChessCodeblock();
     this.initializeChessPosition(config);
-    this.createInfoElement(config);
+    this.createInfoElement();
     this.setBoardCallbacks(config);
     this.createHTMLBoard(config);
   }
@@ -60,10 +65,10 @@ export class Chessboard {
         // ignore invalid lines
         continue;
       }
-  
+
       const option = line.substring(0, delimeterPosition);
       const value = line.substring(delimeterPosition + 1).trim();
-  
+
       switch (option.toLowerCase()) {
         case "fen":
           config.fen = value;
@@ -116,14 +121,17 @@ export class Chessboard {
     }
 
     // movable if specified and if not then only if no fen supplied
-    this.movable = this.movable === true || (!config.fen && this.movable !== false);
+    this.movable =
+      this.movable === true || (!config.fen && this.movable !== false);
 
     // drawable if specified and if not then only if no drawing supplied
-    this.drawable = this.drawable === true || (this.initialShapes.length === 0 && this.drawable !== false);
-    
-    config.draggable = {enabled: this.movable, showGhost: true};
-    config.selectable = {enabled: this.movable};
-    config.drawable = {enabled: this.drawable};
+    this.drawable =
+      this.drawable === true ||
+      (this.initialShapes.length === 0 && this.drawable !== false);
+
+    config.draggable = { enabled: this.movable, showGhost: true };
+    config.selectable = { enabled: this.movable };
+    config.drawable = { enabled: this.drawable };
     return config;
   }
 
@@ -137,18 +145,17 @@ export class Chessboard {
           ),
         () => null // TODO: log FEN error
       );
-    } 
-    else {
+    } else {
       this.chess = Chess.default();
     }
-  
+
     if (this.chess) {
       config.turnColor = this.chess.turn;
       config.check = this.chess.isCheck();
     }
   }
 
-  createInfoElement(config: Config) {
+  createInfoElement() {
     // Only if the user can move or draw then track the moves/shapes that he user does
     // and show them in a right column to the board.
     if (!this.movable && !this.drawable) {
@@ -183,9 +190,9 @@ export class Chessboard {
         free: false,
         dests: chessgroundDests(this.chess),
         events: {
-          after: this.updateChessMove.bind(this)
-        }
-      }
+          after: this.updateChessMove.bind(this),
+        },
+      };
     }
 
     if (this.drawable) {
@@ -222,8 +229,8 @@ export class Chessboard {
         check: this.chess.isCheck(),
         movable: {
           color: this.chess.turn,
-          dests: chessgroundDests(this.chess)
-        }
+          dests: chessgroundDests(this.chess),
+        },
       });
     }
   }
@@ -262,8 +269,7 @@ export class Chessboard {
     this.infoElement!.innerText = updatedText;
     if (updatedText) {
       this.infoCopyElement!.hidden = false;
-    } 
-    else {
+    } else {
       this.infoCopyElement!.hidden = true;
     }
   }
