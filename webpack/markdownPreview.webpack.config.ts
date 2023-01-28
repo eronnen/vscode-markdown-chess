@@ -1,5 +1,6 @@
 import { join } from "path";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import TerserPlugin from "terser-webpack-plugin";
 
 const markdownConfig = {
   target: "web",
@@ -50,6 +51,22 @@ const markdownConfig = {
   },
   optimization: {
     minimize: true,
+    minimizer: [
+      new TerserPlugin(
+        {
+          terserOptions: {
+            mangle: {
+              properties: {
+                regex: /_$/
+              }
+            },
+            compress: {
+              passes: 2,
+            },
+          },
+        }
+      )
+    ]
   },
   plugins: [new MiniCssExtractPlugin()],
   resolve: {

@@ -19,47 +19,47 @@ import {
 } from "./constants";
 
 class Chessboard {
-  private chessElement: HTMLElement;
-  private containerElement: HTMLElement;
-  private infoElement: HTMLElement | null;
-  private infoCopyElement: HTMLElement | null;
+  private chessElement_: HTMLElement;
+  private containerElement_: HTMLElement;
+  private infoElement_: HTMLElement | null;
+  private infoCopyElement_: HTMLElement | null;
 
-  private movable: boolean | null;
-  private drawable: boolean | null;
+  private movable_: boolean | null;
+  private drawable_: boolean | null;
 
-  private boardApi: Api | null;
-  private chess: Chess | null;
-  private lastMove: [Key, Key] | null;
-  private initialShapes: DrawShape[];
+  private boardApi_: Api | null;
+  private chess_: Chess | null;
+  private lastMove_: [Key, Key] | null;
+  private initialShapes_: DrawShape[];
 
   constructor(chessElement: HTMLElement) {
-    this.chessElement = chessElement;
-    this.containerElement = chessElement.parentElement!;
-    this.infoElement = null;
-    this.infoCopyElement = null;
+    this.chessElement_ = chessElement;
+    this.containerElement_ = chessElement.parentElement!;
+    this.infoElement_ = null;
+    this.infoCopyElement_ = null;
 
-    this.movable = null;
-    this.drawable = null;
+    this.movable_ = null;
+    this.drawable_ = null;
 
-    this.boardApi = null;
-    this.chess = null;
-    this.lastMove = null;
-    this.initialShapes = [];
+    this.boardApi_ = null;
+    this.chess_ = null;
+    this.lastMove_ = null;
+    this.initialShapes_ = [];
 
-    const config = this.parseChessCodeblock();
-    this.initializeChessPosition(config);
-    this.createInfoElement();
-    this.setBoardCallbacks(config);
-    this.createHTMLBoard(config);
+    const config = this.parseChessCodeblock_();
+    this.initializeChessPosition_(config);
+    this.createInfoElement_();
+    this.setBoardCallbacks_(config);
+    this.createHTMLBoard_(config);
   }
 
-  private parseChessCodeblock(): Config {
+  private parseChessCodeblock_(): Config {
     const config: Config = {
       disableContextMenu: true,
     };
 
     // I think yaml library here is an overkill here
-    for (const line of (this.chessElement.textContent || "").split("\n")) {
+    for (const line of (this.chessElement_.textContent || "").split("\n")) {
       const delimeterPosition = line.indexOf(":");
       if (-1 === delimeterPosition) {
         // ignore invalid lines
@@ -88,7 +88,7 @@ class Chessboard {
         case "arrows": {
           const arrowSquares = parseSquaresString(value);
           for (let i = 0; i < arrowSquares.length - 1; i += 2) {
-            this.initialShapes.push({
+            this.initialShapes_.push({
               orig: arrowSquares[i],
               dest: arrowSquares[i + 1],
               brush: DEFAULT_ARROW_COLOR,
@@ -99,7 +99,7 @@ class Chessboard {
         case "squares": {
           const squares = parseSquaresString(value);
           for (const square of squares) {
-            this.initialShapes.push({
+            this.initialShapes_.push({
               orig: square,
               brush: DEFAULT_SQUARE_COLOR,
             });
@@ -107,37 +107,37 @@ class Chessboard {
           break;
         }
         case "movable":
-          this.movable = parseBoolean(value);
+          this.movable_ = parseBoolean(value);
           break;
         case "drawable":
-          this.drawable = parseBoolean(value);
+          this.drawable_ = parseBoolean(value);
           break;
         case "size":
           if (value.match(/^\d+/g)) {
-            this.chessElement.style.width = parseFloat(value) + "px";
+            this.chessElement_.style.width = parseFloat(value) + "px";
           }
           break;
       }
     }
 
     // movable if specified and if not then only if no fen supplied
-    this.movable =
-      this.movable === true || (!config.fen && this.movable !== false);
+    this.movable_ =
+      this.movable_ === true || (!config.fen && this.movable_ !== false);
 
     // drawable if specified and if not then only if no drawing supplied
-    this.drawable =
-      this.drawable === true ||
-      (this.initialShapes.length === 0 && this.drawable !== false);
+    this.drawable_ =
+      this.drawable_ === true ||
+      (this.initialShapes_.length === 0 && this.drawable_ !== false);
 
-    config.draggable = { enabled: this.movable, showGhost: true };
-    config.selectable = { enabled: this.movable };
-    config.drawable = { enabled: this.drawable };
+    config.draggable = { enabled: this.movable_, showGhost: true };
+    config.selectable = { enabled: this.movable_ };
+    config.drawable = { enabled: this.drawable_ };
     return config;
   }
 
-  private initializeChessPosition(config: Config) {
+  private initializeChessPosition_(config: Config) {
     if (config.fen) {
-      this.chess = parseFen(config.fen).unwrap(
+      this.chess_ = parseFen(config.fen).unwrap(
         (setup) =>
           Chess.fromSetup(setup).unwrap(
             (value) => value,
@@ -146,107 +146,107 @@ class Chessboard {
         () => null // TODO: log FEN error
       );
     } else {
-      this.chess = Chess.default();
+      this.chess_ = Chess.default();
     }
 
-    if (this.chess) {
-      config.turnColor = this.chess.turn;
-      config.check = this.chess.isCheck();
+    if (this.chess_) {
+      config.turnColor = this.chess_.turn;
+      config.check = this.chess_.isCheck();
     }
   }
 
-  private createInfoElement() {
+  private createInfoElement_() {
     // Only if the user can move or draw then track the moves/shapes that he user does
     // and show them in a right column to the board.
-    if (!this.movable && !this.drawable) {
+    if (!this.movable_ && !this.drawable_) {
       return;
     }
 
     const infoContainer = document.createElement("div");
     infoContainer.classList.add(CHESSGROUND_INFO_CLASS);
-    this.infoElement = document.createElement("p");
-    this.infoCopyElement = document.createElement("button");
-    this.infoCopyElement.innerHTML = "Copy";
-    this.infoCopyElement.hidden = true;
-    this.infoCopyElement.onclick = () => {
-      const info = this.infoElement!.innerText;
+    this.infoElement_ = document.createElement("p");
+    this.infoCopyElement_ = document.createElement("button");
+    this.infoCopyElement_.innerHTML = "Copy";
+    this.infoCopyElement_.hidden = true;
+    this.infoCopyElement_.onclick = () => {
+      const info = this.infoElement_!.innerText;
       if (info) {
         navigator.clipboard.writeText(info);
       }
     };
 
-    infoContainer.appendChild(this.infoElement);
-    infoContainer.appendChild(this.infoCopyElement);
-    this.containerElement.appendChild(infoContainer);
+    infoContainer.appendChild(this.infoElement_);
+    infoContainer.appendChild(this.infoCopyElement_);
+    this.containerElement_.appendChild(infoContainer);
   }
 
-  private setBoardCallbacks(config: Config) {
-    if (this.movable && this.chess) {
+  private setBoardCallbacks_(config: Config) {
+    if (this.movable_ && this.chess_) {
       // Allow only legal moves, I think it's more convenient for the user
       // because the typical use case of the extension is opening notes and not random boards.
 
       config.movable = {
-        color: this.chess.turn,
+        color: this.chess_.turn,
         free: false,
-        dests: chessgroundDests(this.chess),
+        dests: chessgroundDests(this.chess_),
         events: {
-          after: this.updateChessMove.bind(this),
+          after: this.updateChessMove_.bind(this),
         },
       };
     }
 
-    if (this.drawable) {
-      config.drawable!.onChange = this.updateInfoElementText.bind(this);
+    if (this.drawable_) {
+      config.drawable!.onChange = this.updateInfoElementText_.bind(this);
     }
   }
 
-  private createHTMLBoard(config: Config) {
-    this.containerElement.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
-    this.boardApi = Chessground(this.chessElement, config);
+  private createHTMLBoard_(config: Config) {
+    this.containerElement_.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
+    this.boardApi_ = Chessground(this.chessElement_, config);
 
     // for some reason giving shapes in config doesn't work when configured a fen too
     // waiting for https://github.com/lichess-org/chessground/pull/247 to be merged
-    if (this.initialShapes.length > 0) {
-      this.boardApi.setShapes(this.initialShapes);
-      this.initialShapes = [];
+    if (this.initialShapes_.length > 0) {
+      this.boardApi_.setShapes(this.initialShapes_);
+      this.initialShapes_ = [];
     }
   }
 
-  private updateChessMove(orig: Key, dest: Key) {
-    if (this.chess) {
-      this.lastMove = [orig, dest];
-      this.chess.play({
+  private updateChessMove_(orig: Key, dest: Key) {
+    if (this.chess_) {
+      this.lastMove_ = [orig, dest];
+      this.chess_.play({
         from: parseSquare(orig) || 0,
         to: parseSquare(dest) || 0,
       });
     }
 
-    this.updateInfoElementText([]);
+    this.updateInfoElementText_([]);
 
-    if (this.boardApi && this.chess) {
-      this.boardApi.set({
-        turnColor: this.chess.turn,
-        check: this.chess.isCheck(),
+    if (this.boardApi_ && this.chess_) {
+      this.boardApi_.set({
+        turnColor: this.chess_.turn,
+        check: this.chess_.isCheck(),
         movable: {
-          color: this.chess.turn,
-          dests: chessgroundDests(this.chess),
+          color: this.chess_.turn,
+          dests: chessgroundDests(this.chess_),
         },
       });
     }
   }
 
-  private updateInfoElementText(shapes: DrawShape[]) {
+  private updateInfoElementText_(shapes: DrawShape[]) {
     let infoText = "";
 
-    if (this.movable && this.chess) {
-      infoText += `fen: ${makeFen(this.chess.toSetup())}\n`;
+    if (this.movable_ && this.chess_) {
+      infoText += `fen: ${makeFen(this.chess_.toSetup())}\n`;
 
-      if (this.lastMove) {
-        infoText += `lastMove: ${this.lastMove[0]} ${this.lastMove[1]}\n`;
+      if (this.lastMove_) {
+        infoText += `lastMove: ${this.lastMove_[0]} ${this.lastMove_[1]}\n`;
       }
     }
 
-    if (this.drawable && shapes.length > 0) {
+    if (this.drawable_ && shapes.length > 0) {
       let arrows = "";
       let squares = "";
       for (const shape of shapes) {
@@ -266,11 +266,11 @@ class Chessboard {
     }
 
     const updatedText = infoText.trim();
-    this.infoElement!.innerText = updatedText;
+    this.infoElement_!.innerText = updatedText;
     if (updatedText) {
-      this.infoCopyElement!.hidden = false;
+      this.infoCopyElement_!.hidden = false;
     } else {
-      this.infoCopyElement!.hidden = true;
+      this.infoCopyElement_!.hidden = true;
     }
   }
 }
