@@ -2,3 +2,4 @@ dist/
 out/
 .vscode-test-web/
 .vscode-test/
+src/markdown/css/chessboard/assets/
