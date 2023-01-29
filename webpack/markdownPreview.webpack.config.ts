@@ -8,11 +8,7 @@ const markdownConfig = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "esbuild-loader",
-        options: {
-          loader: "ts",
-          target: "ESNext",
-        },
+        use: "ts-loader",
         exclude: /node_modules/,
       },
       {
@@ -30,13 +26,6 @@ const markdownConfig = {
             },
           },
           "css-loader",
-          {
-            loader: "esbuild-loader",
-            options: {
-              loader: "css",
-              minify: true,
-            },
-          },
         ],
       },
       {

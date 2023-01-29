@@ -97,10 +97,10 @@
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.2",
+    "@vscode/test-web": "^0.0.34",
     "chessground": "^8.3.6",
     "chessops": "^0.12.5",
     "css-loader": "^6.7.3",
-    "esbuild-loader": "^2.21.0",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
     "markdown-it": "^13.0.1",
@@ -117,9 +117,5 @@
     "uglify-js": "^3.17.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0"
-  },
-  "dependencies": {
-    "@vscode/test-web": "^0.0.34",
-    "save-dev": "^0.0.1-security"
   }
 }
