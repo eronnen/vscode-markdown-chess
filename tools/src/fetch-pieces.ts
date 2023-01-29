@@ -7,6 +7,7 @@ const lilaPiecesDir =
 const localPiecesDir = join(
   "..",
   "src",
+  "markdown",
   "css",
   "chessboard",
   "assets",

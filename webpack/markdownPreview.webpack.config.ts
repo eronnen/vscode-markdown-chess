@@ -11,7 +11,7 @@ const markdownConfig = {
         loader: "esbuild-loader",
         options: {
           loader: "ts",
-          target: "es2022",
+          target: "ESNext",
         },
         exclude: /node_modules/,
       },
@@ -52,28 +52,32 @@ const markdownConfig = {
   optimization: {
     minimize: true,
     minimizer: [
-      new TerserPlugin(
-        {
-          terserOptions: {
-            mangle: {
-              properties: {
-                regex: /_$/
-              }
-            },
-            compress: {
-              passes: 2,
+      new TerserPlugin({
+        terserOptions: {
+          mangle: {
+            properties: {
+              regex: /_$/,
             },
           },
-        }
-      )
-    ]
+          compress: {
+            passes: 2,
+          },
+        },
+      }),
+    ],
   },
   plugins: [new MiniCssExtractPlugin()],
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
   entry: {
-    markdownPreview: join(__dirname, "..", "src", "markdownPreview.ts"),
+    markdownPreview: join(
+      __dirname,
+      "..",
+      "src",
+      "markdown",
+      "markdownPreview.ts"
+    ),
   },
   output: {
     path: join(__dirname, "..", "dist"),

@@ -1,6 +1,9 @@
 import type MarkdownIt from "markdown-it";
 
-import { CHESSGROUND_CONTAINER_CLASS, CHESSGROUND_CLASS } from "./constants";
+import {
+  CHESSGROUND_CONTAINER_CLASS,
+  CHESSGROUND_CLASS,
+} from "../shared/constants";
 
 const vscodeElementClass = "code-line";
 const chessgroundConfigDefaultGetter = () => {

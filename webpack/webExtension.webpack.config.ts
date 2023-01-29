@@ -3,7 +3,7 @@ import webpack from "webpack";
 
 const webExtensionConfig = {
   target: "webworker",
-  entry: "./src/extension.ts",
+  entry: "./src/extension/extension.ts",
   output: {
     path: resolve(__dirname, "..", "dist", "web"),
     filename: "extension.js",

@@ -1,6 +1,6 @@
 import { createChessboard } from "./chessBoard";
 
-import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "./constants";
+import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "../shared/constants";
 
 import "./css/markdownChess.css";
 
