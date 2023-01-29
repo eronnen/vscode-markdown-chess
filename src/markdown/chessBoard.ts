@@ -16,7 +16,7 @@ import {
   DEFAULT_SQUARE_COLOR,
   CHESSGROUND_INFO_CLASS,
   DEFAULT_BOARD_GEOMETRY,
-} from "./constants";
+} from "../shared/constants";
 
 class Chessboard {
   private chessElement_: HTMLElement;

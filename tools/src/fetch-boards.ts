@@ -8,6 +8,7 @@ const lilaBoardsDir =
 const localBoardsDir = join(
   "..",
   "src",
+  "markdown",
   "css",
   "chessboard",
   "assets",
