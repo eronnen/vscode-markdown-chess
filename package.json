@@ -98,7 +98,7 @@
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.2",
     "@vscode/test-web": "^0.0.34",
-    "chessground": "^8.3.6",
+    "chessground": "^8.3.7",
     "chessops": "^0.12.5",
     "css-loader": "^6.7.3",
     "eslint": "^8.28.0",

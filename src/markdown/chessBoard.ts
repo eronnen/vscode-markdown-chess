@@ -30,7 +30,6 @@ class Chessboard {
   private boardApi_: Api | null;
   private chess_: Chess | null;
   private lastMove_: [Key, Key] | null;
-  private initialShapes_: DrawShape[];
 
   constructor(chessElement: HTMLElement) {
     this.chessElement_ = chessElement;
@@ -44,7 +43,6 @@ class Chessboard {
     this.boardApi_ = null;
     this.chess_ = null;
     this.lastMove_ = null;
-    this.initialShapes_ = [];
 
     const config = this.parseChessCodeblock_();
     this.initializeChessPosition_(config);
@@ -57,6 +55,7 @@ class Chessboard {
     const config: Config = {
       disableContextMenu: true,
     };
+    const shapes: DrawShape[] = [];
 
     // I think yaml library here is an overkill here
     for (const line of (this.chessElement_.textContent || "").split("\n")) {
@@ -88,7 +87,7 @@ class Chessboard {
         case "arrows": {
           const arrowSquares = parseSquaresString(value);
           for (let i = 0; i < arrowSquares.length - 1; i += 2) {
-            this.initialShapes_.push({
+            shapes.push({
               orig: arrowSquares[i],
               dest: arrowSquares[i + 1],
               brush: DEFAULT_ARROW_COLOR,
@@ -99,7 +98,7 @@ class Chessboard {
         case "squares": {
           const squares = parseSquaresString(value);
           for (const square of squares) {
-            this.initialShapes_.push({
+            shapes.push({
               orig: square,
               brush: DEFAULT_SQUARE_COLOR,
             });
@@ -127,11 +126,11 @@ class Chessboard {
     // drawable if specified and if not then only if no drawing supplied
     this.drawable_ =
       this.drawable_ === true ||
-      (this.initialShapes_.length === 0 && this.drawable_ !== false);
+      (shapes.length === 0 && this.drawable_ !== false);
 
     config.draggable = { enabled: this.movable_, showGhost: true };
     config.selectable = { enabled: this.movable_ };
-    config.drawable = { enabled: this.drawable_ };
+    config.drawable = { enabled: this.drawable_, shapes: shapes };
     return config;
   }
 
@@ -203,13 +202,6 @@ class Chessboard {
   private createHTMLBoard_(config: Config) {
     this.containerElement_.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
     this.boardApi_ = Chessground(this.chessElement_, config);
-
-    // for some reason giving shapes in config doesn't work when configured a fen too
-    // waiting for https://github.com/lichess-org/chessground/pull/247 to be merged
-    if (this.initialShapes_.length > 0) {
-      this.boardApi_.setShapes(this.initialShapes_);
-      this.initialShapes_ = [];
-    }
   }
 
   private updateChessMove_(orig: Key, dest: Key) {
