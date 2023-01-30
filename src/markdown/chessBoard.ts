@@ -131,6 +131,7 @@ class Chessboard {
     config.draggable = { enabled: this.movable_, showGhost: true };
     config.selectable = { enabled: this.movable_ };
     config.drawable = { enabled: this.drawable_, shapes: shapes };
+    config.viewOnly = !this.drawable_ && !this.movable_;
     return config;
   }
 
