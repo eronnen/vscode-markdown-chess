@@ -2,7 +2,7 @@
   "name": "vscode-markdown-chess",
   "displayName": "Markdown Chess Viewer",
   "description": "Chess Boards in Markdown Viewer",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {
