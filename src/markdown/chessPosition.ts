@@ -4,13 +4,12 @@ import type { Color, Key } from "chessground/types";
 import type { DrawShape } from "chessground/draw";
 
 import { Chessground } from "chessground";
-import { colors } from "chessground/types";
 import { Chess } from "chessops/chess";
 import { chessgroundDests } from "chessops/compat";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseSquare } from "chessops/util";
 
-import { parseBoolean, parseSquaresString } from "./chessUtils";
+import { parseSquaresString } from "./chessUtils";
 import {
   DEFAULT_ARROW_COLOR,
   DEFAULT_SQUARE_COLOR,
@@ -31,7 +30,7 @@ class ChessPosition {
   private chess_: Chess | null;
   private lastMove_: [Key, Key] | null;
 
-  constructor(chessElement: HTMLElement) {
+  constructor(chessElement: HTMLElement, chessOptions: ChessBlockOptions) {
     this.chessElement_ = chessElement;
     this.containerElement_ = chessElement.parentElement!;
     this.infoElement_ = null;
@@ -44,89 +43,64 @@ class ChessPosition {
     this.chess_ = null;
     this.lastMove_ = null;
 
-    const config = this.parseChessCodeblock_();
+    const config = this.parseOptions_(chessOptions);
     this.initializePosition_(config);
     this.createInfoElement_();
     this.setBoardCallbacks_(config);
     this.createHTMLBoard_(config);
   }
 
-  private parseChessCodeblock_(): Config {
+  private parseOptions_(chessOptions: ChessBlockOptions): Config {
     const config: Config = {
       disableContextMenu: true,
     };
     const shapes: DrawShape[] = [];
 
-    // I think yaml library here is an overkill here
-    for (const line of (this.chessElement_.textContent || "").split("\n")) {
-      const delimeterPosition = line.indexOf(":");
-      if (-1 === delimeterPosition) {
-        // ignore invalid lines
-        continue;
+    if (chessOptions.orientation) {
+      config.orientation = chessOptions.orientation as Color;
+    }
+
+    if (chessOptions.fen) {
+      config.fen = chessOptions.fen;
+    }
+
+    if (chessOptions.lastMove) {
+      const lastMoveSquares = parseSquaresString(chessOptions.lastMove);
+      if (lastMoveSquares.length >= 2) {
+        config.lastMove = lastMoveSquares.slice(0, 2);
       }
+    }
 
-      const option = line.substring(0, delimeterPosition);
-      const value = line.substring(delimeterPosition + 1).trim();
+    if (chessOptions.arrows) {
+      const arrowSquares = parseSquaresString(chessOptions.arrows);
+      for (let i = 0; i < arrowSquares.length - 1; i += 2) {
+        shapes.push({
+          orig: arrowSquares[i],
+          dest: arrowSquares[i + 1],
+          brush: DEFAULT_ARROW_COLOR,
+        });
+      }
+    }
 
-      switch (option.toLowerCase()) {
-        case "fen":
-          config.fen = value;
-          break;
-        case "orientation":
-          if (colors.includes(value as Color)) {
-            config.orientation = value as Color;
-          }
-          break;
-        case "lastmove": {
-          const lastMoveSquares = parseSquaresString(value);
-          if (lastMoveSquares.length >= 2) {
-            config.lastMove = lastMoveSquares.slice(0, 2);
-          }
-          break;
-        }
-        case "arrows": {
-          const arrowSquares = parseSquaresString(value);
-          for (let i = 0; i < arrowSquares.length - 1; i += 2) {
-            shapes.push({
-              orig: arrowSquares[i],
-              dest: arrowSquares[i + 1],
-              brush: DEFAULT_ARROW_COLOR,
-            });
-          }
-          break;
-        }
-        case "squares": {
-          const squares = parseSquaresString(value);
-          for (const square of squares) {
-            shapes.push({
-              orig: square,
-              brush: DEFAULT_SQUARE_COLOR,
-            });
-          }
-          break;
-        }
-        case "movable":
-          this.movable_ = parseBoolean(value);
-          break;
-        case "drawable":
-          this.drawable_ = parseBoolean(value);
-          break;
-        case "size":
-          if (value.match(/^\d+/g)) {
-            this.chessElement_.style.width = parseFloat(value) + "px";
-          }
-          break;
+    if (chessOptions.squares) {
+      const squares = parseSquaresString(chessOptions.squares);
+      for (const square of squares) {
+        shapes.push({
+          orig: square,
+          brush: DEFAULT_SQUARE_COLOR,
+        });
       }
     }
 
     // movable if specified and if not then only if no fen supplied
     this.movable_ =
-      this.movable_ === true || (!config.fen && this.movable_ !== false);
+      chessOptions.movable === true ||
+      (!config.fen && chessOptions.movable !== false);
 
     // drawable if specified and if not then only if no drawing supplied
     this.drawable_ =
-      this.drawable_ === true ||
-      (shapes.length === 0 && this.drawable_ !== false);
+      chessOptions.drawable === true ||
+      (shapes.length === 0 && chessOptions.drawable !== false);
 
     config.draggable = { enabled: this.movable_, showGhost: true };
     config.selectable = { enabled: this.movable_ };
@@ -268,6 +242,9 @@ class ChessPosition {
   }
 }
 
-export function createChessboard(chessElement: HTMLElement) {
-  new ChessPosition(chessElement);
+export function createChessPosition(
+  chessElement: HTMLElement,
+  chessOptions: ChessBlockOptions
+) {
+  new ChessPosition(chessElement, chessOptions);
 }

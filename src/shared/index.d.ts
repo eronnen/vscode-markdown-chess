@@ -18,3 +18,15 @@ declare interface ChessgroundConfig {
 }
 
 declare type ChessgroundConfigGetter = () => ChessgroundConfig;
+
+declare interface ChessBlockOptions {
+  size: number | null;
+  orientation: string | null;
+
+  fen: string | null;
+  arrows: string | null;
+  squares: string | null;
+  movable: boolean | null;
+  drawable: boolean | null;
+  lastMove: string | null;
+}

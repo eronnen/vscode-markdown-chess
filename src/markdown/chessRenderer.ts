@@ -1,5 +1,8 @@
-import { createChessboard } from "./chessPosition";
+import type { Color } from "chessground/types";
+import { colors } from "chessground/types";
 
+import { createChessPosition } from "./chessPosition";
+import { parseBoolean } from "./chessUtils";
 import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "../shared/constants";
 
 import "./css/markdownChess.css";
@@ -17,6 +20,69 @@ const pieceSetsStyles: Record<PieceSet, StyleLoaderImport> = {
   merida: meridaPieces,
 };
 
+function parseChessBlockOptions(chessElement: HTMLElement): ChessBlockOptions {
+  const options: ChessBlockOptions = {
+    size: null,
+    orientation: null,
+    fen: null,
+    arrows: null,
+    squares: null,
+    movable: null,
+    drawable: null,
+    lastMove: null,
+  };
+
+  // I think yaml library here is an overkill here, also won't mix well with PGN
+  for (const line of (chessElement.textContent || "").split("\n")) {
+    if (line.startsWith("1.") || line.startsWith("[")) {
+      // it's the start of a PGN, finish parsing block
+      break;
+    }
+
+    const delimeterPosition = line.indexOf(":");
+    if (-1 === delimeterPosition) {
+      // ignore invalid lines
+      continue;
+    }
+
+    const option = line.substring(0, delimeterPosition);
+    const value = line.substring(delimeterPosition + 1).trim();
+
+    switch (option.toLowerCase()) {
+      case "size":
+        if (value.match(/^\d+/g)) {
+          chessElement.style.width = parseFloat(value) + "px";
+        }
+        break;
+      case "orientation":
+        if (colors.includes(value as Color)) {
+          options.orientation = value as Color;
+        }
+        break;
+      case "fen":
+        options.fen = value;
+        break;
+      case "lastmove":
+        options.lastMove = value;
+        break;
+      case "arrows":
+        options.arrows = value;
+        break;
+      case "squares":
+        options.squares = value;
+        break;
+      case "movable":
+        options.movable = parseBoolean(value);
+        break;
+      case "drawable":
+        options.drawable = parseBoolean(value);
+        break;
+    }
+  }
+
+  return options;
+}
+
 export function renderAllChessBlocksInElement(root: HTMLElement) {
   let chessExists = false;
   let usedPieces = false;
@@ -31,9 +97,10 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
         }
       }
 
-      createChessboard(chessElement);
+      const chessOptions = parseChessBlockOptions(chessElement);
+      createChessPosition(chessElement, chessOptions);
     } else {
-      console.error("Non-HTML chess object");
+      // Error
     }
   }
 
