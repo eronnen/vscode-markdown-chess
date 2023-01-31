@@ -1,4 +1,4 @@
-import { createChessboard } from "./chessBoard";
+import { createChessboard } from "./chessPosition";
 
 import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "../shared/constants";
 

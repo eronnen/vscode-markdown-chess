@@ -18,7 +18,7 @@ import {
   DEFAULT_BOARD_GEOMETRY,
 } from "../shared/constants";
 
-class Chessboard {
+class ChessPosition {
   private chessElement_: HTMLElement;
   private containerElement_: HTMLElement;
   private infoElement_: HTMLElement | null;
@@ -45,7 +45,7 @@ class Chessboard {
     this.lastMove_ = null;
 
     const config = this.parseChessCodeblock_();
-    this.initializeChessPosition_(config);
+    this.initializePosition_(config);
     this.createInfoElement_();
     this.setBoardCallbacks_(config);
     this.createHTMLBoard_(config);
@@ -135,7 +135,7 @@ class Chessboard {
     return config;
   }
 
-  private initializeChessPosition_(config: Config) {
+  private initializePosition_(config: Config) {
     if (config.fen) {
       this.chess_ = parseFen(config.fen).unwrap(
         (setup) =>
@@ -269,5 +269,5 @@ class Chessboard {
 }
 
 export function createChessboard(chessElement: HTMLElement) {
-  new Chessboard(chessElement);
+  new ChessPosition(chessElement);
 }

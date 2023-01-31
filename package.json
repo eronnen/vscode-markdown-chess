@@ -1,8 +1,8 @@
 {
   "name": "vscode-markdown-chess",
   "displayName": "Markdown Chess Viewer",
-  "description": "Chess Boards in Markdown Viewer",
-  "version": "0.1.8",
+  "description": "Chess position and games viewer in markdown",
+  "version": "0.2.0",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {
@@ -14,7 +14,8 @@
     "chess",
     "markdown",
     "preview",
-    "lichess"
+    "lichess",
+    "pgn"
   ],
   "engines": {
     "vscode": "^1.74.0"
