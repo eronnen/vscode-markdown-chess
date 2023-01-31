@@ -16,12 +16,12 @@ export function markdownItChessgroundPlugin(
 ) {
   const highlight = md.options.highlight;
   md.options.highlight = (code: string, lang: string, attrs: string) => {
-    if (lang === "chess") {
+    if (lang === "chess" || lang == "pgn") {
       // wrapping in another div so we can later add a column right to the chess board
       const config = configGetter();
       return `<pre style="all:unset;"><div class="${CHESSGROUND_CONTAINER_CLASS} ${vscodeElementClass} ${
         config.boardTheme
-      } ${config.pieceSet}" data-pieceset="${
+      } ${config.pieceSet}" data-lang="${lang}" data-pieceset="${
         config.pieceSet
       }"><div class="${CHESSGROUND_CLASS}">${code.trim()}</div></div></pre>`;
     } else if (highlight) {

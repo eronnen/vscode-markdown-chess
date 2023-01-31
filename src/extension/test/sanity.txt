@@ -1,5 +1,5 @@
 ---
-desc: Sanity
+desc: Sanity chess
 ---
 
 should show a chessboard
@@ -8,5 +8,18 @@ should show a chessboard
 fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 ```
 .
-<pre style="all:unset;"><div class="chessgroundMarkdownContainer code-line brown cburnett" data-pieceset="cburnett"><div class="chessgroundMarkdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></pre>
+<pre style="all:unset;"><div class="chessgroundMarkdownContainer code-line brown cburnett" data-lang="chess" data-pieceset="cburnett"><div class="chessgroundMarkdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></pre>
+.
+
+---
+desc: Sanity pgn
+---
+
+should show a pgn chess board
+.
+```pgn
+ABCDEF
+```
+.
+<pre style="all:unset;"><div class="chessgroundMarkdownContainer code-line brown cburnett" data-lang="pgn" data-pieceset="cburnett"><div class="chessgroundMarkdown">ABCDEF</div></div></pre>
 .
