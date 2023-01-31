@@ -1,9 +1,11 @@
 import type { Color } from "chessground/types";
 import { colors } from "chessground/types";
 
-import { createChessPosition } from "./chessPosition";
 import { parseBoolean } from "./chessUtils";
 import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "../shared/constants";
+
+import { createChessPosition } from "./chessPosition";
+import { createChessGame } from "./chessGame";
 
 import "./css/markdownChess.css";
 
@@ -30,6 +32,7 @@ function parseChessBlockOptions(chessElement: HTMLElement): ChessBlockOptions {
     movable: null,
     drawable: null,
     lastMove: null,
+    moves: null,
   };
 
   // I think yaml library here is an overkill here, also won't mix well with PGN
@@ -98,7 +101,14 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
       }
 
       const chessOptions = parseChessBlockOptions(chessElement);
-      createChessPosition(chessElement, chessOptions);
+      
+      if (chessElement.parentElement!.dataset.lang == "pgn") {
+        createChessGame(chessElement, chessOptions, true);
+      } else if (chessOptions.moves) {
+        createChessGame(chessElement, chessOptions, false);
+      } else {
+        createChessPosition(chessElement, chessOptions);
+      }
     } else {
       // Error
     }

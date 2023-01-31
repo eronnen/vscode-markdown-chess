@@ -29,4 +29,6 @@ declare interface ChessBlockOptions {
   movable: boolean | null;
   drawable: boolean | null;
   lastMove: string | null;
+
+  moves: string | null;
 }
