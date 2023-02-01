@@ -66,11 +66,18 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
+- [ ] Add margin-top
+- [ ] Add "Flip position" button
+- [ ] Animation
 - [ ] Point to the right markdown text when clicking on chess board
 - [ ] Support jpg/png board backgrounds
 - [ ] Support 3d pieces
 
-## Known Issues
+## References
+
+- https://github.com/lichess-org/chessground
+- https://github.com/niklasf/chessops
+- https://github.com/microsoft/vscode/blob/main/extensions/markdown-language-features/media/markdown.css
 
 ## Contributing
 
