@@ -14,7 +14,6 @@ import {
   DEFAULT_ARROW_COLOR,
   DEFAULT_SQUARE_COLOR,
   CHESSGROUND_INFO_CLASS,
-  DEFAULT_BOARD_GEOMETRY,
 } from "../shared/constants";
 
 class ChessPosition {
@@ -175,7 +174,6 @@ class ChessPosition {
   }
 
   private createHTMLBoard_(config: Config) {
-    this.containerElement_.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
     this.boardApi_ = Chessground(this.chessElement_, config);
   }
 

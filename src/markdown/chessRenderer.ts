@@ -2,7 +2,7 @@ import type { Color } from "chessground/types";
 import { colors } from "chessground/types";
 
 import { parseBoolean } from "./chessUtils";
-import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET } from "../shared/constants";
+import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET, DEFAULT_BOARD_GEOMETRY } from "../shared/constants";
 
 import { createChessPosition } from "./chessPosition";
 import { createChessGame } from "./chessGame";
@@ -109,6 +109,9 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
       } else {
         createChessPosition(chessElement, chessOptions);
       }
+
+      chessElement.parentElement!.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
+
     } else {
       // Error
     }
