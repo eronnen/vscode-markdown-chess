@@ -10,8 +10,11 @@ import { Chess } from "chessops/chess";
 import { PgnParser, startingPosition } from "chessops/pgn";
 import { makeFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
+import { defaultSetup } from "chessops/setup";
 import { isDrop } from "chessops/types";
 import { makeSquare, opposite } from "chessops/util";
+
+import { DEFAULT_MOVE_DELAY_MILLISECONDS } from "../shared/constants";
 
 function logFuck(s: string) {
   const fuck = document.createElement('p');
@@ -46,14 +49,16 @@ class ChessGame {
       this.parseFenWithMoves_(chessOptions);
     }
 
-    if (!this.initialPosition_) {
-      // error parsing moves
-      return;
+    if (this.initialPosition_) {
+      this.chess_ = Chess.fromSetup(this.initialPosition_).unwrap(); // TODO: handle errors
     }
-
-    this.chess_ = Chess.fromSetup(this.initialPosition_).unwrap(); // TODO: handle errors
+    else {
+      this.initialPosition_ = defaultSetup();
+      this.chess_ = Chess.default();
+    }
+    
     this.createChessBoard_(chessOptions);
-    this.playMove_(500);
+    this.playMove_(DEFAULT_MOVE_DELAY_MILLISECONDS);
   }
 
   private parsePgnGame_() {
