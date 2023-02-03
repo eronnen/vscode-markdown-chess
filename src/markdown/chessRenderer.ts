@@ -8,6 +8,7 @@ import { createChessPosition } from "./chessPosition";
 import { createChessGame } from "./chessGame";
 
 import "./css/markdownChess.css";
+import "./css/lichessFont.css";
 
 import "./css/chessboard/_coords.scss";
 import "./css/chessboard/_chessground.scss";
