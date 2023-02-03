@@ -14,7 +14,7 @@ import { defaultSetup } from "chessops/setup";
 import { isDrop } from "chessops/types";
 import { makeSquare, opposite } from "chessops/util";
 
-import { DEFAULT_MOVE_DELAY_MILLISECONDS } from "../shared/constants";
+import { DEFAULT_MOVE_DELAY_MILLISECONDS, CHESSGROUND_MOVES_CLASS } from "../shared/constants";
 
 function logFuck(s: string) {
   const fuck = document.createElement('p');
@@ -58,6 +58,7 @@ class ChessGame {
     }
     
     this.createChessBoard_(chessOptions);
+    this.createMovesElement_();
     this.playMove_(DEFAULT_MOVE_DELAY_MILLISECONDS);
   }
 
@@ -159,6 +160,18 @@ class ChessGame {
     if (nextMoveDelay >= 0) {
       setTimeout(this.playMove_.bind(this), this.boardApi_.state.animation.duration + nextMoveDelay, nextMoveDelay);
     }
+  }
+
+  private createMovesElement_() {
+    const movesContainer = document.createElement("div");
+    movesContainer.classList.add(CHESSGROUND_MOVES_CLASS);
+    
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.style.fontFamily = "lichess";
+    buttonsContainer.textContent = "   ";
+
+    movesContainer.appendChild(buttonsContainer);
+    this.containerElement_.appendChild(movesContainer);
   }
 }
 
