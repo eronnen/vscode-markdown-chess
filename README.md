@@ -68,7 +68,7 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 - [ ] init null class members with var declaration not in constructor
 - [ ] declare members in constructor
-- [ ] Chess game buttons (forward/backward)
+- [ ] view chess variants in pgn block
 - [ ] handle FEN/PGN parse error
 - [ ] Point to the right markdown text when clicking on chess board
 - [ ] Support jpg/png board backgrounds

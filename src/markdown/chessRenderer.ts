@@ -2,7 +2,13 @@ import type { Color } from "chessground/types";
 import { colors } from "chessground/types";
 
 import { parseBoolean } from "./chessUtils";
-import { CHESSGROUND_CLASS, DEFAULT_PIECE_SET, DEFAULT_BOARD_GEOMETRY } from "../shared/constants";
+import {
+  CHESSGROUND_CLASS,
+  DEFAULT_PIECE_SET,
+  DEFAULT_BOARD_GEOMETRY,
+  CHESSGROUND_CHESS_GAME_CLASS,
+  CHESSGROUND_CHESS_POSITION_CLASS,
+} from "../shared/constants";
 
 import { createChessPosition } from "./chessPosition";
 import { createChessGame } from "./chessGame";
@@ -102,17 +108,22 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
       }
 
       const chessOptions = parseChessBlockOptions(chessElement);
-      
+
       if (chessElement.parentElement!.dataset.lang == "pgn") {
+        chessElement.classList.add(CHESSGROUND_CHESS_GAME_CLASS);
         createChessGame(chessElement, chessOptions, true);
       } else if (chessOptions.moves) {
+        chessElement.classList.add(CHESSGROUND_CHESS_GAME_CLASS);
         createChessGame(chessElement, chessOptions, false);
       } else {
+        chessElement.classList.add(CHESSGROUND_CHESS_POSITION_CLASS);
         createChessPosition(chessElement, chessOptions);
       }
 
-      chessElement.parentElement!.classList.toggle(DEFAULT_BOARD_GEOMETRY, true);
-
+      chessElement.parentElement!.classList.toggle(
+        DEFAULT_BOARD_GEOMETRY,
+        true
+      );
     } else {
       // Error
     }
