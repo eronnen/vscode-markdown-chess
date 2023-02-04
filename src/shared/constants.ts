@@ -8,4 +8,4 @@ export const DEFAULT_BOARD_GEOMETRY = "is2d";
 export const DEFAULT_PIECE_SET: PieceSet = "merida";
 export const DEFAULT_ARROW_COLOR = "green";
 export const DEFAULT_SQUARE_COLOR = "green";
-export const DEFAULT_MOVE_DELAY_MILLISECONDS = 300;
+export const DEFAULT_MOVE_DELAY_MILLISECONDS = 450;

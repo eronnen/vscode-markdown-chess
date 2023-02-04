@@ -22,8 +22,8 @@ class ChessPosition {
   private infoElement_: HTMLElement | null;
   private infoCopyElement_: HTMLElement | null;
 
-  private movable_: boolean | null;
-  private drawable_: boolean | null;
+  private movable_: boolean;
+  private drawable_: boolean;
 
   private boardApi_: Api | null;
   private chess_: Chess | null;
@@ -34,9 +34,6 @@ class ChessPosition {
     this.containerElement_ = chessElement.parentElement!;
     this.infoElement_ = null;
     this.infoCopyElement_ = null;
-
-    this.movable_ = null;
-    this.drawable_ = null;
 
     this.boardApi_ = null;
     this.chess_ = null;

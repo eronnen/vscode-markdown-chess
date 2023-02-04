@@ -72,6 +72,11 @@
   cursor: pointer;
 }
 
+.chessgroundMoves button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .chessgroundMoves button:hover {
   background: #537c23;
   color: #ffffff;
