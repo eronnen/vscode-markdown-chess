@@ -23,3 +23,16 @@ ABCDEF
 .
 <pre style="all:unset;"><div class="chessgroundMarkdownContainer code-line brown cburnett" data-lang="pgn" data-pieceset="cburnett"><div class="chessgroundMarkdown">ABCDEF</div></div></pre>
 .
+
+---
+desc: Sanity lowercase
+---
+
+should show a chessboard in lowercase code language
+.
+```CHeSS
+fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+```
+.
+<pre style="all:unset;"><div class="chessgroundMarkdownContainer code-line brown cburnett" data-lang="chess" data-pieceset="cburnett"><div class="chessgroundMarkdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></pre>
+.

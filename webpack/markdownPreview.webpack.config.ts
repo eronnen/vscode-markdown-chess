@@ -1,6 +1,7 @@
 import { join } from "path";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import TerserPlugin from "terser-webpack-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 
 const markdownConfig = {
   target: "web",
@@ -53,6 +54,7 @@ const markdownConfig = {
           },
         },
       }),
+      new CssMinimizerPlugin(),
     ],
   },
   plugins: [new MiniCssExtractPlugin()],
