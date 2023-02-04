@@ -40,3 +40,39 @@
 .chessgroundInfo button:hover {
   filter: brightness(0.9);
 }
+
+.chessgroundMoves {
+  grid-column: 2 / 2;
+  grid-row: 1 / 1;
+  min-width: 100px;
+  padding-left: 10px;
+  font-size: 0.9em;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.chessgroundMoveButtons {
+  display: inline-grid;
+  grid-template-columns: auto;
+}
+
+.chessgroundMoves button {
+  grid-row: 1 / 1;
+  padding: 4px;
+  min-width: 2em;
+  font-size: 1.5em;
+  font-family: lichess-minimal;
+  text-align: center;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  overflow: hidden;
+  outline: hidden;
+  color: rgb(186, 186, 186);
+  cursor: pointer;
+}
+
+.chessgroundMoves button:hover {
+  background: #537c23;
+  color: #ffffff;
+}

@@ -102,6 +102,7 @@
     "chessground": "^8.3.7",
     "chessops": "^0.12.5",
     "css-loader": "^6.7.3",
+    "css-minimizer-webpack-plugin": "^4.2.2",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
     "markdown-it": "^13.0.1",
