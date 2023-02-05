@@ -4,6 +4,9 @@
   grid-template-columns: max-content;
   row-gap: 7px;
 }
+.chessgroundMarkdownContainer:focus {
+  outline: none;
+}
 
 .chessgroundMarkdown {
   width: 280px;
@@ -30,15 +33,16 @@
   grid-row: 1 / 1;
   min-width: 100px;
   padding-left: 10px;
-  font-size: 0.9em;
+  font-size: 0.8em;
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
 .chessgroundInfo button {
-  margin-top: 0.8em;
-  height: 1.5em;
-  font-size: 1.1em;
+  margin-top: 0.5em;
+  margin-bottom: 3em;
+  height: 1.8em;
+  font-size: 1em;
   font-family: "Courier New", monospace;
   color: white;
   background: #3692e7;

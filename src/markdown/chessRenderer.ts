@@ -87,6 +87,8 @@ function parseChessBlockOptions(chessElement: HTMLElement): ChessBlockOptions {
       case "drawable":
         options.drawable = parseBoolean(value);
         break;
+      case "moves":
+        options.moves = value.trim();
     }
   }
 
