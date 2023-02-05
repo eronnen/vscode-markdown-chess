@@ -2,17 +2,27 @@
   margin-bottom: 1em;
   display: grid;
   grid-template-columns: max-content;
+  row-gap: 7px;
 }
 
 .chessgroundMarkdown {
-  grid-column: 1 / 2;
-  grid-row: 1 / 1;
   width: 280px;
   height: auto;
   object-fit: contain;
   min-width: 150px;
   max-width: 600px;
   aspect-ratio: 1 / 1;
+}
+
+.chessgroundMarkdown .chessGame {
+  grid-column: 1 / 2;
+  grid-row: 1 / 1;
+  row-gap: 10px;
+}
+
+.chessgroundMarkdown .chessPosition {
+  grid-column: 1 / 1;
+  grid-row: 1 / 2;
 }
 
 .chessgroundInfo {
@@ -42,17 +52,17 @@
 }
 
 .chessgroundMoves {
-  grid-column: 2 / 2;
-  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+  grid-row: 2 / 2;
   min-width: 100px;
-  padding-left: 10px;
   font-size: 0.9em;
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
 .chessgroundMoveButtons {
-  display: inline-grid;
+  display: grid;
+  justify-content: center;
   grid-template-columns: auto;
 }
 
@@ -77,7 +87,7 @@
   cursor: default;
 }
 
-.chessgroundMoves button:hover {
+.chessgroundMoves button:hover:enabled {
   background: #537c23;
   color: #ffffff;
 }
