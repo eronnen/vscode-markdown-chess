@@ -20,12 +20,12 @@ import {
   CHESSGROUND_MOVE_BUTTONS_CLASS,
 } from "../shared/constants";
 
-function logFuck(s: string) {
-  const fuck = document.createElement("p");
-  fuck.textContent = s;
-  document.body.appendChild(fuck);
-  return;
-}
+// function log(s: string) {
+//   const logElement = document.createElement("p");
+//   logElement.textContent = s;
+//   document.body.appendChild(logElement);
+//   return;
+// }
 
 const ROOK_CASTLE_FROM = {
   white: {a: 0, h: 7},
@@ -187,7 +187,6 @@ class ChessGame {
     for (; this.currentMove_ < untilMove; this.currentMove_++) {
       move = parseSan(this.chess_, this.sanMoves_[this.currentMove_]);
       if (!move) {
-        logFuck("FUCK MOVE1 " + this.currentMove_);
         // TODO: log error
         break;
       }
@@ -258,7 +257,6 @@ class ChessGame {
     const move = parseSan(this.chess_, this.sanMoves_[this.currentMove_]);
     this.currentMove_++;
     if (!move) {
-      logFuck("FUCK1");
       return;
     }
 
@@ -323,7 +321,6 @@ class ChessGame {
     const move = parseSan(this.chess_, this.sanMoves_[this.currentMove_]);
     if (!move) {
       // TODO: log error
-      logFuck("FUCK MOVE2 " + currentMoveTemp);
       return;
     }
 
