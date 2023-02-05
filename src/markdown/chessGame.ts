@@ -2,16 +2,9 @@ import type { Api } from "chessground/api";
 import type { Config } from "chessground/config";
 import type { Color, PiecesDiff } from "chessground/types";
 import type { Setup } from "chessops/setup";
-import type {
-  Move,
-  NormalMove,
-  DropMove,
-  CastlingSide,
-  Square,
-} from "chessops/types";
+import type { Move } from "chessops/types";
 
 import { Chessground } from "chessground";
-import { chessgroundMove } from "chessops/compat";
 import { castlingSide, Chess } from "chessops/chess";
 import { PgnParser, startingPosition } from "chessops/pgn";
 import { makeFen } from "chessops/fen";
@@ -20,9 +13,9 @@ import { defaultSetup } from "chessops/setup";
 import { isDrop, isNormal } from "chessops/types";
 import {
   makeSquare,
-  opposite,
   kingCastlesTo,
   rookCastlesTo,
+  opposite,
 } from "chessops/util";
 
 import {
@@ -31,12 +24,12 @@ import {
   CHESSGROUND_MOVE_BUTTONS_CLASS,
 } from "../shared/constants";
 
-// function log(s: string) {
-//   const logElement = document.createElement("p");
-//   logElement.textContent = s;
-//   document.body.appendChild(logElement);
-//   return;
-// }
+function log(s: string) {
+  const logElement = document.createElement("p");
+  logElement.textContent = s;
+  document.body.appendChild(logElement);
+  return;
+}
 
 const ROOK_CASTLE_FROM = {
   white: { a: 0, h: 7 },
@@ -44,7 +37,6 @@ const ROOK_CASTLE_FROM = {
 };
 
 class ChessGame {
-  private chessElement_: HTMLElement;
   private containerElement_: HTMLElement;
 
   private buttonFirstMove_: HTMLButtonElement;
@@ -62,12 +54,11 @@ class ChessGame {
   private currentNextMoveCallback_: ReturnType<typeof setTimeout> | null;
 
   constructor(
-    chessElement: HTMLElement,
+    private chessElement_: HTMLElement,
     chessOptions: ChessBlockOptions,
     isPgn: boolean
   ) {
-    this.chessElement_ = chessElement;
-    this.containerElement_ = chessElement.parentElement!;
+    this.containerElement_ = chessElement_.parentElement!;
 
     this.sanMoves_ = [];
     this.currentMove_ = 0;
@@ -293,35 +284,60 @@ class ChessGame {
 
   private playMove_(move: Move) {
     // TODO: catch errors
-    this.chess_.play(move);
-    const moveSquares = chessgroundMove(move);
-
-    if (isDrop(move)) {
-      this.boardApi_.newPiece(
-        {
-          role: (move as DropMove).role,
-          color: opposite(this.chess_.turn),
-        },
-        makeSquare((move as DropMove).to)
-      );
-    } else {
-      this.boardApi_.move(moveSquares[0], moveSquares[1]);
-      if ((move as NormalMove).promotion) {
+    if (isNormal(move)) {
+      if (move.promotion) {
         this.boardApi_.setPieces(
           new Map([
             [
-              makeSquare((move as NormalMove).to),
+              makeSquare(move.to),
               {
-                color: opposite(this.chess_.turn),
-                role: (move as NormalMove).promotion!,
+                color: this.chess_.turn,
+                role: move.promotion!,
                 promoted: true,
               },
             ],
+            [
+              makeSquare(move.from),
+              undefined
+            ]
           ])
         );
+      } else if (move.to == this.chess_.epSquare && this.chess_.board.get(move.from)?.role === 'pawn') {
+        // en passant
+        this.boardApi_.setPieces(
+          new Map([
+            [
+              makeSquare(move.from),
+              undefined
+            ],
+            [
+              makeSquare(move.to),
+              {
+                color: this.chess_.turn,
+                role: 'pawn'
+              }
+            ],
+            [
+              makeSquare(move.to + (this.chess_.turn === 'white' ? -8 : 8)),
+              undefined
+            ]
+          ])
+        );
+      } else {
+        this.boardApi_.move(makeSquare(move.from), makeSquare(move.to));
       }
+    } else {
+      // drop move
+      this.boardApi_.newPiece(
+        {
+          role: move.role,
+          color: this.chess_.turn,
+        },
+        makeSquare(move.to)
+      );
     }
 
+    this.chess_.play(move);
     this.updateBoard_(false);
   }
 
@@ -344,57 +360,63 @@ class ChessGame {
 
     if (isDrop(move)) {
       this.boardApi_.setPieces(
-        new Map([[makeSquare((move as DropMove).to), undefined]])
+        new Map([[makeSquare(move.to), undefined]])
       );
     } else {
       const pieceMovements: PiecesDiff = new Map();
-      let castling: CastlingSide | undefined = undefined;
 
-      if ((move as NormalMove).promotion) {
-        pieceMovements.set(makeSquare((move as NormalMove).from), {
+      if (move.promotion) {
+        pieceMovements.set(makeSquare(move.from), {
           color: this.chess_.turn,
           role: "pawn",
         });
         pieceMovements.set(
-          makeSquare((move as NormalMove).to),
-          this.chess_.board.get((move as NormalMove).to)
+          makeSquare(move.to),
+          this.chess_.board.get(move.to)
         );
       } else if (
-        this.chess_.board.get((move as NormalMove).from)?.role == "king"
+        this.chess_.board.get(move.from)?.role === "king" && castlingSide(this.chess_, move)
       ) {
-        castling = castlingSide(this.chess_, move);
-        if (castling) {
-          pieceMovements.set(
-            makeSquare(kingCastlesTo(this.chess_.turn, castling)),
-            undefined
-          );
-          pieceMovements.set(makeSquare((move as NormalMove).from), {
-            color: this.chess_.turn,
-            role: "king",
-          });
-
-          pieceMovements.set(
-            makeSquare(rookCastlesTo(this.chess_.turn, castling)),
-            undefined
-          );
-          pieceMovements.set(
-            makeSquare(ROOK_CASTLE_FROM[this.chess_.turn][castling]),
-            {
-              color: this.chess_.turn,
-              role: "rook",
-            }
-          );
-        }
-      }
-
-      if (!castling && !(move as NormalMove).promotion) {
+        const castling = castlingSide(this.chess_, move);
         pieceMovements.set(
-          makeSquare((move as NormalMove).from),
-          this.chess_.board.get((move as NormalMove).from)
+          makeSquare(kingCastlesTo(this.chess_.turn, castling!)),
+          undefined
+        );
+        pieceMovements.set(makeSquare(move.from), {
+          color: this.chess_.turn,
+          role: "king",
+        });
+
+        pieceMovements.set(
+          makeSquare(rookCastlesTo(this.chess_.turn, castling!)),
+          undefined
         );
         pieceMovements.set(
-          makeSquare((move as NormalMove).to),
-          this.chess_.board.get((move as NormalMove).to)
+          makeSquare(ROOK_CASTLE_FROM[this.chess_.turn][castling!]),
+          {
+            color: this.chess_.turn,
+            role: "rook",
+          }
+        );
+      } else if (this.chess_.epSquare == move.to && this.chess_.board.get(move.from)?.role === "pawn") {
+        pieceMovements.set(makeSquare(move.to), undefined);
+        pieceMovements.set(makeSquare(move.from), {
+          color: this.chess_.turn,
+          role: "pawn"
+        });
+        pieceMovements.set(makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)), {
+          color: opposite(this.chess_.turn),
+          role: "pawn"
+        })
+      } else {
+        // regular move/capture
+        pieceMovements.set(
+          makeSquare(move.from),
+          this.chess_.board.get(move.from)
+        );
+        pieceMovements.set(
+          makeSquare(move.to),
+          this.chess_.board.get(move.to)
         );
       }
 
