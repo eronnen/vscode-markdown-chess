@@ -1,15 +1,14 @@
 import type { Api } from "chessground/api";
 import type { Config } from "chessground/config";
 import type { Color, PiecesDiff } from "chessground/types";
-import type { Setup } from "chessops/setup";
 import type { Move } from "chessops/types";
+import type { Position } from "chessops/chess";
 
 import { Chessground } from "chessground";
 import { castlingSide, Chess } from "chessops/chess";
 import { PgnParser, startingPosition } from "chessops/pgn";
-import { makeFen } from "chessops/fen";
+import { makeFen, parseFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
-import { defaultSetup } from "chessops/setup";
 import { isDrop, isNormal } from "chessops/types";
 import {
   makeSquare,
@@ -45,11 +44,11 @@ class ChessGame {
   private buttonNextMove_: HTMLButtonElement;
   private buttonLastMove_: HTMLButtonElement;
 
-  private initialPosition_: Setup;
-  private sanMoves_: string[];
-  private currentMove_: number;
+  private initialPosition_: Position;
+  private sanMoves_: string[] = [];
+  private currentMove_: number = 0;
   private boardApi_: Api;
-  private chess_: Chess;
+  private chess_: Position;
 
   private currentNextMoveCallback_: ReturnType<typeof setTimeout> | null;
 
@@ -60,13 +59,17 @@ class ChessGame {
   ) {
     this.containerElement_ = chessElement_.parentElement!;
 
-    this.sanMoves_ = [];
-    this.currentMove_ = 0;
-
-    if (isPgn) {
-      this.parsePgnGame_();
-    } else {
-      this.parseFenWithMoves_(chessOptions);
+    try {
+      if (isPgn) {
+        this.parsePgnGame_();
+      } else {
+        this.parseFenWithMoves_(chessOptions);
+      }
+    } finally {
+      // TODO: show error
+      if (!this.initialPosition_) {
+        this.initialPosition_ = Chess.default();
+      }
     }
 
     this.reinitializeChess_();
@@ -94,7 +97,7 @@ class ChessGame {
         return;
       }
 
-      this.initialPosition_ = startingPosition(game.headers).unwrap().toSetup(); // TODO: handle errors
+      this.initialPosition_ = startingPosition(game.headers).unwrap();
       for (const move of game.moves.mainline()) {
         this.sanMoves_.push(move.san);
       }
@@ -102,7 +105,12 @@ class ChessGame {
   }
 
   private parseFenWithMoves_(chessOptions: ChessBlockOptions) {
-    return null;
+    this.initialPosition_ = chessOptions.fen
+      ? Chess.fromSetup(parseFen(chessOptions.fen).unwrap()).unwrap()
+      : Chess.default();
+    if (chessOptions.moves) {
+      this.sanMoves_ = chessOptions.moves.split(" ");
+    }
   }
 
   private createMovesElement_() {
@@ -111,29 +119,70 @@ class ChessGame {
 
     this.buttonFirstMove_ = document.createElement("button");
     this.buttonFirstMove_.textContent = "";
-    this.buttonFirstMove_.onclick = this.goToFirstMove_.bind(this);
+    this.buttonFirstMove_.addEventListener(
+      "click",
+      this.goToFirstMove_.bind(this)
+    );
 
     this.buttonPreviousMove_ = document.createElement("button");
     this.buttonPreviousMove_.textContent = "";
-    this.buttonPreviousMove_.onclick = this.playPreviousMove_.bind(this);
+    this.buttonPreviousMove_.addEventListener(
+      "click",
+      this.playPreviousMove_.bind(this)
+    );
 
     this.buttonPlayMove_ = document.createElement("button");
     this.buttonPlayMove_.textContent = "";
-    this.buttonPlayMove_.onclick = this.playNextMove_.bind(
-      this,
-      DEFAULT_MOVE_DELAY_MILLISECONDS
+    this.buttonPlayMove_.addEventListener(
+      "click",
+      this.playNextMove_.bind(this, DEFAULT_MOVE_DELAY_MILLISECONDS)
     );
 
     this.buttonNextMove_ = document.createElement("button");
     this.buttonNextMove_.textContent = "";
-    this.buttonNextMove_.onclick = () => {
-      this.cancelOngoingAnimation_();
-      this.playNextMove_(-1);
-    };
+    this.buttonNextMove_.addEventListener(
+      "click",
+      this.playNextMove_.bind(this, -1)
+    );
 
     this.buttonLastMove_ = document.createElement("button");
     this.buttonLastMove_.textContent = "";
-    this.buttonLastMove_.onclick = this.goToLastMove_.bind(this);
+    this.buttonLastMove_.addEventListener(
+      "click",
+      this.goToLastMove_.bind(this)
+    );
+
+    this.containerElement_.addEventListener(
+      "keydown",
+      (e) => {
+        switch (e.key) {
+          case "ArrowLeft":
+            this.playPreviousMove_();
+            e.preventDefault();
+            break;
+          case "ArrowRight":
+            this.playNextMove_();
+            e.preventDefault();
+            break;
+          case "ArrowUp":
+          case "Home":
+            this.goToFirstMove_();
+            e.preventDefault();
+            break;
+          case "ArrowDown":
+          case "End":
+            this.goToLastMove_();
+            e.preventDefault();
+            break;
+        }
+      },
+      true
+    );
+
+    this.containerElement_.addEventListener("click", () => {
+      this.containerElement_.focus();
+    });
+    this.containerElement_.tabIndex = 0;
 
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add(CHESSGROUND_MOVE_BUTTONS_CLASS);
@@ -149,7 +198,7 @@ class ChessGame {
 
   private createChessBoard_(chessOptions: ChessBlockOptions) {
     const config: Config = {
-      fen: makeFen(this.initialPosition_!),
+      fen: makeFen(this.initialPosition_.toSetup()),
       disableContextMenu: true,
       draggable: {
         enabled: false,
@@ -169,19 +218,7 @@ class ChessGame {
   }
 
   private reinitializeChess_() {
-    // TODO: log errors?
-    let initializedChess = false;
-    try {
-      if (this.initialPosition_) {
-        this.chess_ = Chess.fromSetup(this.initialPosition_).unwrap(); // TODO: handle errors
-        initializedChess = true;
-      }
-    } finally {
-      if (!initializedChess) {
-        this.initialPosition_ = defaultSetup();
-        this.chess_ = Chess.default();
-      }
-    }
+    this.chess_ = this.initialPosition_.clone();
   }
 
   private playMovesUntil_(untilMove: number) {
@@ -258,17 +295,21 @@ class ChessGame {
   }
 
   private playNextMove_(nextMoveDelay: number = -1) {
+    if (nextMoveDelay <= 0) {
+      this.cancelOngoingAnimation_();
+    }
+
     this.currentNextMoveCallback_ = null;
     if (this.currentMove_ >= this.sanMoves_.length) {
       return;
     }
 
     const move = parseSan(this.chess_, this.sanMoves_[this.currentMove_]);
-    this.currentMove_++;
     if (!move) {
       return;
     }
 
+    this.currentMove_++;
     this.playMove_(move);
 
     if (nextMoveDelay >= 0) {
@@ -296,31 +337,28 @@ class ChessGame {
                 promoted: true,
               },
             ],
-            [
-              makeSquare(move.from),
-              undefined
-            ]
+            [makeSquare(move.from), undefined],
           ])
         );
-      } else if (move.to == this.chess_.epSquare && this.chess_.board.get(move.from)?.role === 'pawn') {
+      } else if (
+        move.to == this.chess_.epSquare &&
+        this.chess_.board.get(move.from)?.role === "pawn"
+      ) {
         // en passant
         this.boardApi_.setPieces(
           new Map([
-            [
-              makeSquare(move.from),
-              undefined
-            ],
+            [makeSquare(move.from), undefined],
             [
               makeSquare(move.to),
               {
                 color: this.chess_.turn,
-                role: 'pawn'
-              }
+                role: "pawn",
+              },
             ],
             [
-              makeSquare(move.to + (this.chess_.turn === 'white' ? -8 : 8)),
-              undefined
-            ]
+              makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)),
+              undefined,
+            ],
           ])
         );
       } else {
@@ -359,9 +397,7 @@ class ChessGame {
     }
 
     if (isDrop(move)) {
-      this.boardApi_.setPieces(
-        new Map([[makeSquare(move.to), undefined]])
-      );
+      this.boardApi_.setPieces(new Map([[makeSquare(move.to), undefined]]));
     } else {
       const pieceMovements: PiecesDiff = new Map();
 
@@ -370,12 +406,10 @@ class ChessGame {
           color: this.chess_.turn,
           role: "pawn",
         });
-        pieceMovements.set(
-          makeSquare(move.to),
-          this.chess_.board.get(move.to)
-        );
+        pieceMovements.set(makeSquare(move.to), this.chess_.board.get(move.to));
       } else if (
-        this.chess_.board.get(move.from)?.role === "king" && castlingSide(this.chess_, move)
+        this.chess_.board.get(move.from)?.role === "king" &&
+        castlingSide(this.chess_, move)
       ) {
         const castling = castlingSide(this.chess_, move);
         pieceMovements.set(
@@ -398,26 +432,29 @@ class ChessGame {
             role: "rook",
           }
         );
-      } else if (this.chess_.epSquare == move.to && this.chess_.board.get(move.from)?.role === "pawn") {
+      } else if (
+        this.chess_.epSquare == move.to &&
+        this.chess_.board.get(move.from)?.role === "pawn"
+      ) {
         pieceMovements.set(makeSquare(move.to), undefined);
         pieceMovements.set(makeSquare(move.from), {
           color: this.chess_.turn,
-          role: "pawn"
+          role: "pawn",
         });
-        pieceMovements.set(makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)), {
-          color: opposite(this.chess_.turn),
-          role: "pawn"
-        })
+        pieceMovements.set(
+          makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)),
+          {
+            color: opposite(this.chess_.turn),
+            role: "pawn",
+          }
+        );
       } else {
         // regular move/capture
         pieceMovements.set(
           makeSquare(move.from),
           this.chess_.board.get(move.from)
         );
-        pieceMovements.set(
-          makeSquare(move.to),
-          this.chess_.board.get(move.to)
-        );
+        pieceMovements.set(makeSquare(move.to), this.chess_.board.get(move.to));
       }
 
       // TODO: restore pieces for atomic chess?

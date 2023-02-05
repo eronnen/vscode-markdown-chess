@@ -6,6 +6,8 @@ Display chess boards in vscode markdown viewer.
 
 ## Usage
 
+### Chess Positions
+
 Create an empty chess board by writing a chess code block:
 
 ````markdown
@@ -16,29 +18,58 @@ Create an empty chess board by writing a chess code block:
 
 On an empty board you can move pieces and draw arrows/squares and copy it back to the chess code block, as shown in the GIF.
 
-You can supply an initial FEN, and arrows/squares to mark on the board, and a board size:
+You can supply an initial FEN, and arrows/squares to mark on the board:
 
 ````markdown
 ```chess
 fen: r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
 arrows: f3->e5 b5->c6
 squares: g5 f7
-size: 350px
 ```
 ````
 
-Full list of supported properties:
+### Chess Games
 
-| **Property**    | **Description**                  | **Possible values**  | **Default**                         |
-| --------------- | -------------------------------- | -------------------- | ----------------------------------- |
-| **fen**         | The initial position             | Any valid FEN string | Initial                             |
-| **arrows**      | Series of arrows to draw         | e2->e4 d2->d4        | Empty                               |
-| **squares**     | Series of squares to mark        | e5 d5                | Empty                               |
-| **orientation** | Which side to view the board     | white / black        | white                               |
-| **size**        | Board width size in px (150-600) | 200px                | 280px                               |
-| **movable**     | Force to enable/disable movement | true / false         | false if FEN supplied               |
-| **drawable**    | Force to enable/disable drawing  | true / false         | false if arrows or sqaures supplied |
-| **lastMove**    | Highlight last move              | e2 e4                | Undefined                           |
+You can view full chess games by using the pgn code block:
+
+````markdown
+```pgn
+orientation: black
+[Event "India"]
+[Date "1984.??.??"]
+[Result "0-1"]
+[White "Srinivas"]
+[Black "Vaidyanathan Ravikumar"]
+[PlyCount "28"]
+
+1. d4 e5 2. dxe5 d6 3. exd6 Bxd6 4. c3 Nf6 5. Bg5 Nc6 6. e3
+O-O 7. Bxf6 Qxf6 8. Qf3 Qg6 9. Ne2 Re8 10. Ng3 Nd4 11. cxd4
+Bg4 12. Qxb7 Rab8 13. Qxa7 Qxb1+ 14. Kd2 Bb4# 0-1
+```
+````
+
+### Supported properties for chess and pgn blocks
+
+These properties are available both for chess and pgn blocks. when using in a pgn block, the properties must come before the pgn itself.
+
+| **Property**    | **Description**                  | **Possible values** | **Default** |
+| --------------- | -------------------------------- | ------------------- | ----------- |
+| **orientation** | Which side to view the board     | white / black       | white       |
+| **size**        | Board width size in px (150-600) | 200px               | 280px       |
+
+### Supported properties for chess blocks
+
+These properties are only available for chess blocks.
+
+| **Property** | **Description**                           | **Possible values**  | **Default**                         |
+| ------------ | ----------------------------------------- | -------------------- | ----------------------------------- |
+| **fen**      | The initial position                      | Any valid FEN string | Initial                             |
+| **arrows**   | Series of arrows to draw                  | e2->e4 d2->d4        | Empty                               |
+| **squares**  | Series of squares to mark                 | e5 d5                | Empty                               |
+| **movable**  | Force to enable/disable movement          | true / false         | false if FEN supplied               |
+| **drawable** | Force to enable/disable drawing           | true / false         | false if arrows or sqaures supplied |
+| **lastMove** | Highlight last move                       | e2 e4                | Undefined                           |
+| **moves**    | Sequence of moves to view in the position | e4 e5 Nf3 Nf6 Nxe5   | Undefined                           |
 
 ## Themes
 
@@ -66,11 +97,10 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
-- [ ] init null class members with var declaration not in constructor
-- [ ] declare members in constructor
-- [ ] view chess variants in pgn block
-- [ ] handle FEN/PGN parse error
+- [ ] show FEN/PGN errors
 - [ ] Point to the right markdown text when clicking on chess board
+- [ ] in a capture of a black piece by a white piece, when animating previous move show the white on top of the black piece
+- [ ] handle en passant and promotion in chessPosition.ts
 - [ ] Support jpg/png board backgrounds
 - [ ] Support 3d pieces
 
