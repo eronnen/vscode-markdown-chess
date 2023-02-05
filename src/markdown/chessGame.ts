@@ -7,7 +7,7 @@ import type { Position } from "chessops/chess";
 import { Chessground } from "chessground";
 import { castlingSide, Chess } from "chessops/chess";
 import { PgnParser, startingPosition } from "chessops/pgn";
-import { makeFen } from "chessops/fen";
+import { makeFen, parseFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
 import { isDrop, isNormal } from "chessops/types";
 import {
@@ -45,8 +45,8 @@ class ChessGame {
   private buttonLastMove_: HTMLButtonElement;
 
   private initialPosition_: Position;
-  private sanMoves_: string[];
-  private currentMove_: number;
+  private sanMoves_: string[] = [];
+  private currentMove_: number = 0;
   private boardApi_: Api;
   private chess_: Position;
 
@@ -58,9 +58,6 @@ class ChessGame {
     isPgn: boolean
   ) {
     this.containerElement_ = chessElement_.parentElement!;
-
-    this.sanMoves_ = [];
-    this.currentMove_ = 0;
 
     try {
       if (isPgn) {
@@ -108,7 +105,12 @@ class ChessGame {
   }
 
   private parseFenWithMoves_(chessOptions: ChessBlockOptions) {
-    return null;
+    this.initialPosition_ = chessOptions.fen
+      ? Chess.fromSetup(parseFen(chessOptions.fen).unwrap()).unwrap()
+      : Chess.default();
+    if (chessOptions.moves) {
+      this.sanMoves_ = chessOptions.moves.split(" ");
+    }
   }
 
   private createMovesElement_() {
@@ -117,51 +119,69 @@ class ChessGame {
 
     this.buttonFirstMove_ = document.createElement("button");
     this.buttonFirstMove_.textContent = "";
-    this.buttonFirstMove_.addEventListener('click', this.goToFirstMove_.bind(this));
+    this.buttonFirstMove_.addEventListener(
+      "click",
+      this.goToFirstMove_.bind(this)
+    );
 
     this.buttonPreviousMove_ = document.createElement("button");
     this.buttonPreviousMove_.textContent = "";
-    this.buttonPreviousMove_.addEventListener('click', this.playPreviousMove_.bind(this));
+    this.buttonPreviousMove_.addEventListener(
+      "click",
+      this.playPreviousMove_.bind(this)
+    );
 
     this.buttonPlayMove_ = document.createElement("button");
     this.buttonPlayMove_.textContent = "";
-    this.buttonPlayMove_.addEventListener('click', this.playNextMove_.bind(
-      this,
-      DEFAULT_MOVE_DELAY_MILLISECONDS
-    ));
+    this.buttonPlayMove_.addEventListener(
+      "click",
+      this.playNextMove_.bind(this, DEFAULT_MOVE_DELAY_MILLISECONDS)
+    );
 
     this.buttonNextMove_ = document.createElement("button");
     this.buttonNextMove_.textContent = "";
-    this.buttonNextMove_.addEventListener('click', this.playNextMove_.bind(this, -1));
+    this.buttonNextMove_.addEventListener(
+      "click",
+      this.playNextMove_.bind(this, -1)
+    );
 
     this.buttonLastMove_ = document.createElement("button");
     this.buttonLastMove_.textContent = "";
-    this.buttonLastMove_.addEventListener('click', this.goToLastMove_.bind(this));
+    this.buttonLastMove_.addEventListener(
+      "click",
+      this.goToLastMove_.bind(this)
+    );
 
-    this.containerElement_.addEventListener('keydown', (e) => {
-      switch (e.key) {
-        case "ArrowLeft":
-          this.playPreviousMove_();
-          e.preventDefault();
-          break;
-        case "ArrowRight":
-          this.playNextMove_();
-          e.preventDefault();
-          break;
-        case "ArrowUp":
-        case "Home":
-          this.goToFirstMove_();
-          e.preventDefault();
-          break;
-        case "ArrowDown":
-        case "End":
-          this.goToLastMove_();
-          e.preventDefault();
-          break;
-      }
-    }, true);
+    this.containerElement_.addEventListener(
+      "keydown",
+      (e) => {
+        switch (e.key) {
+          case "ArrowLeft":
+            this.playPreviousMove_();
+            e.preventDefault();
+            break;
+          case "ArrowRight":
+            this.playNextMove_();
+            e.preventDefault();
+            break;
+          case "ArrowUp":
+          case "Home":
+            this.goToFirstMove_();
+            e.preventDefault();
+            break;
+          case "ArrowDown":
+          case "End":
+            this.goToLastMove_();
+            e.preventDefault();
+            break;
+        }
+      },
+      true
+    );
 
-    this.containerElement_.addEventListener("click", () => {this.containerElement_.focus();});
+    this.containerElement_.addEventListener("click", () => {
+      this.containerElement_.focus();
+    });
     this.containerElement_.tabIndex = 0;
 
     const buttonsContainer = document.createElement("div");
@@ -285,11 +305,11 @@ class ChessGame {
     }
 
     const move = parseSan(this.chess_, this.sanMoves_[this.currentMove_]);
-    this.currentMove_++;
     if (!move) {
       return;
     }
 
+    this.currentMove_++;
     this.playMove_(move);
 
     if (nextMoveDelay >= 0) {
@@ -317,31 +337,28 @@ class ChessGame {
                 promoted: true,
               },
             ],
-            [
-              makeSquare(move.from),
-              undefined
-            ]
+            [makeSquare(move.from), undefined],
           ])
         );
-      } else if (move.to == this.chess_.epSquare && this.chess_.board.get(move.from)?.role === 'pawn') {
+      } else if (
+        move.to == this.chess_.epSquare &&
+        this.chess_.board.get(move.from)?.role === "pawn"
+      ) {
         // en passant
         this.boardApi_.setPieces(
           new Map([
-            [
-              makeSquare(move.from),
-              undefined
-            ],
+            [makeSquare(move.from), undefined],
             [
               makeSquare(move.to),
               {
                 color: this.chess_.turn,
-                role: 'pawn'
-              }
+                role: "pawn",
+              },
             ],
             [
-              makeSquare(move.to + (this.chess_.turn === 'white' ? -8 : 8)),
-              undefined
-            ]
+              makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)),
+              undefined,
+            ],
           ])
         );
       } else {
@@ -380,9 +397,7 @@ class ChessGame {
     }
 
     if (isDrop(move)) {
-      this.boardApi_.setPieces(
-        new Map([[makeSquare(move.to), undefined]])
-      );
+      this.boardApi_.setPieces(new Map([[makeSquare(move.to), undefined]]));
     } else {
       const pieceMovements: PiecesDiff = new Map();
 
@@ -391,12 +406,10 @@ class ChessGame {
           color: this.chess_.turn,
           role: "pawn",
         });
-        pieceMovements.set(
-          makeSquare(move.to),
-          this.chess_.board.get(move.to)
-        );
+        pieceMovements.set(makeSquare(move.to), this.chess_.board.get(move.to));
       } else if (
-        this.chess_.board.get(move.from)?.role === "king" && castlingSide(this.chess_, move)
+        this.chess_.board.get(move.from)?.role === "king" &&
+        castlingSide(this.chess_, move)
       ) {
         const castling = castlingSide(this.chess_, move);
         pieceMovements.set(
@@ -419,26 +432,29 @@ class ChessGame {
             role: "rook",
           }
         );
-      } else if (this.chess_.epSquare == move.to && this.chess_.board.get(move.from)?.role === "pawn") {
+      } else if (
+        this.chess_.epSquare == move.to &&
+        this.chess_.board.get(move.from)?.role === "pawn"
+      ) {
         pieceMovements.set(makeSquare(move.to), undefined);
         pieceMovements.set(makeSquare(move.from), {
           color: this.chess_.turn,
-          role: "pawn"
+          role: "pawn",
         });
-        pieceMovements.set(makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)), {
-          color: opposite(this.chess_.turn),
-          role: "pawn"
-        })
+        pieceMovements.set(
+          makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)),
+          {
+            color: opposite(this.chess_.turn),
+            role: "pawn",
+          }
+        );
       } else {
         // regular move/capture
         pieceMovements.set(
           makeSquare(move.from),
           this.chess_.board.get(move.from)
         );
-        pieceMovements.set(
-          makeSquare(move.to),
-          this.chess_.board.get(move.to)
-        );
+        pieceMovements.set(makeSquare(move.to), this.chess_.board.get(move.to));
       }
 
       // TODO: restore pieces for atomic chess?

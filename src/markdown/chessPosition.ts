@@ -6,7 +6,8 @@ import type { DrawShape } from "chessground/draw";
 import { Chessground } from "chessground";
 import { Chess } from "chessops/chess";
 import { chessgroundDests } from "chessops/compat";
-import { makeFen, parseFen } from "chessops/fen";
+import { makeFen, parseFen, INITIAL_FEN } from "chessops/fen";
+import { makeSanAndPlay } from "chessops/san";
 import { parseSquare } from "chessops/util";
 
 import { parseSquaresString } from "./chessUtils";
@@ -20,6 +21,8 @@ class ChessPosition {
   private containerElement_: HTMLElement;
   private infoElement_: HTMLElement | null;
   private infoCopyElement_: HTMLElement | null;
+  private movesInfoElement_: HTMLElement | null;
+  private movesInfoCopyElement_: HTMLElement | null;
 
   private movable_: boolean;
   private drawable_: boolean;
@@ -28,11 +31,17 @@ class ChessPosition {
   private chess_: Chess | null;
   private lastMove_: [Key, Key] | null;
 
-  constructor(private chessElement_: HTMLElement, chessOptions: ChessBlockOptions) {
+  private initialFen_: string = INITIAL_FEN;
+  private playedMoves_: string[] = [];
+
+  constructor(
+    private chessElement_: HTMLElement,
+    chessOptions: ChessBlockOptions
+  ) {
     this.containerElement_ = chessElement_.parentElement!;
     const config = this.parseOptions_(chessOptions);
     this.initializePosition_(config);
-    this.createInfoElement_();
+    this.createInfoElements_();
     this.setBoardCallbacks_(config);
     this.createHTMLBoard_(config);
   }
@@ -49,6 +58,7 @@ class ChessPosition {
 
     if (chessOptions.fen) {
       config.fen = chessOptions.fen;
+      this.initialFen_ = chessOptions.fen;
     }
 
     if (chessOptions.lastMove) {
@@ -116,7 +126,7 @@ class ChessPosition {
     }
   }
 
-  private createInfoElement_() {
+  private createInfoElements_() {
     // Only if the user can move or draw then track the moves/shapes that he user does
     // and show them in a right column to the board.
     if (!this.movable_ && !this.drawable_) {
@@ -127,7 +137,7 @@ class ChessPosition {
     infoContainer.classList.add(CHESSGROUND_INFO_CLASS);
     this.infoElement_ = document.createElement("p");
     this.infoCopyElement_ = document.createElement("button");
-    this.infoCopyElement_.innerHTML = "Copy";
+    this.infoCopyElement_.innerHTML = "Copy Position";
     this.infoCopyElement_.hidden = true;
     this.infoCopyElement_.onclick = () => {
       const info = this.infoElement_!.innerText;
@@ -135,9 +145,22 @@ class ChessPosition {
         navigator.clipboard.writeText(info);
       }
     };
-
+    
+    this.movesInfoElement_ = document.createElement("p");
+    this.movesInfoCopyElement_ = document.createElement("button");
+    this.movesInfoCopyElement_.innerHTML = "Copy Sequence";
+    this.movesInfoCopyElement_.hidden = true;
+    this.movesInfoCopyElement_.onclick = () => {
+      const info = this.movesInfoElement_!.innerText;
+      if (info) {
+        navigator.clipboard.writeText(info);
+      }
+    }
+    
     infoContainer.appendChild(this.infoElement_);
     infoContainer.appendChild(this.infoCopyElement_);
+    infoContainer.appendChild(this.movesInfoElement_);
+    infoContainer.appendChild(this.movesInfoCopyElement_);
     this.containerElement_.appendChild(infoContainer);
   }
 
@@ -168,10 +191,11 @@ class ChessPosition {
   private updateChessMove_(orig: Key, dest: Key) {
     if (this.chess_) {
       this.lastMove_ = [orig, dest];
-      this.chess_.play({
-        from: parseSquare(orig) || 0,
-        to: parseSquare(dest) || 0,
-      });
+      const move = {
+        from: parseSquare(orig)!,
+        to: parseSquare(dest)!,
+      }
+      this.playedMoves_.push(makeSanAndPlay(this.chess_, move));
     }
 
     this.updateInfoElementText_([]);
@@ -218,12 +242,21 @@ class ChessPosition {
       }
     }
 
-    const updatedText = infoText.trim();
-    this.infoElement_!.innerText = updatedText;
-    if (updatedText) {
+    const updatedInfoText = infoText.trim();
+    this.infoElement_!.innerText = updatedInfoText;
+    if (updatedInfoText) {
       this.infoCopyElement_!.hidden = false;
     } else {
       this.infoCopyElement_!.hidden = true;
+    }
+
+    if (this.movable_ && this.playedMoves_.length > 0) {
+      const movesInfoText = `fen: ${this.initialFen_}\nmoves: ${this.playedMoves_.join(' ')}`;
+      this.movesInfoElement_!.innerText = movesInfoText;
+      this.movesInfoCopyElement_!.hidden = false;
+    } else {
+      this.movesInfoElement_!.innerText = '';
+      this.movesInfoCopyElement_!.hidden = true;
     }
   }
 }
