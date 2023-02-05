@@ -111,29 +111,52 @@ class ChessGame {
 
     this.buttonFirstMove_ = document.createElement("button");
     this.buttonFirstMove_.textContent = "";
-    this.buttonFirstMove_.onclick = this.goToFirstMove_.bind(this);
+    this.buttonFirstMove_.addEventListener('click', this.goToFirstMove_.bind(this));
 
     this.buttonPreviousMove_ = document.createElement("button");
     this.buttonPreviousMove_.textContent = "";
-    this.buttonPreviousMove_.onclick = this.playPreviousMove_.bind(this);
+    this.buttonPreviousMove_.addEventListener('click', this.playPreviousMove_.bind(this));
 
     this.buttonPlayMove_ = document.createElement("button");
     this.buttonPlayMove_.textContent = "";
-    this.buttonPlayMove_.onclick = this.playNextMove_.bind(
+    this.buttonPlayMove_.addEventListener('click', this.playNextMove_.bind(
       this,
       DEFAULT_MOVE_DELAY_MILLISECONDS
-    );
+    ));
 
     this.buttonNextMove_ = document.createElement("button");
     this.buttonNextMove_.textContent = "";
-    this.buttonNextMove_.onclick = () => {
-      this.cancelOngoingAnimation_();
-      this.playNextMove_(-1);
-    };
+    this.buttonNextMove_.addEventListener('click', this.playNextMove_.bind(this, -1));
 
     this.buttonLastMove_ = document.createElement("button");
     this.buttonLastMove_.textContent = "";
-    this.buttonLastMove_.onclick = this.goToLastMove_.bind(this);
+    this.buttonLastMove_.addEventListener('click', this.goToLastMove_.bind(this));
+
+    this.containerElement_.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case "ArrowLeft":
+          this.playPreviousMove_();
+          e.preventDefault();
+          break;
+        case "ArrowRight":
+          this.playNextMove_();
+          e.preventDefault();
+          break;
+        case "ArrowUp":
+        case "Home":
+          this.goToFirstMove_();
+          e.preventDefault();
+          break;
+        case "ArrowDown":
+        case "End":
+          this.goToLastMove_();
+          e.preventDefault();
+          break;
+      }
+    }, true);
+
+    this.containerElement_.addEventListener("click", () => {this.containerElement_.focus();});
+    this.containerElement_.tabIndex = 0;
 
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add(CHESSGROUND_MOVE_BUTTONS_CLASS);
@@ -258,6 +281,10 @@ class ChessGame {
   }
 
   private playNextMove_(nextMoveDelay: number = -1) {
+    if (nextMoveDelay <= 0) {
+      this.cancelOngoingAnimation_();
+    }
+
     this.currentNextMoveCallback_ = null;
     if (this.currentMove_ >= this.sanMoves_.length) {
       return;

@@ -4,6 +4,9 @@
   grid-template-columns: max-content;
   row-gap: 7px;
 }
+.chessgroundMarkdownContainer:focus {
+  outline: none;
+}
 
 .chessgroundMarkdown {
   width: 280px;
