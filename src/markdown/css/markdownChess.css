@@ -33,7 +33,7 @@
   grid-row: 1 / 1;
   min-width: 100px;
   padding-left: 10px;
-  font-size: 0.8em;
+  font-size: 0.85em;
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -43,8 +43,6 @@
 
 .chessgroundInfo button {
   margin-top: 0.5em;
-  font-size: 1.1em;
-  font-family: "Courier New", monospace;
   color: white;
   background: #3692e7;
   border-radius: 5%;
