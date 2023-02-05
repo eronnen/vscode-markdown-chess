@@ -30,7 +30,7 @@ squares: g5 f7
 
 ### Chess Games
 
-You can view full chess games by using the pgn code block:
+You can view full chess games by using the pgn code block and copying a game in pgn format:
 
 ````markdown
 ```pgn
@@ -48,14 +48,27 @@ Bg4 12. Qxb7 Rab8 13. Qxa7 Qxb1+ 14. Kd2 Bb4# 0-1
 ```
 ````
 
+Alternatively, you can supply a starting position and a move sequence:
+
+````markdown
+```chess
+fen: r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4
+moves: Ba4 Nf6 O-O b5 Bb3 Be7 Re1 d6
+```
+````
+
+## Properties
+
+You can set various properties inside the code block, each one in a separate line in the format `name: value`.
+
 ### Supported properties for chess and pgn blocks
 
 These properties are available both for chess and pgn blocks. when using in a pgn block, the properties must come before the pgn itself.
 
-| **Property**    | **Description**                  | **Possible values** | **Default** |
-| --------------- | -------------------------------- | ------------------- | ----------- |
-| **orientation** | Which side to view the board     | white / black       | white       |
-| **size**        | Board width size in px (150-600) | 200px               | 280px       |
+| **Property**    | **Description**                         | **Possible values** | **Default** |
+| --------------- | --------------------------------------- | ------------------- | ----------- |
+| **orientation** | Which side to view the board            | white / black       | white       |
+| **size**        | Board width/height size in px (150-600) | 400px               | 280px       |
 
 ### Supported properties for chess blocks
 
@@ -97,6 +110,7 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 ## TODO
 
+- [ ] show move number in PGN viewer
 - [ ] show FEN/PGN errors
 - [ ] Point to the right markdown text when clicking on chess board
 - [ ] in a capture of a black piece by a white piece, when animating previous move show the white on top of the black piece
