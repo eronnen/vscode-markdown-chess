@@ -1,15 +1,14 @@
 import type { Api } from "chessground/api";
 import type { Config } from "chessground/config";
 import type { Color, PiecesDiff } from "chessground/types";
-import type { Setup } from "chessops/setup";
 import type { Move } from "chessops/types";
+import type { Position } from "chessops/chess";
 
 import { Chessground } from "chessground";
 import { castlingSide, Chess } from "chessops/chess";
 import { PgnParser, startingPosition } from "chessops/pgn";
 import { makeFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
-import { defaultSetup } from "chessops/setup";
 import { isDrop, isNormal } from "chessops/types";
 import {
   makeSquare,
@@ -45,11 +44,11 @@ class ChessGame {
   private buttonNextMove_: HTMLButtonElement;
   private buttonLastMove_: HTMLButtonElement;
 
-  private initialPosition_: Setup;
+  private initialPosition_: Position;
   private sanMoves_: string[];
   private currentMove_: number;
   private boardApi_: Api;
-  private chess_: Chess;
+  private chess_: Position;
 
   private currentNextMoveCallback_: ReturnType<typeof setTimeout> | null;
 
@@ -63,10 +62,17 @@ class ChessGame {
     this.sanMoves_ = [];
     this.currentMove_ = 0;
 
-    if (isPgn) {
-      this.parsePgnGame_();
-    } else {
-      this.parseFenWithMoves_(chessOptions);
+    try {
+      if (isPgn) {
+        this.parsePgnGame_();
+      } else {
+        this.parseFenWithMoves_(chessOptions);
+      }
+    } finally {
+      // TODO: show error
+      if (!this.initialPosition_) {
+        this.initialPosition_ = Chess.default();
+      }
     }
 
     this.reinitializeChess_();
@@ -94,7 +100,7 @@ class ChessGame {
         return;
       }
 
-      this.initialPosition_ = startingPosition(game.headers).unwrap().toSetup(); // TODO: handle errors
+      this.initialPosition_ = startingPosition(game.headers).unwrap();
       for (const move of game.moves.mainline()) {
         this.sanMoves_.push(move.san);
       }
@@ -172,7 +178,7 @@ class ChessGame {
 
   private createChessBoard_(chessOptions: ChessBlockOptions) {
     const config: Config = {
-      fen: makeFen(this.initialPosition_!),
+      fen: makeFen(this.initialPosition_.toSetup()),
       disableContextMenu: true,
       draggable: {
         enabled: false,
@@ -192,19 +198,7 @@ class ChessGame {
   }
 
   private reinitializeChess_() {
-    // TODO: log errors?
-    let initializedChess = false;
-    try {
-      if (this.initialPosition_) {
-        this.chess_ = Chess.fromSetup(this.initialPosition_).unwrap(); // TODO: handle errors
-        initializedChess = true;
-      }
-    } finally {
-      if (!initializedChess) {
-        this.initialPosition_ = defaultSetup();
-        this.chess_ = Chess.default();
-      }
-    }
+    this.chess_ = this.initialPosition_.clone();
   }
 
   private playMovesUntil_(untilMove: number) {
