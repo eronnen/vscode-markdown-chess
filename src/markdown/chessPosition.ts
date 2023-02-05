@@ -145,7 +145,7 @@ class ChessPosition {
         navigator.clipboard.writeText(info);
       }
     };
-    
+
     this.movesInfoElement_ = document.createElement("p");
     this.movesInfoCopyElement_ = document.createElement("button");
     this.movesInfoCopyElement_.innerHTML = "Copy Sequence";
@@ -155,8 +155,8 @@ class ChessPosition {
       if (info) {
         navigator.clipboard.writeText(info);
       }
-    }
-    
+    };
+
     infoContainer.appendChild(this.infoElement_);
     infoContainer.appendChild(this.infoCopyElement_);
     infoContainer.appendChild(this.movesInfoElement_);
@@ -194,7 +194,7 @@ class ChessPosition {
       const move = {
         from: parseSquare(orig)!,
         to: parseSquare(dest)!,
-      }
+      };
       this.playedMoves_.push(makeSanAndPlay(this.chess_, move));
     }
 
@@ -251,11 +251,13 @@ class ChessPosition {
     }
 
     if (this.movable_ && this.playedMoves_.length > 0) {
-      const movesInfoText = `fen: ${this.initialFen_}\nmoves: ${this.playedMoves_.join(' ')}`;
+      const movesInfoText = `fen: ${
+        this.initialFen_
+      }\nmoves: ${this.playedMoves_.join(" ")}`;
       this.movesInfoElement_!.innerText = movesInfoText;
       this.movesInfoCopyElement_!.hidden = false;
     } else {
-      this.movesInfoElement_!.innerText = '';
+      this.movesInfoElement_!.innerText = "";
       this.movesInfoCopyElement_!.hidden = true;
     }
   }
