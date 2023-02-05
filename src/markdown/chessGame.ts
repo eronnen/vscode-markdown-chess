@@ -12,7 +12,7 @@ import { makeFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
 import { defaultSetup } from "chessops/setup";
 import { isDrop, isNormal } from "chessops/types";
-import { makeSquare, opposite, squareFile, kingCastlesTo } from "chessops/util";
+import { makeSquare, opposite, kingCastlesTo, rookCastlesTo } from "chessops/util";
 
 import {
   DEFAULT_MOVE_DELAY_MILLISECONDS,
@@ -26,10 +26,6 @@ function logFuck(s: string) {
   document.body.appendChild(fuck);
   return;
 }
-
-// TODO: wait for https://github.com/niklasf/chessops/pull/128 to merge in upstream
-const rookCastlesTo = (color: Color, side: CastlingSide): Square =>
-  color === 'white' ? (side === 'a' ? 3 : 5) : side === 'a' ? 59 : 61;
 
 const ROOK_CASTLE_FROM = {
   white: {a: 0, h: 7},
