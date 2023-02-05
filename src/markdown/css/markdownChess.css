@@ -36,19 +36,21 @@
   font-size: 0.8em;
   overflow-wrap: break-word;
   word-wrap: break-word;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .chessgroundInfo button {
   margin-top: 0.5em;
-  margin-bottom: 3em;
-  height: 1.8em;
-  font-size: 1em;
+  font-size: 1.1em;
   font-family: "Courier New", monospace;
   color: white;
   background: #3692e7;
   border-radius: 5%;
   border-color: transparent;
   cursor: pointer;
+  max-width: 150px;
 }
 
 .chessgroundInfo button:hover {

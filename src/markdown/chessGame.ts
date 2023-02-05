@@ -324,7 +324,6 @@ class ChessGame {
   }
 
   private playMove_(move: Move) {
-    // TODO: catch errors
     if (isNormal(move)) {
       if (move.promotion) {
         this.boardApi_.setPieces(

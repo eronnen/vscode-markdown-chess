@@ -21,7 +21,6 @@ class ChessPosition {
   private containerElement_: HTMLElement;
   private infoElement_: HTMLElement | null;
   private infoCopyElement_: HTMLElement | null;
-  private movesInfoElement_: HTMLElement | null;
   private movesInfoCopyElement_: HTMLElement | null;
 
   private movable_: boolean;
@@ -137,7 +136,7 @@ class ChessPosition {
     infoContainer.classList.add(CHESSGROUND_INFO_CLASS);
     this.infoElement_ = document.createElement("p");
     this.infoCopyElement_ = document.createElement("button");
-    this.infoCopyElement_.innerHTML = "Copy Position";
+    this.infoCopyElement_.innerHTML = "Copy";
     this.infoCopyElement_.hidden = true;
     this.infoCopyElement_.onclick = () => {
       const info = this.infoElement_!.innerText;
@@ -146,12 +145,11 @@ class ChessPosition {
       }
     };
 
-    this.movesInfoElement_ = document.createElement("p");
     this.movesInfoCopyElement_ = document.createElement("button");
-    this.movesInfoCopyElement_.innerHTML = "Copy Sequence";
+    this.movesInfoCopyElement_.innerHTML = "Copy Move Sequence";
     this.movesInfoCopyElement_.hidden = true;
     this.movesInfoCopyElement_.onclick = () => {
-      const info = this.movesInfoElement_!.innerText;
+      const info = this.infoElement_!.dataset.movesInfo;
       if (info) {
         navigator.clipboard.writeText(info);
       }
@@ -159,7 +157,6 @@ class ChessPosition {
 
     infoContainer.appendChild(this.infoElement_);
     infoContainer.appendChild(this.infoCopyElement_);
-    infoContainer.appendChild(this.movesInfoElement_);
     infoContainer.appendChild(this.movesInfoCopyElement_);
     this.containerElement_.appendChild(infoContainer);
   }
@@ -254,10 +251,10 @@ class ChessPosition {
       const movesInfoText = `fen: ${
         this.initialFen_
       }\nmoves: ${this.playedMoves_.join(" ")}`;
-      this.movesInfoElement_!.innerText = movesInfoText;
+      this.infoElement_!.dataset.movesInfo = movesInfoText;
       this.movesInfoCopyElement_!.hidden = false;
     } else {
-      this.movesInfoElement_!.innerText = "";
+      this.infoElement_!.dataset.movesInfo = "";
       this.movesInfoCopyElement_!.hidden = true;
     }
   }

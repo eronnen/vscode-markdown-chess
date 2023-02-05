@@ -111,6 +111,7 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 ## TODO
 
 - [ ] show move number in PGN viewer
+- [ ] update PGN current move when clicking on move in editor
 - [ ] show FEN/PGN errors
 - [ ] Point to the right markdown text when clicking on chess board
 - [ ] in a capture of a black piece by a white piece, when animating previous move show the white on top of the black piece
@@ -118,7 +119,6 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 - [ ] Support jpg/png board backgrounds
 - [ ] Support 3d pieces
 
-## Known Issues
 
 ## Contributing
 
