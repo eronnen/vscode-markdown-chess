@@ -23,12 +23,12 @@ import {
   CHESSGROUND_MOVE_BUTTONS_CLASS,
 } from "../shared/constants";
 
-function log(s: string) {
-  const logElement = document.createElement("p");
-  logElement.textContent = s;
-  document.body.appendChild(logElement);
-  return;
-}
+// function log(s: string) {
+//   const logElement = document.createElement("p");
+//   logElement.textContent = s;
+//   document.body.appendChild(logElement);
+//   return;
+// }
 
 const ROOK_CASTLE_FROM = {
   white: { a: 0, h: 7 },
@@ -46,7 +46,7 @@ class ChessGame {
 
   private initialPosition_: Position;
   private sanMoves_: string[] = [];
-  private currentMove_: number = 0;
+  private currentMove_ = 0;
   private boardApi_: Api;
   private chess_: Position;
 
@@ -257,7 +257,7 @@ class ChessGame {
   }
 
   private updateBoard_(
-    updateFen: boolean = true,
+    updateFen = true,
     lastMove: Move | undefined = undefined
   ) {
     this.boardApi_.set({
@@ -294,7 +294,7 @@ class ChessGame {
     this.updateMoveButtons_();
   }
 
-  private playNextMove_(nextMoveDelay: number = -1) {
+  private playNextMove_(nextMoveDelay = -1) {
     if (nextMoveDelay <= 0) {
       this.cancelOngoingAnimation_();
     }

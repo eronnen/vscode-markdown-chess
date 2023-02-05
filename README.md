@@ -119,7 +119,6 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 - [ ] Support jpg/png board backgrounds
 - [ ] Support 3d pieces
 
-
 ## Contributing
 
 `vscode-markdown-chess` is developed on GitHub at [eronne/vscode-mardown-chess](https://github.com/eronnen/vscode-markdown-chess). Feel free to add PRs, issues and feature request on the [issues](https://github.com/eronnen/vscode-markdown-chess/issues) page.
