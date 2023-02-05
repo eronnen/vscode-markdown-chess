@@ -17,7 +17,6 @@ import {
 } from "../shared/constants";
 
 class ChessPosition {
-  private chessElement_: HTMLElement;
   private containerElement_: HTMLElement;
   private infoElement_: HTMLElement | null;
   private infoCopyElement_: HTMLElement | null;
@@ -29,16 +28,8 @@ class ChessPosition {
   private chess_: Chess | null;
   private lastMove_: [Key, Key] | null;
 
-  constructor(chessElement: HTMLElement, chessOptions: ChessBlockOptions) {
-    this.chessElement_ = chessElement;
-    this.containerElement_ = chessElement.parentElement!;
-    this.infoElement_ = null;
-    this.infoCopyElement_ = null;
-
-    this.boardApi_ = null;
-    this.chess_ = null;
-    this.lastMove_ = null;
-
+  constructor(private chessElement_: HTMLElement, chessOptions: ChessBlockOptions) {
+    this.containerElement_ = chessElement_.parentElement!;
     const config = this.parseOptions_(chessOptions);
     this.initializePosition_(config);
     this.createInfoElement_();

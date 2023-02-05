@@ -37,7 +37,6 @@ const ROOK_CASTLE_FROM = {
 };
 
 class ChessGame {
-  private chessElement_: HTMLElement;
   private containerElement_: HTMLElement;
 
   private buttonFirstMove_: HTMLButtonElement;
@@ -55,12 +54,11 @@ class ChessGame {
   private currentNextMoveCallback_: ReturnType<typeof setTimeout> | null;
 
   constructor(
-    chessElement: HTMLElement,
+    private chessElement_: HTMLElement,
     chessOptions: ChessBlockOptions,
     isPgn: boolean
   ) {
-    this.chessElement_ = chessElement;
-    this.containerElement_ = chessElement.parentElement!;
+    this.containerElement_ = chessElement_.parentElement!;
 
     this.sanMoves_ = [];
     this.currentMove_ = 0;
