@@ -2,7 +2,13 @@ import type { Api } from "chessground/api";
 import type { Config } from "chessground/config";
 import type { Color, PiecesDiff } from "chessground/types";
 import type { Setup } from "chessops/setup";
-import type { Move, NormalMove, DropMove, CastlingSide, Square } from "chessops/types";
+import type {
+  Move,
+  NormalMove,
+  DropMove,
+  CastlingSide,
+  Square,
+} from "chessops/types";
 
 import { Chessground } from "chessground";
 import { chessgroundMove } from "chessops/compat";
@@ -12,7 +18,12 @@ import { makeFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
 import { defaultSetup } from "chessops/setup";
 import { isDrop, isNormal } from "chessops/types";
-import { makeSquare, opposite, kingCastlesTo, rookCastlesTo } from "chessops/util";
+import {
+  makeSquare,
+  opposite,
+  kingCastlesTo,
+  rookCastlesTo,
+} from "chessops/util";
 
 import {
   DEFAULT_MOVE_DELAY_MILLISECONDS,
@@ -28,8 +39,8 @@ import {
 // }
 
 const ROOK_CASTLE_FROM = {
-  white: {a: 0, h: 7},
-  black: {a: 56, h: 63}
+  white: { a: 0, h: 7 },
+  black: { a: 56, h: 63 },
 };
 
 class ChessGame {
@@ -217,10 +228,17 @@ class ChessGame {
     }
   }
 
-  private updateBoard_(updateFen: boolean = true, lastMove: Move | undefined = undefined) {
+  private updateBoard_(
+    updateFen: boolean = true,
+    lastMove: Move | undefined = undefined
+  ) {
     this.boardApi_.set({
-      ...(updateFen ? {fen: makeFen(this.chess_.toSetup())} : {}),
-      ...(lastMove && isNormal(lastMove) ? {lastMove: [makeSquare(lastMove.from), makeSquare(lastMove.to)]} : {}),
+      ...(updateFen ? { fen: makeFen(this.chess_.toSetup()) } : {}),
+      ...(lastMove && isNormal(lastMove)
+        ? { lastMove: [makeSquare(lastMove.from), makeSquare(lastMove.to)] }
+        : this.currentMove_ == 0
+        ? { lastMove: undefined }
+        : {}),
       turnColor: this.chess_.turn,
       check: this.chess_.isCheck(),
     });
@@ -312,7 +330,7 @@ class ChessGame {
     if (this.currentMove_ == 0) {
       return;
     }
-    
+
     const currentMoveTemp = this.currentMove_ - 1;
     this.currentMove_ = 0;
     this.reinitializeChess_();
@@ -326,12 +344,7 @@ class ChessGame {
 
     if (isDrop(move)) {
       this.boardApi_.setPieces(
-        new Map([
-          [
-            makeSquare((move as DropMove).to),
-            undefined
-          ],
-        ])
+        new Map([[makeSquare((move as DropMove).to), undefined]])
       );
     } else {
       const pieceMovements: PiecesDiff = new Map();
@@ -342,27 +355,47 @@ class ChessGame {
           color: this.chess_.turn,
           role: "pawn",
         });
-        pieceMovements.set(makeSquare((move as NormalMove).to), this.chess_.board.get((move as NormalMove).to));
-      } else if (this.chess_.board.get((move as NormalMove).from)?.role == "king") {
+        pieceMovements.set(
+          makeSquare((move as NormalMove).to),
+          this.chess_.board.get((move as NormalMove).to)
+        );
+      } else if (
+        this.chess_.board.get((move as NormalMove).from)?.role == "king"
+      ) {
         castling = castlingSide(this.chess_, move);
         if (castling) {
-          pieceMovements.set(makeSquare(kingCastlesTo(this.chess_.turn, castling)), undefined);
+          pieceMovements.set(
+            makeSquare(kingCastlesTo(this.chess_.turn, castling)),
+            undefined
+          );
           pieceMovements.set(makeSquare((move as NormalMove).from), {
             color: this.chess_.turn,
-            role: "king"
+            role: "king",
           });
 
-          pieceMovements.set(makeSquare(rookCastlesTo(this.chess_.turn, castling)), undefined);
-          pieceMovements.set(makeSquare(ROOK_CASTLE_FROM[this.chess_.turn][castling]), {
-            color: this.chess_.turn,
-            role: "rook"
-          });
+          pieceMovements.set(
+            makeSquare(rookCastlesTo(this.chess_.turn, castling)),
+            undefined
+          );
+          pieceMovements.set(
+            makeSquare(ROOK_CASTLE_FROM[this.chess_.turn][castling]),
+            {
+              color: this.chess_.turn,
+              role: "rook",
+            }
+          );
         }
-      } 
-      
-      if (!castling && !((move as NormalMove).promotion)) {
-        pieceMovements.set(makeSquare((move as NormalMove).from), this.chess_.board.get((move as NormalMove).from));
-        pieceMovements.set(makeSquare((move as NormalMove).to), this.chess_.board.get((move as NormalMove).to));
+      }
+
+      if (!castling && !(move as NormalMove).promotion) {
+        pieceMovements.set(
+          makeSquare((move as NormalMove).from),
+          this.chess_.board.get((move as NormalMove).from)
+        );
+        pieceMovements.set(
+          makeSquare((move as NormalMove).to),
+          this.chess_.board.get((move as NormalMove).to)
+        );
       }
 
       // TODO: restore pieces for atomic chess?
