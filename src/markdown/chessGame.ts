@@ -1,6 +1,6 @@
 import type { Api } from "chessground/api";
 import type { Config } from "chessground/config";
-import type { Color, PiecesDiff } from "chessground/types";
+import type { Color, PiecesDiff, Key } from "chessground/types";
 import type { Move } from "chessops/types";
 import type { Position } from "chessops/chess";
 
@@ -16,6 +16,8 @@ import {
   rookCastlesTo,
   opposite,
 } from "chessops/util";
+
+import { parseSquaresString } from "./chessUtils";
 
 import {
   DEFAULT_MOVE_DELAY_MILLISECONDS,
@@ -45,6 +47,7 @@ class ChessGame {
   private buttonLastMove_: HTMLButtonElement;
 
   private initialPosition_: Position;
+  private initialLastMove_: Key[] | undefined = undefined;
   private sanMoves_: string[] = [];
   private currentMove_ = 0;
   private boardApi_: Api;
@@ -110,6 +113,13 @@ class ChessGame {
       : Chess.default();
     if (chessOptions.moves) {
       this.sanMoves_ = chessOptions.moves.split(" ");
+    }
+
+    if (chessOptions.lastMove) {
+      const lastMoveSquares = parseSquaresString(chessOptions.lastMove);
+      if (lastMoveSquares.length >= 2) {
+        this.initialLastMove_ = lastMoveSquares.slice(0, 2);
+      }
     }
   }
 
@@ -265,7 +275,7 @@ class ChessGame {
       ...(lastMove && isNormal(lastMove)
         ? { lastMove: [makeSquare(lastMove.from), makeSquare(lastMove.to)] }
         : this.currentMove_ == 0
-        ? { lastMove: undefined }
+        ? { lastMove: this.initialLastMove_ }
         : {}),
       turnColor: this.chess_.turn,
       check: this.chess_.isCheck(),
