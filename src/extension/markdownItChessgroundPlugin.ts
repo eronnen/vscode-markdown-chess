@@ -5,7 +5,6 @@ import {
   CHESSGROUND_CLASS,
 } from "../shared/constants";
 
-const vscodeElementClass = "code-line";
 const chessgroundConfigDefaultGetter = () => {
   return { boardTheme: "brown", pieceSet: "cburnett" };
 };
@@ -19,11 +18,11 @@ export function markdownItChessgroundPlugin(
     if (lang.toLowerCase() === "chess" || lang.toLowerCase() == "pgn") {
       // wrapping in another div so we can later add a column right to the chess board
       const config = configGetter();
-      return `<pre style="all:unset;"><div class="${CHESSGROUND_CONTAINER_CLASS} ${vscodeElementClass} ${
-        config.boardTheme
-      } ${config.pieceSet}" data-lang="${lang.toLowerCase()}" data-pieceset="${
+      return `<div class="${CHESSGROUND_CONTAINER_CLASS} ${config.boardTheme} ${
         config.pieceSet
-      }"><div class="${CHESSGROUND_CLASS}">${code.trim()}</div></div></pre>`;
+      }" data-lang="${lang.toLowerCase()}" data-pieceset="${
+        config.pieceSet
+      }"><div class="${CHESSGROUND_CLASS}">${code.trim()}</div></div>`;
     } else if (highlight) {
       return highlight(code, lang, attrs);
     } else {

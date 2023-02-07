@@ -216,7 +216,7 @@ class ChessPosition {
       infoText += `fen: ${makeFen(this.chess_.toSetup())}\n`;
 
       if (this.lastMove_) {
-        infoText += `lastMove: ${this.lastMove_.join(' ')}\n`;
+        infoText += `lastMove: ${this.lastMove_.join(" ")}\n`;
       }
     }
 

@@ -101,6 +101,12 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
   for (const chessElement of root.getElementsByClassName(CHESSGROUND_CLASS)) {
     if (chessElement instanceof HTMLElement) {
       chessExists = true;
+
+      const preParent = chessElement.closest("pre");
+      if (preParent) {
+        preParent.style.all = "unset";
+      }
+
       if (!usedPieces) {
         const pieceSet = chessElement.parentElement!.dataset.pieceset;
         if (pieceSet) {

@@ -49,6 +49,7 @@
   border-color: transparent;
   cursor: pointer;
   max-width: 150px;
+  user-select: none;
 }
 
 .chessgroundInfo button:hover {
@@ -84,6 +85,7 @@
   outline: hidden;
   color: rgb(186, 186, 186);
   cursor: pointer;
+  user-select: none;
 }
 
 .chessgroundMoves button:disabled {
