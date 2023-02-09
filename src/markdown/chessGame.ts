@@ -25,13 +25,6 @@ import {
   CHESSGROUND_MOVE_BUTTONS_CLASS,
 } from "../shared/constants";
 
-// function log(s: string) {
-//   const logElement = document.createElement("p");
-//   logElement.textContent = s;
-//   document.body.appendChild(logElement);
-//   return;
-// }
-
 const ROOK_CASTLE_FROM = {
   white: { a: 0, h: 7 },
   black: { a: 56, h: 63 },
