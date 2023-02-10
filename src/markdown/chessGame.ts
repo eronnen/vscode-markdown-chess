@@ -20,7 +20,6 @@ import {
 import { parseSquaresString } from "./chessUtils";
 
 import {
-  DEFAULT_MOVE_DELAY_MILLISECONDS,
   CHESSGROUND_MOVES_CLASS,
   CHESSGROUND_MOVE_BUTTONS_CLASS,
 } from "../shared/constants";
@@ -51,7 +50,8 @@ class ChessGame {
   constructor(
     private chessElement_: HTMLElement,
     chessOptions: ChessBlockOptions,
-    isPgn: boolean
+    isPgn: boolean,
+    private playbackSpeedMilliseconds_: number
   ) {
     this.containerElement_ = chessElement_.parentElement!;
 
@@ -138,7 +138,7 @@ class ChessGame {
     this.buttonPlayMove_.textContent = "";
     this.buttonPlayMove_.addEventListener(
       "click",
-      this.playNextMove_.bind(this, DEFAULT_MOVE_DELAY_MILLISECONDS)
+      this.playNextMove_.bind(this, this.playbackSpeedMilliseconds_)
     );
 
     this.buttonNextMove_ = document.createElement("button");
@@ -471,7 +471,8 @@ class ChessGame {
 export function createChessGame(
   chessElement: HTMLElement,
   chessOptions: ChessBlockOptions,
-  isPgn: boolean
+  isPgn: boolean,
+  playbackSpeedMilliseconds: number
 ) {
-  new ChessGame(chessElement, chessOptions, isPgn);
+  new ChessGame(chessElement, chessOptions, isPgn, playbackSpeedMilliseconds);
 }

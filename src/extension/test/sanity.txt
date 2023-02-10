@@ -8,7 +8,7 @@ should show a chessboard
 fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 ```
 .
-<pre><code class="language-chess"><div class="chessgroundMarkdownContainer brown cburnett" data-lang="chess" data-pieceset="cburnett"><div class="chessgroundMarkdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></code></pre>
+<pre><code class="language-chess"><div class="chessgroundMarkdownContainer brown cburnett" data-lang="chess" data-pieceset="cburnett" data-playback-speed="450"><div class="chessgroundMarkdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></code></pre>
 .
 
 ---
@@ -21,7 +21,7 @@ should show a pgn chess board
 ABCDEF
 ```
 .
-<pre><code class="language-pgn"><div class="chessgroundMarkdownContainer brown cburnett" data-lang="pgn" data-pieceset="cburnett"><div class="chessgroundMarkdown">ABCDEF</div></div></code></pre>
+<pre><code class="language-pgn"><div class="chessgroundMarkdownContainer brown cburnett" data-lang="pgn" data-pieceset="cburnett" data-playback-speed="450"><div class="chessgroundMarkdown">ABCDEF</div></div></code></pre>
 .
 
 ---
@@ -34,5 +34,5 @@ should show a chessboard in lowercase code language
 fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 ```
 .
-<pre><code class="language-CHeSS"><div class="chessgroundMarkdownContainer brown cburnett" data-lang="chess" data-pieceset="cburnett"><div class="chessgroundMarkdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></code></pre>
+<pre><code class="language-CHeSS"><div class="chessgroundMarkdownContainer brown cburnett" data-lang="chess" data-pieceset="cburnett" data-playback-speed="450"><div class="chessgroundMarkdown">fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</div></div></code></pre>
 .

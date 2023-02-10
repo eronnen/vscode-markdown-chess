@@ -1,6 +1,7 @@
 import type MarkdownIt from "markdown-it";
 import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
+import { DEFAULT_MOVE_DELAY_MILLISECONDS } from "../shared/constants";
 
 const configSection = "markdown-chess";
 const openSettingsCommand = `${configSection}.openSettings`;
@@ -47,9 +48,14 @@ export function activate(context: vscode.ExtensionContext) {
         const pieceSet = sanitizePieceSet(
           vscode.workspace.getConfiguration(configSection).get("pieceSet")
         );
+        const playbackSpeed: number =
+          vscode.workspace
+            .getConfiguration(configSection)
+            .get("playbackSpeed") || DEFAULT_MOVE_DELAY_MILLISECONDS;
         return {
           boardTheme: boardTheme,
           pieceSet: pieceSet,
+          playbackSpeed: playbackSpeed,
         };
       };
 

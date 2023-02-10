@@ -3,10 +3,15 @@ import type MarkdownIt from "markdown-it";
 import {
   CHESSGROUND_CONTAINER_CLASS,
   CHESSGROUND_CLASS,
+  DEFAULT_MOVE_DELAY_MILLISECONDS,
 } from "../shared/constants";
 
 const chessgroundConfigDefaultGetter = () => {
-  return { boardTheme: "brown", pieceSet: "cburnett" };
+  return {
+    boardTheme: "brown",
+    pieceSet: "cburnett",
+    playbackSpeed: DEFAULT_MOVE_DELAY_MILLISECONDS,
+  };
 };
 
 export function markdownItChessgroundPlugin(
@@ -22,6 +27,8 @@ export function markdownItChessgroundPlugin(
         config.pieceSet
       }" data-lang="${lang.toLowerCase()}" data-pieceset="${
         config.pieceSet
+      }" data-playback-speed="${
+        config.playbackSpeed
       }"><div class="${CHESSGROUND_CLASS}">${code.trim()}</div></div>`;
     } else if (highlight) {
       return highlight(code, lang, attrs);

@@ -15,6 +15,7 @@ declare interface StyleLoaderImport {
 declare interface ChessgroundConfig {
   boardTheme: string;
   pieceSet: string;
+  playbackSpeed: number;
 }
 
 declare type ChessgroundConfigGetter = () => ChessgroundConfig;

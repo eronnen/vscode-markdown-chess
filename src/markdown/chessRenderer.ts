@@ -6,6 +6,7 @@ import {
   CHESSGROUND_CLASS,
   DEFAULT_PIECE_SET,
   DEFAULT_BOARD_GEOMETRY,
+  DEFAULT_MOVE_DELAY_MILLISECONDS,
   CHESSGROUND_CHESS_GAME_CLASS,
   CHESSGROUND_CHESS_POSITION_CLASS,
 } from "../shared/constants";
@@ -115,14 +116,21 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
         }
       }
 
+      let playbackSpeed = DEFAULT_MOVE_DELAY_MILLISECONDS;
+      if (chessElement.parentElement!.dataset.playbackSpeed) {
+        playbackSpeed = parseInt(
+          chessElement.parentElement!.dataset.playbackSpeed
+        );
+      }
+
       const chessOptions = parseChessBlockOptions(chessElement);
 
       if (chessElement.parentElement!.dataset.lang == "pgn") {
         chessElement.classList.add(CHESSGROUND_CHESS_GAME_CLASS);
-        createChessGame(chessElement, chessOptions, true);
+        createChessGame(chessElement, chessOptions, true, playbackSpeed);
       } else if (chessOptions.moves) {
         chessElement.classList.add(CHESSGROUND_CHESS_GAME_CLASS);
-        createChessGame(chessElement, chessOptions, false);
+        createChessGame(chessElement, chessOptions, false, playbackSpeed);
       } else {
         chessElement.classList.add(CHESSGROUND_CHESS_POSITION_CLASS);
         createChessPosition(chessElement, chessOptions);
