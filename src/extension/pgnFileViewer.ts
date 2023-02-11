@@ -7,6 +7,7 @@ import { PgnNodeData, PgnParser } from "chessops/pgn";
 import {
   CHESSGROUND_CONTAINER_CLASS,
   CHESSGROUND_CLASS,
+  PGN_FILE_WEBVIEW_TYPE
 } from "../shared/constants";
 
 function getNonce() {
@@ -17,6 +18,10 @@ function getNonce() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
+}
+
+function escapeAttribute(value: string | vscode.Uri): string {
+	return value.toString().replace(/"/g, '&quot;');
 }
 
 function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
@@ -30,11 +35,10 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 }
 
 class PgnFileViewer {
-  public static readonly viewType = "chess-viewer.pgn.preview";
   public static openViewers: Set<PgnFileViewer> = new Set<PgnFileViewer>();
 
-  private webviewPanel_;
-  private webviewTitle_;
+  private resource_: vscode.Uri;
+  private webviewPanel_: vscode.WebviewPanel;
 
   private _disposables: vscode.Disposable[] = [];
   private disposed_: boolean = false;
@@ -42,27 +46,43 @@ class PgnFileViewer {
   private games_: (Game<PgnNodeData> | PgnError)[] = [];
   private chessConfig_: ChessgroundConfig;
 
-  constructor(
+  private constructor(
     private context_: vscode.ExtensionContext,
-    private resource_: vscode.Uri,
-    previewColumn: vscode.ViewColumn,
-    private chessConfigGetter_: ChessgroundConfigGetter
-  ) {
-    this.webviewTitle_ = `PGN Preview: ${Utils.basename(resource_)}`;
-    this.webviewPanel_ = vscode.window.createWebviewPanel(
-      PgnFileViewer.viewType,
-      this.webviewTitle_,
-      previewColumn,
-      getWebviewOptions(context_.extensionUri)
-    );
-    PgnFileViewer.openViewers.add(this);
-    this.webviewPanel_.onDidDispose(
-      () => this.dispose(),
-      null,
-      this._disposables
-    );
+    private chessConfigGetter_: ChessgroundConfigGetter,
+  ) {}
 
-    this.updateContent_();
+  public static createNewPgnViewer(
+    context: vscode.ExtensionContext,
+    resource: vscode.Uri,
+    previewColumn: vscode.ViewColumn,
+    chessConfigGetter: ChessgroundConfigGetter,
+  ): PgnFileViewer {
+    const viewer = new PgnFileViewer(context, chessConfigGetter);
+    viewer.resource_ = resource;
+    viewer.webviewPanel_ = vscode.window.createWebviewPanel(
+      PGN_FILE_WEBVIEW_TYPE,
+      `PGN Preview: ${Utils.basename(viewer.resource_)}`,
+      previewColumn,
+      getWebviewOptions(viewer.context_.extensionUri)
+    );
+    
+    viewer.initialize_();
+    return viewer;
+  }
+
+  public static restorePgnViewer(
+    context: vscode.ExtensionContext,
+    chessConfigGetter: ChessgroundConfigGetter,
+    webviewPanel: vscode.WebviewPanel,
+    state: any
+  ): PgnFileViewer {
+    const viewer = new PgnFileViewer(context, chessConfigGetter);
+    viewer.webviewPanel_ = webviewPanel;
+    viewer.resource_ = vscode.Uri.parse(state.resource);
+    viewer.webviewPanel_.webview.options = getWebviewOptions(context.extensionUri);
+    
+    viewer.initialize_();
+    return viewer;
   }
 
   public dispose() {
@@ -76,6 +96,17 @@ class PgnFileViewer {
         x.dispose();
       }
     }
+  }
+
+  private initialize_() {
+    PgnFileViewer.openViewers.add(this);
+    this.webviewPanel_.onDidDispose(
+      () => this.dispose(),
+      null,
+      this._disposables
+    );
+
+    this.updateContent_();
   }
 
   private async updateContent_() {
@@ -126,6 +157,7 @@ moves: ${moves.join(" ")}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="pgn-file-viewer-data" data-state="${escapeAttribute(JSON.stringify({resource: this.resource_.toString()}))}">
     <link rel="stylesheet" type="text/css" href="${this.extensionResourcePath_(
       "markdownPreview.css"
     )}" />
@@ -133,6 +165,12 @@ moves: ${moves.join(" ")}
 <body>
 <h1>${Utils.basename(this.resource_)}</h1>
 ${gamesHtml}
+<script>
+state = JSON.parse(document.getElementById("pgn-file-viewer-data").getAttribute("data-state"));
+vscode = acquireVsCodeApi();
+originalState = vscode.getState();
+vscode.setState(state);
+</script>
 <script async src="${this.extensionResourcePath_(
       "markdownPreview.bundle.js"
     )}" nonce="${nonce}" charset="UTF-8"></script>
@@ -165,10 +203,10 @@ ${gamesHtml}
   }
 }
 
-export function showPgnPreview(
+export function createNewPgnPreview(
   context: vscode.ExtensionContext,
+  chessConfigGetter: ChessgroundConfigGetter,
   sideBySide: boolean,
-  chessConfigGetter: ChessgroundConfigGetter
 ) {
   const resource = vscode.window.activeTextEditor?.document.uri;
   if (!resource) {
@@ -185,7 +223,16 @@ export function showPgnPreview(
     vscode.ViewColumn.One;
   const previewColumn = sideBySide ? vscode.ViewColumn.Beside : resourceColumn;
 
-  return new PgnFileViewer(context, resource, previewColumn, chessConfigGetter);
+  return PgnFileViewer.createNewPgnViewer(context, resource, previewColumn, chessConfigGetter);
+}
+
+export function restorePgnPreview(
+  context: vscode.ExtensionContext,
+  chessConfigGetter: ChessgroundConfigGetter,
+  webviewPanel: vscode.WebviewPanel,
+  state: any
+) {
+  return PgnFileViewer.restorePgnViewer(context, chessConfigGetter, webviewPanel, state);
 }
 
 // export function closeAllPgnPreviews() {

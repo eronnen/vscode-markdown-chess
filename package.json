@@ -28,8 +28,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:pgn",
-    "onWebviewPanel:pgnPreview"
+    "onWebviewPanel:chess-viewer.pgnPreview"
   ],
   "main": "./dist/extension.js",
   "browser": "./dist/web/extension.js",

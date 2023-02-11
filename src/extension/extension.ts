@@ -2,8 +2,8 @@ import type MarkdownIt from "markdown-it";
 
 import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
-import { showPgnPreview } from "./pgnFileViewer";
-import { DEFAULT_MOVE_DELAY_MILLISECONDS } from "../shared/constants";
+import { createNewPgnPreview, restorePgnPreview } from "./pgnFileViewer";
+import { DEFAULT_MOVE_DELAY_MILLISECONDS, PGN_FILE_WEBVIEW_TYPE } from "../shared/constants";
 
 const configSection = "chess-viewer";
 const openSettingsCommand = `${configSection}.openSettings`;
@@ -53,18 +53,26 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(openPgnPreviewCommand, () => {
-      console.warn("FUCK1: open PGN preview to the side");
-      showPgnPreview(context, true, extensionConfigGetter);
-    })
-  );
-
-  context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((e) => {
       if (e.affectsConfiguration(configSection)) {
         vscode.commands.executeCommand("markdown.preview.refresh");
       }
     })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(openPgnPreviewCommand, () => {
+      console.warn("FUCK1: open PGN preview to the side");
+      createNewPgnPreview(context, extensionConfigGetter, true);
+    })
+  );
+
+  vscode.window.registerWebviewPanelSerializer(PGN_FILE_WEBVIEW_TYPE, {
+      async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+        console.warn("FUCK2: deserializing");
+        restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
+      }
+    }
   );
 
   return {
@@ -76,6 +84,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 // export function deactivate() {
-//   console.warn("FUCK3: deactivate()");
-//   closeAllPgnPreviews();
 // }
