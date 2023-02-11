@@ -44,8 +44,13 @@
     "languages": [
       {
         "id": "pgn",
-        "aliases": ["PGN", "pgn"],
-        "extensions": [".pgn"]
+        "aliases": [
+          "PGN",
+          "pgn"
+        ],
+        "extensions": [
+          ".pgn"
+        ]
       }
     ],
     "configuration": {
