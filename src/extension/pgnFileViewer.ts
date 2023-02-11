@@ -4,6 +4,11 @@ import vscode from "vscode";
 import { Utils } from 'vscode-uri';
 import { PgnNodeData, PgnParser } from "chessops/pgn";
 
+import {
+    CHESSGROUND_CONTAINER_CLASS,
+    CHESSGROUND_CLASS,
+  } from "../shared/constants";
+
 function getNonce() {
 	let text = '';
 	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -33,12 +38,14 @@ class PgnFileViewer {
     private _disposables: vscode.Disposable[] = [];
     private disposed_: boolean = false;
 
-    private games_: (Game<PgnNodeData> | PgnError)[] = []
+    private games_: (Game<PgnNodeData> | PgnError)[] = [];
+    private chessConfig_: ChessgroundConfig;
 
     constructor(
         private context_: vscode.ExtensionContext,
         private resource_: vscode.Uri,
-        previewColumn: vscode.ViewColumn
+        previewColumn: vscode.ViewColumn,
+        private chessConfigGetter_: ChessgroundConfigGetter
     ) {
         this.webviewTitle_ = `PGN Preview: ${Utils.basename(resource_)}`;
         this.webviewPanel_ = vscode.window.createWebviewPanel(PgnFileViewer.viewType, this.webviewTitle_, previewColumn, getWebviewOptions(context_.extensionUri));
@@ -67,8 +74,7 @@ class PgnFileViewer {
             return;
         }
 
-
-
+        this.chessConfig_ = this.chessConfigGetter_();
         this.webviewPanel_.webview.html = this.getContentHTML_();
     }
 
@@ -91,7 +97,7 @@ Result: ${game.headers.get("Result")}<br/>
         
         return `<h2>${game.headers.get('White')} - ${game.headers.get('Black')}</h2>
 ${headersHTML}
-<code><div class="chessgroundMarkdownContainer brown cburnett" data-lang="chess" data-pieceset="cburnett" data-playback-speed="450"><div class="chessgroundMarkdown">
+<code><div class="${CHESSGROUND_CONTAINER_CLASS} ${this.chessConfig_.boardTheme} ${this.chessConfig_.pieceSet}" data-lang="chess" data-pieceset="${this.chessConfig_.pieceSet}" data-playback-speed="${this.chessConfig_.playbackSpeed}"><div class="${CHESSGROUND_CLASS}">
 moves: ${moves.join(' ')}
 </div></div></code>`;
     }
@@ -137,7 +143,7 @@ ${gamesHtml}
     }
 }
 
-export function showPgnPreview(context: vscode.ExtensionContext, sideBySide: boolean) {
+export function showPgnPreview(context: vscode.ExtensionContext, sideBySide: boolean, chessConfigGetter: ChessgroundConfigGetter) {
     const resource = vscode.window.activeTextEditor?.document.uri;
     if (!resource) {
         return;
@@ -150,7 +156,7 @@ export function showPgnPreview(context: vscode.ExtensionContext, sideBySide: boo
     const resourceColumn = (vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn) || vscode.ViewColumn.One;
     const previewColumn = sideBySide ? vscode.ViewColumn.Beside : resourceColumn;
     
-    return new PgnFileViewer(context, resource, previewColumn);
+    return new PgnFileViewer(context, resource, previewColumn, chessConfigGetter);
 }
 
 // export function closeAllPgnPreviews() {

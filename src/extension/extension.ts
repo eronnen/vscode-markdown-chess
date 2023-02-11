@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(openPgnPreviewCommand, () => {
       console.warn("FUCK1: open PGN preview to the side");
-      showPgnPreview(context, true);
+      showPgnPreview(context, true, extensionConfigGetter);
     })
   );
 
