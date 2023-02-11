@@ -138,14 +138,14 @@ class ChessGame {
     this.buttonPlayMove_.textContent = "";
     this.buttonPlayMove_.addEventListener(
       "click",
-      this.playNextMove_.bind(this, this.playbackSpeedMilliseconds_)
+      this.playNextMove_.bind(this, this.playbackSpeedMilliseconds_, true)
     );
 
     this.buttonNextMove_ = document.createElement("button");
     this.buttonNextMove_.textContent = "";
     this.buttonNextMove_.addEventListener(
       "click",
-      this.playNextMove_.bind(this, -1)
+      this.playNextMove_.bind(this, -1, true)
     );
 
     this.buttonLastMove_ = document.createElement("button");
@@ -257,6 +257,10 @@ class ChessGame {
       this.buttonNextMove_.disabled = false;
       this.buttonLastMove_.disabled = false;
     }
+
+    if (!this.currentNextMoveCallback_) {
+      this.buttonPlayMove_.textContent = "";
+    }
   }
 
   private updateBoard_(
@@ -278,8 +282,10 @@ class ChessGame {
   private cancelOngoingAnimation_() {
     if (this.currentNextMoveCallback_) {
       clearTimeout(this.currentNextMoveCallback_);
+      this.currentNextMoveCallback_ = null;
     }
     this.boardApi_.state.animation.current = undefined;
+    this.buttonPlayMove_.textContent = "";
   }
 
   private goToFirstMove_() {
@@ -297,25 +303,35 @@ class ChessGame {
     this.updateMoveButtons_();
   }
 
-  private playNextMove_(nextMoveDelay = -1) {
+  private playNextMove_(nextMoveDelay = -1, isUiClick = false) {
     if (nextMoveDelay <= 0) {
+      // play only one move, so cancel the current play
       this.cancelOngoingAnimation_();
+    } else {
+      if (isUiClick) {
+        if (!this.currentNextMoveCallback_) {
+          // Click while not playing - start
+          this.buttonPlayMove_.textContent = ""; // pause symbol
+        } else {
+          // Click while playing - stop
+          this.cancelOngoingAnimation_();
+          this.updateMoveButtons_();
+          return;
+        }
+      }
     }
 
     this.currentNextMoveCallback_ = null;
-    if (this.currentMove_ >= this.sanMoves_.length) {
-      return;
-    }
-
     const move = parseSan(this.chess_, this.sanMoves_[this.currentMove_]);
     if (!move) {
+      this.updateMoveButtons_();
       return;
     }
 
     this.currentMove_++;
     this.playMove_(move);
 
-    if (nextMoveDelay >= 0) {
+    if (nextMoveDelay >= 0 && this.currentMove_ < this.sanMoves_.length) {
       this.currentNextMoveCallback_ = setTimeout(
         this.playNextMove_.bind(this),
         this.boardApi_.state.animation.duration + nextMoveDelay,
