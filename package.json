@@ -1,8 +1,8 @@
 {
   "name": "vscode-markdown-chess",
-  "displayName": "Markdown Chess Viewer",
-  "description": "Chess boards and PGN viewer in markdown",
-  "version": "0.2.3",
+  "displayName": "Chess Viewer",
+  "description": "Chess markdown viewer and PGN file viewer",
+  "version": "0.3.0",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {
@@ -35,9 +35,9 @@
       "./dist/markdownPreview.css"
     ],
     "configuration": {
-      "title": "Markdown Chess Viewer",
+      "title": "Chess Viewer",
       "properties": {
-        "markdown-chess.boardTheme": {
+        "chess-viewer.boardTheme": {
           "order": 0,
           "type": "string",
           "enum": [
@@ -50,7 +50,7 @@
           "default": "brown",
           "description": "Default board theme for chess in markdown"
         },
-        "markdown-chess.pieceSet": {
+        "chess-viewer.pieceSet": {
           "order": 1,
           "type": "string",
           "enum": [
@@ -61,7 +61,7 @@
           "default": "merida",
           "description": "Default piece set for chess in markdown"
         },
-        "markdown-chess.playbackSpeed": {
+        "chess-viewer.playbackSpeed": {
           "order": 2,
           "type": "number",
           "default": 450,
@@ -73,8 +73,8 @@
     },
     "commands": [
       {
-        "command": "markdown-chess.openSettings",
-        "title": "Markdown: Open Chess Settings"
+        "command": "chess-viewer.openSettings",
+        "title": "Chess Viewer: Open Settings"
       }
     ]
   },

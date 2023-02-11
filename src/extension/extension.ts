@@ -3,7 +3,7 @@ import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
 import { DEFAULT_MOVE_DELAY_MILLISECONDS } from "../shared/constants";
 
-const configSection = "markdown-chess";
+const configSection = "chess-viewer";
 const openSettingsCommand = `${configSection}.openSettings`;
 
 const validBoardThemes = ["brown", "blue", "green", "ic", "purple"];
