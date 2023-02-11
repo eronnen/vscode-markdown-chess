@@ -17,13 +17,20 @@
     "lichess",
     "pgn"
   ],
+  "galleryBanner": {
+    "color": "#242b2b",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:pgn",
+    "onWebviewPanel:pgnPreview"
+  ],
   "main": "./dist/extension.js",
   "browser": "./dist/web/extension.js",
   "contributes": {
@@ -75,8 +82,43 @@
       {
         "command": "chess-viewer.openSettings",
         "title": "Chess Viewer: Open Settings"
+      },
+      {
+        "command": "chess-viewer.showPreviewToSide",
+        "title": "Chess Viewer: Open Preview",
+        "category": "PGN"
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "chess-viewer.showPreviewToSide",
+          "when": "editorLangId == pgn",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "chess-viewer.showPreviewToSide",
+          "when": "resourceLangId == pgn",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "chess-viewer.showPreviewToSide",
+          "when": "resourceLangId == pgn",
+          "group": "1_open"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "chess-viewer.showPreviewToSide",
+          "when": "editorLangId == pgn",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint src --ext ts",
@@ -125,6 +167,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4",
     "uglify-js": "^3.17.4",
+    "vscode-uri": "^3.0.7",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0"
   }
