@@ -41,6 +41,13 @@
     "markdown.previewStyles": [
       "./dist/markdownPreview.css"
     ],
+    "languages": [
+      {
+        "id": "pgn",
+        "aliases": ["PGN", "pgn"],
+        "extensions": [".pgn"]
+      }
+    ],
     "configuration": {
       "title": "Chess Viewer",
       "properties": {
