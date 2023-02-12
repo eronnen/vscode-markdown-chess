@@ -21,6 +21,8 @@ const state = {
 
 vscode.setState(state);
 
+window.chessViewerContext = "pgn";
+
 function initializeChessGroundInDocument() {
   renderAllChessBlocksInElement(document.body);
 }

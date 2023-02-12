@@ -55,6 +55,11 @@ class ChessGame {
   ) {
     this.containerElement_ = chessElement_.parentElement!;
 
+    if (window.chessViewerContext === "pgn") {
+      // center board in PGN preview
+      this.containerElement_.style.justifyContent = "space-around";
+    }
+
     try {
       if (isPgn) {
         this.parsePgnGame_();
