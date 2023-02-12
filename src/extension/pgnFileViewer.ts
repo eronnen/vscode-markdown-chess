@@ -34,6 +34,10 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
   };
 }
 
+function isPgnDocument(document: vscode.TextDocument): boolean {
+  return document.languageId === "pgn" || Utils.extname(document.uri) == "pgn";
+}
+
 class PgnFileViewer {
   public static currentPreview: PgnFileViewer | undefined;
 
@@ -56,8 +60,14 @@ class PgnFileViewer {
 				return;
 			}
 
-      if (editor.document.languageId === "pgn" || Utils.extname(editor.document.uri) == "pgn") {
+      if (isPgnDocument(editor.document) && editor.document.uri.toString() !== this.resource_.toString()) {
         this.updateResource_(editor.document.uri);
+      }
+    }));
+
+    this.disposables_.push(vscode.workspace.onDidSaveTextDocument((document) => {
+      if (document.uri.toString() === this.resource_.toString()) {
+        this.updateContent_();
       }
     }));
     
@@ -77,7 +87,7 @@ class PgnFileViewer {
     chessConfigGetter: ChessgroundConfigGetter
   ) {
     if (PgnFileViewer.currentPreview) {
-      if (resource == PgnFileViewer.currentPreview.resource_) {
+      if (resource.toString() === PgnFileViewer.currentPreview.resource_.toString()) {
         PgnFileViewer.currentPreview.webviewPanel_.reveal(previewColumn);
       } else {
         PgnFileViewer.currentPreview.updateResource_(resource);
@@ -111,7 +121,6 @@ class PgnFileViewer {
   }
 
   private dispose_() {
-    console.warn("FUCK5 dispose");
     this.disposed_ = true;
 
     this.webviewPanel_.dispose();
