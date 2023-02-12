@@ -86,6 +86,11 @@
           "minimum": 50,
           "maximum": 1000,
           "description": "Number of milliseconds between each move when auto-playing chess position"
+        },
+        "chess-viewer.mainPlayerName": {
+          "order": 3,
+          "type": "string",
+          "description": "Name of a player to view his side by default in chess games"
         }
       }
     },

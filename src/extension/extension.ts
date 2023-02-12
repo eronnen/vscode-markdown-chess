@@ -45,6 +45,9 @@ const extensionConfigGetter: ChessgroundConfigGetter = () => {
     boardTheme: boardTheme,
     pieceSet: pieceSet,
     playbackSpeed: playbackSpeed,
+    mainPlayerName: vscode.workspace
+      .getConfiguration(configSection)
+      .get("mainPlayerName"),
   };
 };
 

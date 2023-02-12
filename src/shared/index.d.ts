@@ -16,6 +16,7 @@ declare interface ChessgroundConfig {
   boardTheme: string;
   pieceSet: string;
   playbackSpeed: number;
+  mainPlayerName?: string;
 }
 
 declare type ChessgroundConfigGetter = () => ChessgroundConfig;

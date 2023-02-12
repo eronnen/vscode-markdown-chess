@@ -5,7 +5,7 @@ Visualize your chess notes in vscode!
 **Features:**
 
 1. [Markdown chess viewer](#markdown-usage)
-2. [PGN viewer](#pgn-viewer)
+2. [PGN file viewer](#pgn-viewer)
 
 ## Markdown Usage
 

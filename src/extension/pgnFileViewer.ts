@@ -196,10 +196,16 @@ Round ${game.headers.get("Round")}<br/>
 Result: ${game.headers.get("Result")}<br/>
 </p>`;
 
-    const chessBlockContent =
+    let chessBlockContent =
       moves.length > 0
         ? `moves: ${moves.join(" ")}`
         : `movable: false\ndrawable: false`;
+
+    if (this.chessConfig_.mainPlayerName) {
+      if (game.headers.get("Black") === this.chessConfig_.mainPlayerName) {
+        chessBlockContent = "orientation: black\n" + chessBlockContent;
+      }
+    }
 
     return `<h2>${game.headers.get("White")} - ${game.headers.get("Black")}</h2>
 ${headersHTML}
