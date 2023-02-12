@@ -1,10 +1,15 @@
-# VSCode Markdown Chess Viewer
+# VSCode Chess Viewer
 
-Display chess boards in vscode markdown viewer.
+Visualize your chess notes in vscode!
+
+**Features:**
+
+1. [Markdown chess viewer](#markdown-usage)
+2. [PGN viewer](#pgn-viewer)
+
+## Markdown Usage
 
 ![vscode-markdown-chess demo](./images/demo.gif)
-
-## Usage
 
 ### Chess Positions
 
@@ -57,11 +62,11 @@ moves: Ba4 Nf6 O-O b5 Bb3 Be7 Re1 d6
 ```
 ````
 
-## Properties
+### Properties
 
 You can set various properties inside the code block, each one in a separate line in the format `name: value`.
 
-### Supported properties for chess and pgn blocks
+#### Supported properties for chess and pgn blocks
 
 These properties are available both for chess and pgn blocks. when using in a pgn block, the properties must come before the pgn itself.
 
@@ -70,7 +75,7 @@ These properties are available both for chess and pgn blocks. when using in a pg
 | **orientation** | Which side to view the board            | white / black       | white       |
 | **size**        | Board width/height size in px (150-600) | 400px               | 280px       |
 
-### Supported properties for chess blocks
+#### Supported properties for chess blocks
 
 These properties are only available for chess blocks.
 
@@ -83,6 +88,12 @@ These properties are only available for chess blocks.
 | **drawable** | Force to enable/disable drawing           | true / false         | false if arrows or sqaures supplied |
 | **lastMove** | Highlight last move                       | e2 e4                | Undefined                           |
 | **moves**    | Sequence of moves to view in the position | e4 e5 Nf3 Nf6 Nxe5   | Undefined                           |
+
+## PGN Viewer
+
+This extension also implements a viewer to PGN files. open your pgn with vscode and view your games!
+
+TODO: include GIF
 
 ## Themes
 

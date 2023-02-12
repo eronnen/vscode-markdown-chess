@@ -69,6 +69,7 @@ const markdownConfig = {
       "markdown",
       "markdownPreview.ts"
     ),
+    pgnPreview: join(__dirname, "..", "src", "markdown", "pgnPreview.ts"),
   },
   output: {
     path: join(__dirname, "..", "dist"),
