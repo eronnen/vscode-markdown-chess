@@ -178,6 +178,8 @@ Round ${game.headers.get("Round")}<br/>
 Result: ${game.headers.get("Result")}<br/>
 </p>`;
 
+    const chessBlockContent = moves.length > 0 ? `moves: ${moves.join(" ")}` : `movable: false\ndrawable: false`;
+
     return `<h2>${game.headers.get("White")} - ${game.headers.get("Black")}</h2>
 ${headersHTML}
 <code><div class="${CHESSGROUND_CONTAINER_CLASS} ${
@@ -187,7 +189,7 @@ ${headersHTML}
     }" data-playback-speed="${
       this.chessConfig_.playbackSpeed
     }"><div class="${CHESSGROUND_CLASS}">
-moves: ${moves.join(" ")}
+${chessBlockContent}
 </div></div></code>`;
   }
 
