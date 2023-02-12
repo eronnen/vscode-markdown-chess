@@ -14,7 +14,8 @@ import {
 
 const configSection = "chess-viewer";
 const openSettingsCommand = `${configSection}.openSettings`;
-const openPgnPreviewCommand = `${configSection}.showPreviewToSide`;
+const openPgnPreviewCommand = `${configSection}.showPreview`;
+const openPgnPreviewToSideCommand = `${configSection}.showPreviewToSide`;
 
 const validBoardThemes = ["brown", "blue", "green", "ic", "purple"];
 const validPieceSets = ["cburnett", "alpha", "merida"];
@@ -72,9 +73,16 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(openPgnPreviewCommand, () => {
+    vscode.commands.registerCommand(openPgnPreviewToSideCommand, () => {
       console.warn("FUCK1: open PGN preview to the side");
       createOrShowPgnPreview(context, extensionConfigGetter, true);
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(openPgnPreviewCommand, () => {
+      console.warn("FUCK12: open PGN preview");
+      createOrShowPgnPreview(context, extensionConfigGetter, false);
     })
   );
 

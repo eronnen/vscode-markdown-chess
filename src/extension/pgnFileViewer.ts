@@ -235,7 +235,7 @@ ${chessBlockContent}
       "pgnPreview.css"
     )}" />
 </head>
-<body>
+<body style="text-align: center; margin-left: auto; margin-right: auto;">
 <h1>${Utils.basename(this.resource_)}</h1>
 ${gamesHtml}
 <script async src="${this.extensionResourcePath_(
@@ -278,10 +278,6 @@ export function createOrShowPgnPreview(
 ) {
   const resource = vscode.window.activeTextEditor?.document.uri;
   if (!resource) {
-    return;
-  }
-
-  if (!sideBySide) {
     return;
   }
 

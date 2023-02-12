@@ -100,9 +100,16 @@
         "title": "Chess Viewer: Open Settings"
       },
       {
+        "command": "chess-viewer.showPreview",
+        "title": "Open Preview",
+        "category": "PGN",
+        "icon": "$(open-preview)"
+      },
+      {
         "command": "chess-viewer.showPreviewToSide",
-        "title": "Chess Viewer: Open Preview",
-        "category": "PGN"
+        "title": "Open Preview to the Side",
+        "category": "PGN",
+        "icon": "$(open-preview)"
       }
     ],
     "menus": {
@@ -115,19 +122,24 @@
       ],
       "editor/context": [
         {
-          "command": "chess-viewer.showPreviewToSide",
+          "command": "chess-viewer.showPreview",
           "when": "resourceLangId == pgn",
           "group": "navigation"
         }
       ],
       "editor/title/context": [
         {
-          "command": "chess-viewer.showPreviewToSide",
+          "command": "chess-viewer.showPreview",
           "when": "resourceLangId == pgn",
           "group": "1_open"
         }
       ],
       "commandPalette": [
+        {
+          "command": "chess-viewer.showPreview",
+          "when": "editorLangId == pgn",
+          "group": "navigation"
+        },
         {
           "command": "chess-viewer.showPreviewToSide",
           "when": "editorLangId == pgn",
