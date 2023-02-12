@@ -33,3 +33,7 @@ declare interface ChessBlockOptions {
 
   moves: string | null;
 }
+
+declare interface PgnViewerState {
+  resource: string;
+}

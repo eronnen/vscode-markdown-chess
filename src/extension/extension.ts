@@ -78,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.window.registerWebviewPanelSerializer(PGN_FILE_WEBVIEW_TYPE, {
     async deserializeWebviewPanel(
       webviewPanel: vscode.WebviewPanel,
-      state: any
+      state: PgnViewerState
     ) {
       console.warn("FUCK2: deserializing");
       restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);

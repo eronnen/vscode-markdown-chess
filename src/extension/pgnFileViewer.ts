@@ -43,7 +43,7 @@ class PgnFileViewer {
 
   private resource_: vscode.Uri;
   private disposables_: vscode.Disposable[] = [];
-  private disposed_: boolean = false;
+  private disposed_ = false;
 
   private games_: (Game<PgnNodeData> | PgnError)[] = [];
   private chessConfig_: ChessgroundConfig;
@@ -125,7 +125,7 @@ class PgnFileViewer {
     context: vscode.ExtensionContext,
     chessConfigGetter: ChessgroundConfigGetter,
     webviewPanel: vscode.WebviewPanel,
-    state: any
+    state: PgnViewerState
   ) {
     const resource = vscode.Uri.parse(state.resource);
     webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
@@ -297,7 +297,7 @@ export function restorePgnPreview(
   context: vscode.ExtensionContext,
   chessConfigGetter: ChessgroundConfigGetter,
   webviewPanel: vscode.WebviewPanel,
-  state: any
+  state: PgnViewerState
 ) {
   PgnFileViewer.restorePgnViewer(
     context,

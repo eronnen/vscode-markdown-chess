@@ -1,6 +1,6 @@
 import { renderAllChessBlocksInElement } from "./chessRenderer";
 
-function getData<T = {}>(key: string): T {
+function getData<T = object>(key: string): T {
   const element = document.getElementById("pgn-file-viewer-data");
   if (element) {
     const data = element.getAttribute(key);
@@ -16,7 +16,7 @@ const vscode = acquireVsCodeApi();
 const originalState = vscode.getState();
 const state = {
   ...(typeof originalState === "object" ? originalState : {}),
-  ...getData<any>("data-state"),
+  ...getData<PgnViewerState>("data-state"),
 };
 
 vscode.setState(state);
