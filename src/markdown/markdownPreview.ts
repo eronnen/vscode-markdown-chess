@@ -1,12 +1,12 @@
 import { renderAllChessBlocksInElement } from "./chessRenderer";
 
-function initializeChessGroundInMarkdown() {
+function initializeChessGroundInDocument() {
   renderAllChessBlocksInElement(document.body);
 }
 
 window.addEventListener(
   "vscode.markdown.updateContent",
-  initializeChessGroundInMarkdown
+  initializeChessGroundInDocument
 );
 
-initializeChessGroundInMarkdown();
+initializeChessGroundInDocument();

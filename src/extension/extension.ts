@@ -3,7 +3,10 @@ import type MarkdownIt from "markdown-it";
 import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
 import { createNewPgnPreview, restorePgnPreview } from "./pgnFileViewer";
-import { DEFAULT_MOVE_DELAY_MILLISECONDS, PGN_FILE_WEBVIEW_TYPE } from "../shared/constants";
+import {
+  DEFAULT_MOVE_DELAY_MILLISECONDS,
+  PGN_FILE_WEBVIEW_TYPE,
+} from "../shared/constants";
 
 const configSection = "chess-viewer";
 const openSettingsCommand = `${configSection}.openSettings`;
@@ -68,12 +71,14 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   vscode.window.registerWebviewPanelSerializer(PGN_FILE_WEBVIEW_TYPE, {
-      async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
-        console.warn("FUCK2: deserializing");
-        restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
-      }
-    }
-  );
+    async deserializeWebviewPanel(
+      webviewPanel: vscode.WebviewPanel,
+      state: any
+    ) {
+      console.warn("FUCK2: deserializing");
+      restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
+    },
+  });
 
   return {
     extendMarkdownIt(md: MarkdownIt) {
