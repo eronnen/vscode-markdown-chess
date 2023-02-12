@@ -35,12 +35,10 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 }
 
 class PgnFileViewer {
-  public static openViewers: Set<PgnFileViewer> = new Set<PgnFileViewer>();
+  public static currentPreview: PgnFileViewer | undefined;
 
-  private resource_: vscode.Uri;
-  private webviewPanel_: vscode.WebviewPanel;
-
-  private _disposables: vscode.Disposable[] = [];
+  private resource_: vscode.Uri
+  private disposables_: vscode.Disposable[] = [];
   private disposed_: boolean = false;
 
   private games_: (Game<PgnNodeData> | PgnError)[] = [];
@@ -48,26 +46,54 @@ class PgnFileViewer {
 
   private constructor(
     private context_: vscode.ExtensionContext,
-    private chessConfigGetter_: ChessgroundConfigGetter
-  ) {}
+    private chessConfigGetter_: ChessgroundConfigGetter,
+    private webviewPanel_: vscode.WebviewPanel,
+    resource: vscode.Uri
+  ) {
+    this.disposables_.push(vscode.window.onDidChangeActiveTextEditor(editor => {
+      // Only allow previewing normal text editors which have a viewColumn: See #101514
+      if (typeof editor?.viewColumn === 'undefined') {
+				return;
+			}
 
-  public static createNewPgnViewer(
+      if (editor.document.languageId === "pgn" || Utils.extname(editor.document.uri) == "pgn") {
+        this.updateResource_(editor.document.uri);
+      }
+    }));
+    
+    this.webviewPanel_.onDidDispose(
+      () => this.dispose_(),
+      null,
+      this.disposables_
+    );
+
+    this.updateResource_(resource);
+  }
+
+  public static createOrShowPgnViewer(
     context: vscode.ExtensionContext,
     resource: vscode.Uri,
     previewColumn: vscode.ViewColumn,
     chessConfigGetter: ChessgroundConfigGetter
-  ): PgnFileViewer {
-    const viewer = new PgnFileViewer(context, chessConfigGetter);
-    viewer.resource_ = resource;
-    viewer.webviewPanel_ = vscode.window.createWebviewPanel(
+  ) {
+    if (PgnFileViewer.currentPreview) {
+      if (resource == PgnFileViewer.currentPreview.resource_) {
+        PgnFileViewer.currentPreview.webviewPanel_.reveal(previewColumn);
+      } else {
+        PgnFileViewer.currentPreview.updateResource_(resource);
+      }
+
+      return;
+    }
+
+    const webviewPanel = vscode.window.createWebviewPanel(
       PGN_FILE_WEBVIEW_TYPE,
-      `PGN Preview: ${Utils.basename(viewer.resource_)}`,
+      "PGN Preview",
       previewColumn,
-      getWebviewOptions(viewer.context_.extensionUri)
+      getWebviewOptions(context.extensionUri)
     );
 
-    viewer.initialize_();
-    return viewer;
+    PgnFileViewer.currentPreview = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
   }
 
   public static restorePgnViewer(
@@ -75,44 +101,43 @@ class PgnFileViewer {
     chessConfigGetter: ChessgroundConfigGetter,
     webviewPanel: vscode.WebviewPanel,
     state: any
-  ): PgnFileViewer {
-    const viewer = new PgnFileViewer(context, chessConfigGetter);
-    viewer.webviewPanel_ = webviewPanel;
-    viewer.resource_ = vscode.Uri.parse(state.resource);
-    viewer.webviewPanel_.webview.options = getWebviewOptions(
+  ) {
+    const resource = vscode.Uri.parse(state.resource);
+    webviewPanel.webview.options = getWebviewOptions(
       context.extensionUri
     );
 
-    viewer.initialize_();
-    return viewer;
+    PgnFileViewer.currentPreview = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
   }
 
-  public dispose() {
+  private dispose_() {
+    console.warn("FUCK5 dispose");
     this.disposed_ = true;
-    PgnFileViewer.openViewers.delete(this);
 
     this.webviewPanel_.dispose();
-    while (this._disposables.length) {
-      const x = this._disposables.pop();
+    while (this.disposables_.length) {
+      const x = this.disposables_.pop();
       if (x) {
         x.dispose();
       }
     }
+
+    PgnFileViewer.currentPreview = undefined;
   }
 
-  private initialize_() {
-    PgnFileViewer.openViewers.add(this);
-    this.webviewPanel_.onDidDispose(
-      () => this.dispose(),
-      null,
-      this._disposables
-    );
-
+  private updateResource_(resource: vscode.Uri) {
+    this.resource_ = resource;
+    this.webviewPanel_.title = `PGN Preview: ${Utils.basename(this.resource_)}`;
     this.updateContent_();
   }
 
   private async updateContent_() {
+    if (this.disposed_) {
+      return;
+    }
+
     await this.parsePgnFile_();
+
     if (this.disposed_) {
       return;
     }
@@ -185,6 +210,7 @@ ${gamesHtml}
   }
 
   private async parsePgnFile_() {
+    this.games_ = [];
     const document = await vscode.workspace.openTextDocument(this.resource_);
     new PgnParser((game, err) => {
       if (this.disposed_) {
@@ -201,7 +227,7 @@ ${gamesHtml}
   }
 }
 
-export function createNewPgnPreview(
+export function createOrShowPgnPreview(
   context: vscode.ExtensionContext,
   chessConfigGetter: ChessgroundConfigGetter,
   sideBySide: boolean
@@ -221,7 +247,7 @@ export function createNewPgnPreview(
     vscode.ViewColumn.One;
   const previewColumn = sideBySide ? vscode.ViewColumn.Beside : resourceColumn;
 
-  return PgnFileViewer.createNewPgnViewer(
+  PgnFileViewer.createOrShowPgnViewer(
     context,
     resource,
     previewColumn,
@@ -235,17 +261,10 @@ export function restorePgnPreview(
   webviewPanel: vscode.WebviewPanel,
   state: any
 ) {
-  return PgnFileViewer.restorePgnViewer(
+  PgnFileViewer.restorePgnViewer(
     context,
     chessConfigGetter,
     webviewPanel,
     state
   );
 }
-
-// export function closeAllPgnPreviews() {
-//     const currentlyOpenViewers = PgnFileViewer.openViewers.values();
-//     for (const viewer of currentlyOpenViewers) {
-//         viewer.dispose();
-//     }
-// }

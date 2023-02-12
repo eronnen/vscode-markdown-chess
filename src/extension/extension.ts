@@ -2,7 +2,7 @@ import type MarkdownIt from "markdown-it";
 
 import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
-import { createNewPgnPreview, restorePgnPreview } from "./pgnFileViewer";
+import { createOrShowPgnPreview, restorePgnPreview } from "./pgnFileViewer";
 import {
   DEFAULT_MOVE_DELAY_MILLISECONDS,
   PGN_FILE_WEBVIEW_TYPE,
@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(openPgnPreviewCommand, () => {
       console.warn("FUCK1: open PGN preview to the side");
-      createNewPgnPreview(context, extensionConfigGetter, true);
+      createOrShowPgnPreview(context, extensionConfigGetter, true);
     })
   );
 
