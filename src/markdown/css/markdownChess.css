@@ -34,6 +34,8 @@
   min-width: 100px;
   padding-left: 10px;
   font-size: 0.85em;
+  color: var(--vscode-textPreformat-foreground);
+
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -43,8 +45,8 @@
 
 .chessgroundInfo button {
   margin-top: 0.5em;
-  color: white;
-  background: #3692e7;
+  color: var(--vscode-editor-foreground);
+  background: var(--vscode-button-background);
   border-radius: 5%;
   border-color: transparent;
   cursor: pointer;
@@ -83,7 +85,7 @@
   border: none;
   overflow: hidden;
   outline: hidden;
-  color: rgb(186, 186, 186);
+  color: var(--vscode-editor-foreground);
   cursor: pointer;
   user-select: none;
 }
