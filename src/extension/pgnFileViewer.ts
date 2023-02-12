@@ -39,7 +39,7 @@ function isPgnDocument(document: vscode.TextDocument): boolean {
 }
 
 class PgnFileViewer {
-  public static currentPreview: PgnFileViewer | undefined;
+  public static currentPreview_: PgnFileViewer | undefined;
 
   private resource_: vscode.Uri
   private disposables_: vscode.Disposable[] = [];
@@ -86,11 +86,11 @@ class PgnFileViewer {
     previewColumn: vscode.ViewColumn,
     chessConfigGetter: ChessgroundConfigGetter
   ) {
-    if (PgnFileViewer.currentPreview) {
-      if (resource.toString() === PgnFileViewer.currentPreview.resource_.toString()) {
-        PgnFileViewer.currentPreview.webviewPanel_.reveal(previewColumn);
+    if (PgnFileViewer.currentPreview_) {
+      if (resource.toString() === PgnFileViewer.currentPreview_.resource_.toString()) {
+        PgnFileViewer.currentPreview_.webviewPanel_.reveal(previewColumn);
       } else {
-        PgnFileViewer.currentPreview.updateResource_(resource);
+        PgnFileViewer.currentPreview_.updateResource_(resource);
       }
 
       return;
@@ -103,7 +103,7 @@ class PgnFileViewer {
       getWebviewOptions(context.extensionUri)
     );
 
-    PgnFileViewer.currentPreview = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
+    PgnFileViewer.currentPreview_ = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
   }
 
   public static restorePgnViewer(
@@ -117,7 +117,13 @@ class PgnFileViewer {
       context.extensionUri
     );
 
-    PgnFileViewer.currentPreview = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
+    PgnFileViewer.currentPreview_ = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
+  }
+
+  public static update() {
+    if (PgnFileViewer.currentPreview_) {
+      PgnFileViewer.currentPreview_.updateContent_();
+    }
   }
 
   private dispose_() {
@@ -131,7 +137,7 @@ class PgnFileViewer {
       }
     }
 
-    PgnFileViewer.currentPreview = undefined;
+    PgnFileViewer.currentPreview_ = undefined;
   }
 
   private updateResource_(resource: vscode.Uri) {
@@ -276,4 +282,8 @@ export function restorePgnPreview(
     webviewPanel,
     state
   );
+}
+
+export function updateExistingPgnPreview() {
+  PgnFileViewer.update();
 }
