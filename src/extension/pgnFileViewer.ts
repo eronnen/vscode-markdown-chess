@@ -41,7 +41,7 @@ function isPgnDocument(document: vscode.TextDocument): boolean {
 class PgnFileViewer {
   public static currentPreview_: PgnFileViewer | undefined;
 
-  private resource_: vscode.Uri
+  private resource_: vscode.Uri;
   private disposables_: vscode.Disposable[] = [];
   private disposed_: boolean = false;
 
@@ -54,23 +54,30 @@ class PgnFileViewer {
     private webviewPanel_: vscode.WebviewPanel,
     resource: vscode.Uri
   ) {
-    this.disposables_.push(vscode.window.onDidChangeActiveTextEditor(editor => {
-      // Only allow previewing normal text editors which have a viewColumn: See #101514
-      if (typeof editor?.viewColumn === 'undefined') {
-				return;
-			}
+    this.disposables_.push(
+      vscode.window.onDidChangeActiveTextEditor((editor) => {
+        // Only allow previewing normal text editors which have a viewColumn: See #101514
+        if (typeof editor?.viewColumn === "undefined") {
+          return;
+        }
 
-      if (isPgnDocument(editor.document) && editor.document.uri.toString() !== this.resource_.toString()) {
-        this.updateResource_(editor.document.uri);
-      }
-    }));
+        if (
+          isPgnDocument(editor.document) &&
+          editor.document.uri.toString() !== this.resource_.toString()
+        ) {
+          this.updateResource_(editor.document.uri);
+        }
+      })
+    );
 
-    this.disposables_.push(vscode.workspace.onDidSaveTextDocument((document) => {
-      if (document.uri.toString() === this.resource_.toString()) {
-        this.updateContent_();
-      }
-    }));
-    
+    this.disposables_.push(
+      vscode.workspace.onDidSaveTextDocument((document) => {
+        if (document.uri.toString() === this.resource_.toString()) {
+          this.updateContent_();
+        }
+      })
+    );
+
     this.webviewPanel_.onDidDispose(
       () => this.dispose_(),
       null,
@@ -87,7 +94,10 @@ class PgnFileViewer {
     chessConfigGetter: ChessgroundConfigGetter
   ) {
     if (PgnFileViewer.currentPreview_) {
-      if (resource.toString() === PgnFileViewer.currentPreview_.resource_.toString()) {
+      if (
+        resource.toString() ===
+        PgnFileViewer.currentPreview_.resource_.toString()
+      ) {
         PgnFileViewer.currentPreview_.webviewPanel_.reveal(previewColumn);
       } else {
         PgnFileViewer.currentPreview_.updateResource_(resource);
@@ -103,7 +113,12 @@ class PgnFileViewer {
       getWebviewOptions(context.extensionUri)
     );
 
-    PgnFileViewer.currentPreview_ = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
+    PgnFileViewer.currentPreview_ = new PgnFileViewer(
+      context,
+      chessConfigGetter,
+      webviewPanel,
+      resource
+    );
   }
 
   public static restorePgnViewer(
@@ -113,11 +128,14 @@ class PgnFileViewer {
     state: any
   ) {
     const resource = vscode.Uri.parse(state.resource);
-    webviewPanel.webview.options = getWebviewOptions(
-      context.extensionUri
-    );
+    webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
 
-    PgnFileViewer.currentPreview_ = new PgnFileViewer(context, chessConfigGetter, webviewPanel, resource);
+    PgnFileViewer.currentPreview_ = new PgnFileViewer(
+      context,
+      chessConfigGetter,
+      webviewPanel,
+      resource
+    );
   }
 
   public static update() {
@@ -178,7 +196,10 @@ Round ${game.headers.get("Round")}<br/>
 Result: ${game.headers.get("Result")}<br/>
 </p>`;
 
-    const chessBlockContent = moves.length > 0 ? `moves: ${moves.join(" ")}` : `movable: false\ndrawable: false`;
+    const chessBlockContent =
+      moves.length > 0
+        ? `moves: ${moves.join(" ")}`
+        : `movable: false\ndrawable: false`;
 
     return `<h2>${game.headers.get("White")} - ${game.headers.get("Black")}</h2>
 ${headersHTML}

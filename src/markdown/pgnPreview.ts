@@ -21,7 +21,6 @@ const state = {
 
 vscode.setState(state);
 
-
 function initializeChessGroundInDocument() {
   renderAllChessBlocksInElement(document.body);
 }

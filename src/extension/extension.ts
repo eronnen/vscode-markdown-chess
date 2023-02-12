@@ -2,7 +2,11 @@ import type MarkdownIt from "markdown-it";
 
 import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
-import { createOrShowPgnPreview, restorePgnPreview, updateExistingPgnPreview } from "./pgnFileViewer";
+import {
+  createOrShowPgnPreview,
+  restorePgnPreview,
+  updateExistingPgnPreview,
+} from "./pgnFileViewer";
 import {
   DEFAULT_MOVE_DELAY_MILLISECONDS,
   PGN_FILE_WEBVIEW_TYPE,
