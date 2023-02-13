@@ -88,6 +88,7 @@ These properties are only available for chess blocks.
 | **drawable** | Force to enable/disable drawing           | true / false         | false if arrows or sqaures supplied |
 | **lastMove** | Highlight last move                       | e2 e4                | Undefined                           |
 | **moves**    | Sequence of moves to view in the position | e4 e5 Nf3 Nf6 Nxe5   | Undefined                           |
+| **variant**  | Variant name                              | Chess960             | Undefined                           |
 
 ## PGN Viewer
 

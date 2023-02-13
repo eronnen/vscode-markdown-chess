@@ -6,10 +6,11 @@ import type { Position } from "chessops/chess";
 
 import { Chessground } from "chessground";
 import { castlingSide, Chess } from "chessops/chess";
-import { PgnParser, startingPosition } from "chessops/pgn";
+import { PgnParser, startingPosition, parseVariant } from "chessops/pgn";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
 import { isDrop, isNormal } from "chessops/types";
+import { defaultPosition, setupPosition } from "chessops/variant";
 import {
   makeSquare,
   kingCastlesTo,
@@ -62,9 +63,9 @@ class ChessGame {
 
     try {
       if (isPgn) {
-        this.parsePgnGame_();
+        this.parsePgnBlock_();
       } else {
-        this.parseFenWithMoves_(chessOptions);
+        this.parseChessBlock_(chessOptions);
       }
     } finally {
       // TODO: show error
@@ -79,7 +80,7 @@ class ChessGame {
     this.createChessBoard_(chessOptions);
   }
 
-  private parsePgnGame_() {
+  private parsePgnBlock_() {
     const blockText = this.chessElement_.textContent || "";
     let pgnStart = blockText.indexOf("[");
     if (pgnStart == -1) {
@@ -94,7 +95,6 @@ class ChessGame {
     new PgnParser((game, err) => {
       if (err) {
         // Error parsing pgn
-        this.chessElement_.textContent = `Error Parsing PGN: ${err}`;
         return;
       }
 
@@ -105,10 +105,18 @@ class ChessGame {
     }).parse(blockText.substring(pgnStart));
   }
 
-  private parseFenWithMoves_(chessOptions: ChessBlockOptions) {
+  private parseChessBlock_(chessOptions: ChessBlockOptions) {
+    const rules = parseVariant(chessOptions.variant);
+    if (!rules) {
+      throw new Error("Unknown chess variant");
+    }
+
     this.initialPosition_ = chessOptions.fen
-      ? Chess.fromSetup(parseFen(chessOptions.fen).unwrap()).unwrap()
-      : Chess.default();
+      ? parseFen(chessOptions.fen)
+          .chain((setup) => setupPosition(rules, setup))
+          .unwrap()
+      : defaultPosition(rules);
+
     if (chessOptions.moves) {
       this.sanMoves_ = chessOptions.moves.split(" ");
     }

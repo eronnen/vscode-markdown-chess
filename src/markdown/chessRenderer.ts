@@ -32,15 +32,16 @@ const pieceSetsStyles: Record<PieceSet, StyleLoaderImport> = {
 
 function parseChessBlockOptions(chessElement: HTMLElement): ChessBlockOptions {
   const options: ChessBlockOptions = {
-    size: null,
-    orientation: null,
-    fen: null,
-    arrows: null,
-    squares: null,
-    movable: null,
-    drawable: null,
-    lastMove: null,
-    moves: null,
+    size: undefined,
+    orientation: undefined,
+    fen: undefined,
+    arrows: undefined,
+    squares: undefined,
+    movable: undefined,
+    drawable: undefined,
+    lastMove: undefined,
+    moves: undefined,
+    variant: undefined,
   };
 
   // I think yaml library here is an overkill here, also won't mix well with PGN
@@ -90,6 +91,10 @@ function parseChessBlockOptions(chessElement: HTMLElement): ChessBlockOptions {
         break;
       case "moves":
         options.moves = value.trim();
+        break;
+      case "variant":
+        options.variant = value.trim();
+        break;
     }
   }
 

@@ -22,17 +22,18 @@ declare interface ChessgroundConfig {
 declare type ChessgroundConfigGetter = () => ChessgroundConfig;
 
 declare interface ChessBlockOptions {
-  size: number | null;
-  orientation: string | null;
+  size: number | undefined;
+  orientation: string | undefined;
 
-  fen: string | null;
-  arrows: string | null;
-  squares: string | null;
-  movable: boolean | null;
-  drawable: boolean | null;
-  lastMove: string | null;
+  fen: string | undefined;
+  arrows: string | undefined;
+  squares: string | undefined;
+  movable: boolean | undefined;
+  drawable: boolean | undefined;
+  lastMove: string | undefined;
 
-  moves: string | null;
+  moves: string | undefined;
+  variant: string | undefined;
 }
 
 declare interface PgnViewerState {
