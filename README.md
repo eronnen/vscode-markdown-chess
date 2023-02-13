@@ -123,6 +123,7 @@ This project is based on the [Chessground](https://github.com/lichess-org/chessg
 
 - [ ] show move number in PGN viewer
 - [ ] update PGN current move when clicking on move in editor
+- [ ] load themes and piece sets CSS in runtime
 - [ ] show FEN/PGN errors
 - [ ] in a capture of a black piece by a white piece, when animating previous move show the white on top of the black piece
 - [ ] handle en passant and promotion in chessPosition.ts
