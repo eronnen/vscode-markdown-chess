@@ -1,13 +1,13 @@
 import type { Key } from "chessground/types";
 
-export function parseBoolean(value: string): boolean | null {
+export function parseBoolean(value: string): boolean | undefined {
   if (value.toLowerCase() === "true") {
     return true;
   } else if (value.toLowerCase() === "false") {
     return false;
   }
 
-  return null;
+  return undefined;
 }
 
 export function parseSquaresString(line: string): Key[] {

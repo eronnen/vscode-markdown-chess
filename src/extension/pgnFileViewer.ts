@@ -201,6 +201,16 @@ Result: ${game.headers.get("Result")}<br/>
         ? `moves: ${moves.join(" ")}`
         : `movable: false\ndrawable: false`;
 
+    if (game.headers.get("Variant")) {
+      chessBlockContent =
+        `variant: ${game.headers.get("Variant")}\n` + chessBlockContent;
+    }
+
+    if (game.headers.get("FEN")) {
+      chessBlockContent =
+        `fen: ${game.headers.get("FEN")}\n` + chessBlockContent;
+    }
+
     if (this.chessConfig_.mainPlayerName) {
       if (game.headers.get("Black") === this.chessConfig_.mainPlayerName) {
         chessBlockContent = "orientation: black\n" + chessBlockContent;
