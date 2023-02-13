@@ -45,10 +45,9 @@
 
 .chessgroundInfo button {
   margin-top: 0.5em;
-  color: var(--vscode-editor-foreground);
+  color: var(--vscode-button-foreground);
   background: var(--vscode-button-background);
-  border-radius: 5%;
-  border-color: transparent;
+  border: 1px solid var(--vscode-button-border, transparent);
   cursor: pointer;
   max-width: 150px;
   user-select: none;
