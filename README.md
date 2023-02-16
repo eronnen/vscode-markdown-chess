@@ -9,7 +9,7 @@ Visualize your chess notes in vscode!
 
 ## Markdown Usage
 
-![vscode-markdown-chess demo](./images/demo.gif)
+![vscode-markdown-chess demo](./images/demo.jpg)
 
 ### Chess Positions
 
@@ -21,7 +21,7 @@ Create an empty chess board by writing a chess code block:
 ```
 ````
 
-On an empty board you can move pieces and draw arrows/squares and copy it back to the chess code block, as shown in the GIF.
+On an empty board you can move pieces and draw arrows/squares and copy it back to the chess code block, as shown in the [demo GIF](./images/demo.gif).
 
 You can supply an initial FEN, and arrows/squares to mark on the board:
 
