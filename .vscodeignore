@@ -13,5 +13,5 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 tools/**
-images/**/*.gif
+images/demo/**
 .prettierignore
