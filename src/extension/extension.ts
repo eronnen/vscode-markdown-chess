@@ -53,7 +53,6 @@ const extensionConfigGetter: ChessgroundConfigGetter = () => {
 };
 
 export function activate(context: vscode.ExtensionContext) {
-  console.warn("FUCK0: chess activate");
   context.subscriptions.push(
     vscode.commands.registerCommand(openSettingsCommand, () => {
       vscode.commands.executeCommand(
@@ -74,14 +73,12 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand(openPgnPreviewToSideCommand, () => {
-      console.warn("FUCK1: open PGN preview to the side");
       createOrShowPgnPreview(context, extensionConfigGetter, true);
     })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(openPgnPreviewCommand, () => {
-      console.warn("FUCK12: open PGN preview");
       createOrShowPgnPreview(context, extensionConfigGetter, false);
     })
   );
@@ -91,7 +88,6 @@ export function activate(context: vscode.ExtensionContext) {
       webviewPanel: vscode.WebviewPanel,
       state: PgnViewerState
     ) {
-      console.warn("FUCK2: deserializing");
       restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
     },
   });
