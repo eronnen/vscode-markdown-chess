@@ -13,3 +13,4 @@ export const DEFAULT_SQUARE_COLOR = "green";
 export const DEFAULT_MOVE_DELAY_MILLISECONDS = 450;
 
 export const PGN_FILE_WEBVIEW_TYPE = "chess-viewer.pgn.preview";
+export const PGN_FILE_EDITOR_TYPE = "vscode.chess-viewer.pgn.preview.editor";

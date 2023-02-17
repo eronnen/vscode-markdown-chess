@@ -6,7 +6,7 @@ This is lichess special font, copied from https://github.com/lichess-org/lila/bl
 
 The lichess-minimal.sfd contains only the needed characters for this extension, in order to reduce the package size.
 
-**TODO**: auomate this with `fantasticon`
+**TODO**: automate this with `fantasticon`
 
 ## fetch-boards.ts
 

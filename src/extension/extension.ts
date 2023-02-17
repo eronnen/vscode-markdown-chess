@@ -4,6 +4,7 @@ import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
 import {
   createOrShowPgnPreview,
+  PgnCustomEditorManager,
   restorePgnPreview,
   showPreviewSource,
   updateExistingPgnPreview,
@@ -11,6 +12,7 @@ import {
 import {
   DEFAULT_MOVE_DELAY_MILLISECONDS,
   PGN_FILE_WEBVIEW_TYPE,
+  PGN_FILE_EDITOR_TYPE,
 } from "../shared/constants";
 
 const configSection = "chess-viewer";
@@ -86,9 +88,12 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(showSourceCommand, () => {
-      showPreviewSource();
-    })
+    vscode.commands.registerCommand(
+      showSourceCommand,
+      (resource: vscode.Uri) => {
+        showPreviewSource(resource);
+      }
+    )
   );
 
   context.subscriptions.push(
@@ -100,6 +105,13 @@ export function activate(context: vscode.ExtensionContext) {
         restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
       },
     })
+  );
+
+  context.subscriptions.push(
+    vscode.window.registerCustomEditorProvider(
+      PGN_FILE_EDITOR_TYPE,
+      new PgnCustomEditorManager(context, extensionConfigGetter)
+    )
   );
 
   return {
