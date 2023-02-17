@@ -38,4 +38,5 @@ declare interface ChessBlockOptions {
 
 declare interface PgnViewerState {
   resource: string;
+  resourceColumn: vscode.ViewColumn;
 }

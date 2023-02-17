@@ -45,10 +45,12 @@
         "id": "pgn",
         "aliases": [
           "PGN",
-          "pgn"
+          "pgn",
+          "Pgn"
         ],
         "extensions": [
-          ".pgn"
+          ".pgn",
+          ".PGN"
         ]
       }
     ],
@@ -97,19 +99,26 @@
     "commands": [
       {
         "command": "chess-viewer.openSettings",
-        "title": "Chess Viewer: Open Settings"
+        "title": "Open Settings",
+        "category": "Chess Viewer"
       },
       {
         "command": "chess-viewer.showPreview",
         "title": "Open Preview",
-        "category": "PGN",
+        "category": "Chess Viewer",
         "icon": "$(open-preview)"
       },
       {
         "command": "chess-viewer.showPreviewToSide",
         "title": "Open Preview to the Side",
-        "category": "PGN",
+        "category": "Chess Viewer",
         "icon": "$(open-preview)"
+      },
+      {
+        "command": "chess-viewer.showSource",
+        "title": "Show Source",
+        "category": "Chess Viewer",
+        "icon": "$(go-to-file)"
       }
     ],
     "menus": {
@@ -117,10 +126,16 @@
         {
           "command": "chess-viewer.showPreviewToSide",
           "when": "editorLangId == pgn",
+          "alt": "chess-viewer.showPreview",
+          "group": "navigation"
+        },
+        {
+          "command": "chess-viewer.showSource",
+          "when": "activeWebviewPanelId == 'chess-viewer.pgn.preview' || activeCustomEditorId == 'vscode.chess-viewer.pgn.preview.editor'",
           "group": "navigation"
         }
       ],
-      "editor/context": [
+      "explorer/context": [
         {
           "command": "chess-viewer.showPreview",
           "when": "resourceLangId == pgn",
@@ -143,6 +158,11 @@
         {
           "command": "chess-viewer.showPreviewToSide",
           "when": "editorLangId == pgn",
+          "group": "navigation"
+        },
+        {
+          "command": "chess-viewer.showSource",
+          "when": "activeWebviewPanelId == 'chess-viewer.pgn.preview' || activeCustomEditorId == 'vscode.chess-viewer.pgn.preview.editor'",
           "group": "navigation"
         }
       ]

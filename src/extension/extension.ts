@@ -5,6 +5,7 @@ import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
 import {
   createOrShowPgnPreview,
   restorePgnPreview,
+  showPreviewSource,
   updateExistingPgnPreview,
 } from "./pgnFileViewer";
 import {
@@ -16,6 +17,7 @@ const configSection = "chess-viewer";
 const openSettingsCommand = `${configSection}.openSettings`;
 const openPgnPreviewCommand = `${configSection}.showPreview`;
 const openPgnPreviewToSideCommand = `${configSection}.showPreviewToSide`;
+const showSourceCommand = `${configSection}.showSource`;
 
 const validBoardThemes = ["brown", "blue", "green", "ic", "purple"];
 const validPieceSets = ["cburnett", "alpha", "merida"];
@@ -83,14 +85,22 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  vscode.window.registerWebviewPanelSerializer(PGN_FILE_WEBVIEW_TYPE, {
-    async deserializeWebviewPanel(
-      webviewPanel: vscode.WebviewPanel,
-      state: PgnViewerState
-    ) {
-      restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
-    },
-  });
+  context.subscriptions.push(
+    vscode.commands.registerCommand(showSourceCommand, () => {
+      showPreviewSource();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.window.registerWebviewPanelSerializer(PGN_FILE_WEBVIEW_TYPE, {
+      async deserializeWebviewPanel(
+        webviewPanel: vscode.WebviewPanel,
+        state: PgnViewerState
+      ) {
+        restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
+      },
+    })
+  );
 
   return {
     extendMarkdownIt(md: MarkdownIt) {
