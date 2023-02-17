@@ -88,12 +88,9 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      showSourceCommand,
-      (resource: vscode.Uri) => {
-        showPreviewSource(resource);
-      }
-    )
+    vscode.commands.registerCommand(showSourceCommand, () => {
+      showPreviewSource();
+    })
   );
 
   context.subscriptions.push(

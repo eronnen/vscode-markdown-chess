@@ -212,7 +212,6 @@ interface PgnPreview {
   dispose(): void;
   update(): void;
   showSource(): void;
-  resource(): vscode.Uri;
 }
 
 class PgnFilePreview extends Disposable implements PgnPreview {
@@ -330,10 +329,6 @@ class PgnFilePreview extends Disposable implements PgnPreview {
     });
   }
 
-  public resource(): vscode.Uri {
-    return this.resource_;
-  }
-
   private updateResource_(resource: vscode.Uri) {
     this.resource_ = resource;
     this.webviewPanel_.title = `PGN Preview: ${Utils.basename(this.resource_)}`;
@@ -401,8 +396,8 @@ class StaticPgnFilePreview extends Disposable implements PgnPreview {
     });
   }
 
-  public resource(): vscode.Uri {
-    return this.resource_;
+  public isActive(): boolean {
+    return this.webviewPanel_.active;
   }
 }
 
@@ -470,9 +465,9 @@ export function restorePgnPreview(
   );
 }
 
-export function showPreviewSource(resource: vscode.Uri) {
+export function showPreviewSource() {
   for (const preview of PgnCustomEditorManager.currents) {
-    if (preview.resource().toString() == resource.toString()) {
+    if (preview.isActive()) {
       preview.showSource();
       return;
     }

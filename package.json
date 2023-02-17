@@ -2,7 +2,7 @@
   "name": "vscode-markdown-chess",
   "displayName": "Chess Viewer",
   "description": "Chess markdown viewer and PGN file viewer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {
@@ -171,7 +171,7 @@
       {
         "viewType": "vscode.chess-viewer.pgn.preview.editor",
         "displayName": "PGN Preview",
-        "priority": "default",
+        "priority": "option",
         "selector": [
           {
             "filenamePattern": "*.pgn"
