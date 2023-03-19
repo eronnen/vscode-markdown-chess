@@ -2,7 +2,7 @@
   "name": "vscode-markdown-chess",
   "displayName": "Chess Viewer",
   "description": "Chess markdown viewer and PGN file viewer",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "license": "GPL-3.0-or-later",
   "publisher": "eronnen",
   "repository": {
@@ -206,7 +206,7 @@
     "@types/vscode": "^1.74.0",
     "@types/vscode-webview": "^1.57.1",
     "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.2",
     "@vscode/test-web": "^0.0.34",
