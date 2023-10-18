@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v1
         with:
-          node-version: lts
+          node-version: 18
       - run: npm install
       - run: npm install --global @vscode/vsce
       - run: vsce package
