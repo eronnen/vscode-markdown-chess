@@ -12,14 +12,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 18
-    - run: npm install
-    - run: npm install --global @vscode/vsce
-    - run: vsce package
-    - uses: actions/upload-artifact@v3
-      with:
-        name: vscode-markdown-chess.vsix
-        path: "*.vsix"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v1
+        with:
+          node-version: lts
+      - run: npm install
+      - run: npm install --global @vscode/vsce
+      - run: vsce package
+      - uses: actions/upload-artifact@v3
+        with:
+          name: vscode-markdown-chess.vsix
+          path: "*.vsix"
