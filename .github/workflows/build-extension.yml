@@ -18,6 +18,8 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm install --global @vscode/vsce
+      - run: npm run check-format
+      - run: npm run lint
       - run: vsce package
       - uses: actions/upload-artifact@v3
         with:
