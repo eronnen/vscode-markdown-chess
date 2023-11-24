@@ -118,7 +118,8 @@ class ChessGame {
       : defaultPosition(rules);
 
     if (chessOptions.moves) {
-      this.sanMoves_ = chessOptions.moves.split(" ");
+      this.sanMoves_ = chessOptions.moves.split(/\s+/);
+      this.sanMoves_ = this.sanMoves_.filter((move) => !move.match(/^\d+\./)); // remove move indices
     }
 
     if (chessOptions.lastMove) {
