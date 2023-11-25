@@ -41,6 +41,7 @@ function parseChessBlockOptions(chessElement: HTMLElement): ChessBlockOptions {
     drawable: undefined,
     lastMove: undefined,
     moves: undefined,
+    initialMove: undefined,
     variant: undefined,
   };
 
@@ -91,6 +92,11 @@ function parseChessBlockOptions(chessElement: HTMLElement): ChessBlockOptions {
         break;
       case "moves":
         options.moves = value.trim();
+        break;
+      case "initialmove":
+        if (value.match(/^-?\d+/g)) {
+          options.initialMove = parseInt(value);
+        }
         break;
       case "variant":
         options.variant = value.trim();

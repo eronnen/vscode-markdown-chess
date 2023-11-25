@@ -40,6 +40,8 @@ class ChessGame {
   private buttonLastMove_: HTMLButtonElement;
 
   private initialPosition_: Position;
+  private initialDisplayPosition_: Position;
+  private initialMove_: number | undefined = undefined;
   private initialLastMove_: Key[] | undefined = undefined;
   private sanMoves_: string[] = [];
   private currentMove_ = 0;
@@ -74,7 +76,12 @@ class ChessGame {
       }
     }
 
-    this.reinitializeChess_();
+    this.chess_ = (
+      this.initialDisplayPosition_ !== undefined
+        ? this.initialDisplayPosition_
+        : this.initialPosition_
+    ).clone();
+    this.currentMove_ = this.initialMove_ || 0;
     this.createMovesElement_();
     this.updateMoveButtons_();
     this.createChessBoard_(chessOptions);
@@ -117,9 +124,18 @@ class ChessGame {
           .unwrap()
       : defaultPosition(rules);
 
+    this.initialDisplayPosition_ = this.initialPosition_.clone();
     if (chessOptions.moves) {
       this.sanMoves_ = chessOptions.moves.split(/\s+/);
       this.sanMoves_ = this.sanMoves_.filter((move) => !move.match(/^\d+\./)); // remove move indices
+
+      if (chessOptions.initialMove !== undefined) {
+        const numberOfIndices = this.sanMoves_.length + 1;
+        this.initialMove_ =
+          ((chessOptions.initialMove % numberOfIndices) + numberOfIndices) %
+          numberOfIndices;
+        this.playMovesUntil_(this.initialMove_, this.initialDisplayPosition_);
+      }
     }
 
     if (chessOptions.lastMove) {
@@ -215,7 +231,7 @@ class ChessGame {
 
   private createChessBoard_(chessOptions: ChessBlockOptions) {
     const config: Config = {
-      fen: makeFen(this.initialPosition_.toSetup()),
+      fen: makeFen(this.chess_.toSetup()),
       disableContextMenu: true,
       draggable: {
         enabled: false,
@@ -236,18 +252,19 @@ class ChessGame {
 
   private reinitializeChess_() {
     this.chess_ = this.initialPosition_.clone();
+    this.currentMove_ = 0;
   }
 
-  private playMovesUntil_(untilMove: number) {
+  private playMovesUntil_(untilMove: number, position: Position = this.chess_) {
     let move: Move | undefined = undefined;
     for (; this.currentMove_ < untilMove; this.currentMove_++) {
-      move = parseSan(this.chess_, this.sanMoves_[this.currentMove_]);
+      move = parseSan(position, this.sanMoves_[this.currentMove_]);
       if (!move) {
         // TODO: log error
         break;
       }
 
-      this.chess_.play(move);
+      position.play(move);
     }
 
     return move;
@@ -304,7 +321,6 @@ class ChessGame {
 
   private goToFirstMove_() {
     this.cancelOngoingAnimation_();
-    this.currentMove_ = 0;
     this.reinitializeChess_();
     this.updateBoard_();
     this.updateMoveButtons_();
@@ -418,7 +434,6 @@ class ChessGame {
     }
 
     const currentMoveTemp = this.currentMove_ - 1;
-    this.currentMove_ = 0;
     this.reinitializeChess_();
     const lastMove = this.playMovesUntil_(currentMoveTemp);
 

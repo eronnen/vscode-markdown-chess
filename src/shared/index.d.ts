@@ -33,6 +33,7 @@ declare interface ChessBlockOptions {
   lastMove: string | undefined;
 
   moves: string | undefined;
+  initialMove: number | undefined;
   variant: string | undefined;
 }
 
