@@ -79,17 +79,17 @@ These properties are available both for chess and pgn blocks. when using in a pg
 
 These properties are only available for chess blocks.
 
-| **Property**    | **Description**                                  | **Possible values**  | **Default**                         |
-| --------------- | ------------------------------------------------ | -------------------- | ----------------------------------- |
-| **fen**         | The initial position                             | Any valid FEN string | Initial                             |
-| **arrows**      | Series of arrows to draw                         | e2->e4 d2->d4        | Empty                               |
-| **squares**     | Series of squares to mark                        | e5 d5                | Empty                               |
-| **movable**     | Force to enable/disable movement                 | true / false         | false if FEN supplied               |
-| **drawable**    | Force to enable/disable drawing                  | true / false         | false if arrows or squares supplied |
-| **lastMove**    | Highlight last move                              | e2 e4                | Undefined                           |
-| **moves**       | Sequence of moves to view in the position        | e4 e5 Nf3 Nf6 Nxe5   | Undefined                           |
-| **initialMove** | Move to display in initial position. -1 for last | -1,0,1,2,3,...       | 0                                   |
-| **variant**     | Variant name                                     | Chess960             | Undefined                           |
+| **Property**    | **Description**                                      | **Possible values**  | **Default**                         |
+| --------------- | ---------------------------------------------------- | -------------------- | ----------------------------------- |
+| **fen**         | The initial position                                 | Any valid FEN string | Initial                             |
+| **arrows**      | Series of arrows to draw                             | e2->e4 d2->d4        | Empty                               |
+| **squares**     | Series of squares to mark                            | e5 d5                | Empty                               |
+| **movable**     | Force to enable/disable movement                     | true / false         | false if FEN supplied               |
+| **drawable**    | Force to enable/disable drawing                      | true / false         | false if arrows or squares supplied |
+| **lastMove**    | Highlight last move                                  | e2 e4                | Undefined                           |
+| **moves**       | Sequence of moves to view in the position            | e4 e5 Nf3 Nf6 Nxe5   | Undefined                           |
+| **initialMove** | Move to display as the initial position. -1 for last | -1,0,1,2,3,...       | 0                                   |
+| **variant**     | Variant name                                         | Chess960             | Undefined                           |
 
 ## PGN Viewer
 
