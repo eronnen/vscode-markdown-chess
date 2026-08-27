@@ -198,6 +198,12 @@
     "package-web": "npx webpack --mode production --devtool hidden-source-map --config ./webpack/webExtension.webpack.config.ts",
     "vscode:prepublish": "npm run lint && npm run check-format && npm run package && npm run package-web && npm run compile-markdown"
   },
+  "overrides": {
+    "@vscode/test-web": {
+      "https-proxy-agent": "7.0.6",
+      "http-proxy-agent": "7.0.2"
+    }
+  },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@lichess-org/chessground": "^10.1.1",
