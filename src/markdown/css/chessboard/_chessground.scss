@@ -159,6 +159,8 @@
 
 .cg-wrap cg-container .cg-shapes,
 .cg-wrap cg-container .cg-custom-svgs,
+.cg-wrap cg-container .cg-shapes-below,
+.cg-wrap cg-container .cg-custom-below,
 .cg-wrap cg-auto-pieces {
   overflow: visible;
   position: absolute;
@@ -182,7 +184,17 @@
   overflow: hidden;
 }
 
-.cg-wrap cg-container .cg-custom-svgs svg {
+.cg-wrap cg-container .cg-shapes-below {
+  overflow: hidden;
+  z-index: 1;
+}
+
+.cg-wrap cg-container .cg-custom-below {
+  z-index: 1;
+}
+
+.cg-wrap cg-container .cg-custom-svgs svg,
+.cg-wrap cg-container .cg-custom-below svg {
   overflow: visible;
 }
 

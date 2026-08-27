@@ -1,5 +1,5 @@
-import type { Color } from "chessground/types";
-import { colors } from "chessground/types";
+import type { Color } from "@lichess-org/chessground/types";
+import { colors } from "@lichess-org/chessground/types";
 
 import { parseBoolean } from "./chessUtils";
 import {
