@@ -1,9 +1,9 @@
-import type { Api } from "chessground/api";
-import type { Config } from "chessground/config";
-import type { Color, Key } from "chessground/types";
-import type { DrawShape } from "chessground/draw";
+import type { Api } from "@lichess-org/chessground/api";
+import type { Config } from "@lichess-org/chessground/config";
+import type { Color, Key } from "@lichess-org/chessground/types";
+import type { DrawShape } from "@lichess-org/chessground/draw";
 
-import { Chessground } from "chessground";
+import { Chessground } from "@lichess-org/chessground";
 import { Chess } from "chessops/chess";
 import { chessgroundDests } from "chessops/compat";
 import { makeFen, parseFen, INITIAL_FEN } from "chessops/fen";

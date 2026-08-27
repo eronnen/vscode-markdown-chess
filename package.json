@@ -200,6 +200,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@lichess-org/chessground": "^10.1.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.43",
     "@types/vscode": "^1.74.0",
@@ -207,8 +208,7 @@
     "@types/webpack": "^5.28.0",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/test-web": "^0.0.81",
-    "chessground": "^9.2.1",
-    "chessops": "^0.13.0",
+    "chessops": "^0.15.1",
     "css-loader": "^7.1.4",
     "css-minimizer-webpack-plugin": "^8.0.0",
     "eslint": "^9.39.5",

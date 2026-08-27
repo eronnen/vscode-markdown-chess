@@ -1,10 +1,10 @@
-import type { Api } from "chessground/api";
-import type { Config } from "chessground/config";
-import type { Color, PiecesDiff, Key } from "chessground/types";
+import type { Api } from "@lichess-org/chessground/api";
+import type { Config } from "@lichess-org/chessground/config";
+import type { Color, PiecesDiff, Key } from "@lichess-org/chessground/types";
 import type { Move } from "chessops/types";
 import type { Position } from "chessops/chess";
 
-import { Chessground } from "chessground";
+import { Chessground } from "@lichess-org/chessground";
 import { castlingSide, Chess } from "chessops/chess";
 import { PgnParser, startingPosition, parseVariant } from "chessops/pgn";
 import { makeFen, parseFen } from "chessops/fen";

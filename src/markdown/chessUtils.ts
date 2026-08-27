@@ -1,4 +1,4 @@
-import type { Key } from "chessground/types";
+import type { Key } from "@lichess-org/chessground/types";
 
 export function parseBoolean(value: string): boolean | undefined {
   if (value.toLowerCase() === "true") {
