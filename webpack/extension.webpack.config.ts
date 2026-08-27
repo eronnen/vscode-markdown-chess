@@ -17,6 +17,7 @@ const extensionConfig = {
     // modules added here also need to be added in the .vscodeignore file
   },
   resolve: {
+    conditionNames: ["import", "require", "node", "default"], // Prefer ESM for CJS files under a "type": "module" package root.
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: [".ts", ".js"],
   },
