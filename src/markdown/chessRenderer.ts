@@ -130,7 +130,7 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
       let playbackSpeed = DEFAULT_MOVE_DELAY_MILLISECONDS;
       if (chessElement.parentElement!.dataset.playbackSpeed) {
         playbackSpeed = parseInt(
-          chessElement.parentElement!.dataset.playbackSpeed
+          chessElement.parentElement!.dataset.playbackSpeed,
         );
       }
 
@@ -149,7 +149,7 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
 
       chessElement.parentElement!.classList.toggle(
         DEFAULT_BOARD_GEOMETRY,
-        true
+        true,
       );
     } else {
       // Error

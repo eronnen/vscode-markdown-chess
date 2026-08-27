@@ -12,7 +12,7 @@ const localBoardsDir = join(
   "css",
   "chessboard",
   "assets",
-  "boards"
+  "boards",
 );
 const availableSvgBoards = ["blue", "brown", "green", "ic", "purple"];
 
@@ -29,7 +29,7 @@ async function fetchAllBoards() {
       (err) => {
         if (err)
           console.error(`got error while writing board ${boardName}: ${err}`);
-      }
+      },
     );
   }
 }

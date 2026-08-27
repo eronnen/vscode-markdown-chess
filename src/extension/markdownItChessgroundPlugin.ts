@@ -1,4 +1,4 @@
-import type MarkdownIt from "markdown-it";
+import type { MarkdownIt } from "markdown-it";
 
 import {
   CHESSGROUND_CONTAINER_CLASS,
@@ -16,7 +16,7 @@ const chessgroundConfigDefaultGetter = () => {
 
 export function markdownItChessgroundPlugin(
   md: MarkdownIt,
-  configGetter: ChessgroundConfigGetter = chessgroundConfigDefaultGetter
+  configGetter: ChessgroundConfigGetter = chessgroundConfigDefaultGetter,
 ) {
   const highlight = md.options.highlight;
   md.options.highlight = (code: string, lang: string, attrs: string) => {

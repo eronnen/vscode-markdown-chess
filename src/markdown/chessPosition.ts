@@ -35,7 +35,7 @@ class ChessPosition {
 
   constructor(
     private chessElement_: HTMLElement,
-    chessOptions: ChessBlockOptions
+    chessOptions: ChessBlockOptions,
   ) {
     this.containerElement_ = chessElement_.parentElement!;
     const config = this.parseOptions_(chessOptions);
@@ -111,9 +111,9 @@ class ChessPosition {
         (setup) =>
           Chess.fromSetup(setup).unwrap(
             (value) => value,
-            () => null // TODO: log FEN error
+            () => null, // TODO: log FEN error
           ),
-        () => null // TODO: log FEN error
+        () => null, // TODO: log FEN error
       );
     } else {
       this.chess_ = Chess.default();
@@ -262,7 +262,7 @@ class ChessPosition {
 
 export function createChessPosition(
   chessElement: HTMLElement,
-  chessOptions: ChessBlockOptions
+  chessOptions: ChessBlockOptions,
 ) {
   new ChessPosition(chessElement, chessOptions);
 }

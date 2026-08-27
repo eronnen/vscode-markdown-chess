@@ -1,4 +1,4 @@
-import type MarkdownIt from "markdown-it";
+import type { MarkdownIt } from "markdown-it";
 
 import vscode from "vscode";
 import { markdownItChessgroundPlugin } from "./markdownItChessgroundPlugin";
@@ -38,10 +38,10 @@ function sanitizePieceSet(theme: string | undefined) {
 
 const extensionConfigGetter: ChessgroundConfigGetter = () => {
   const boardTheme = sanitizeBoardTheme(
-    vscode.workspace.getConfiguration(configSection).get("boardTheme")
+    vscode.workspace.getConfiguration(configSection).get("boardTheme"),
   );
   const pieceSet = sanitizePieceSet(
-    vscode.workspace.getConfiguration(configSection).get("pieceSet")
+    vscode.workspace.getConfiguration(configSection).get("pieceSet"),
   );
   const playbackSpeed: number =
     vscode.workspace.getConfiguration(configSection).get("playbackSpeed") ||
@@ -61,9 +61,9 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(openSettingsCommand, () => {
       vscode.commands.executeCommand(
         "workbench.action.openSettings",
-        configSection
+        configSection,
       );
-    })
+    }),
   );
 
   context.subscriptions.push(
@@ -72,43 +72,43 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand("markdown.preview.refresh");
         updateExistingPgnPreview();
       }
-    })
+    }),
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(openPgnPreviewToSideCommand, () => {
       createOrShowPgnPreview(context, extensionConfigGetter, true);
-    })
+    }),
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(openPgnPreviewCommand, () => {
       createOrShowPgnPreview(context, extensionConfigGetter, false);
-    })
+    }),
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(showSourceCommand, () => {
       showPreviewSource();
-    })
+    }),
   );
 
   context.subscriptions.push(
     vscode.window.registerWebviewPanelSerializer(PGN_FILE_WEBVIEW_TYPE, {
       async deserializeWebviewPanel(
         webviewPanel: vscode.WebviewPanel,
-        state: PgnViewerState
+        state: PgnViewerState,
       ) {
         restorePgnPreview(context, extensionConfigGetter, webviewPanel, state);
       },
-    })
+    }),
   );
 
   context.subscriptions.push(
     vscode.window.registerCustomEditorProvider(
       PGN_FILE_EDITOR_TYPE,
-      new PgnCustomEditorManager(context, extensionConfigGetter)
-    )
+      new PgnCustomEditorManager(context, extensionConfigGetter),
+    ),
   );
 
   return {

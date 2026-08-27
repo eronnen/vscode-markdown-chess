@@ -54,7 +54,7 @@ class ChessGame {
     private chessElement_: HTMLElement,
     chessOptions: ChessBlockOptions,
     isPgn: boolean,
-    private playbackSpeedMilliseconds_: number
+    private playbackSpeedMilliseconds_: number,
   ) {
     this.containerElement_ = chessElement_.parentElement!;
 
@@ -154,35 +154,35 @@ class ChessGame {
     this.buttonFirstMove_.textContent = "";
     this.buttonFirstMove_.addEventListener(
       "click",
-      this.goToFirstMove_.bind(this)
+      this.goToFirstMove_.bind(this),
     );
 
     this.buttonPreviousMove_ = document.createElement("button");
     this.buttonPreviousMove_.textContent = "";
     this.buttonPreviousMove_.addEventListener(
       "click",
-      this.playPreviousMove_.bind(this)
+      this.playPreviousMove_.bind(this),
     );
 
     this.buttonPlayMove_ = document.createElement("button");
     this.buttonPlayMove_.textContent = "";
     this.buttonPlayMove_.addEventListener(
       "click",
-      this.playNextMove_.bind(this, this.playbackSpeedMilliseconds_, true)
+      this.playNextMove_.bind(this, this.playbackSpeedMilliseconds_, true),
     );
 
     this.buttonNextMove_ = document.createElement("button");
     this.buttonNextMove_.textContent = "";
     this.buttonNextMove_.addEventListener(
       "click",
-      this.playNextMove_.bind(this, -1, true)
+      this.playNextMove_.bind(this, -1, true),
     );
 
     this.buttonLastMove_ = document.createElement("button");
     this.buttonLastMove_.textContent = "";
     this.buttonLastMove_.addEventListener(
       "click",
-      this.goToLastMove_.bind(this)
+      this.goToLastMove_.bind(this),
     );
 
     this.containerElement_.addEventListener(
@@ -209,7 +209,7 @@ class ChessGame {
             break;
         }
       },
-      true
+      true,
     );
 
     this.containerElement_.addEventListener("click", () => {
@@ -296,15 +296,15 @@ class ChessGame {
 
   private updateBoard_(
     updateFen = true,
-    lastMove: Move | undefined = undefined
+    lastMove: Move | undefined = undefined,
   ) {
     this.boardApi_.set({
       ...(updateFen ? { fen: makeFen(this.chess_.toSetup()) } : {}),
       ...(lastMove && isNormal(lastMove)
         ? { lastMove: [makeSquare(lastMove.from), makeSquare(lastMove.to)] }
         : this.currentMove_ == 0
-        ? { lastMove: this.initialLastMove_ }
-        : {}),
+          ? { lastMove: this.initialLastMove_ }
+          : {}),
       turnColor: this.chess_.turn,
       check: this.chess_.isCheck(),
     });
@@ -365,7 +365,7 @@ class ChessGame {
       this.currentNextMoveCallback_ = setTimeout(
         this.playNextMove_.bind(this),
         this.boardApi_.state.animation.duration + nextMoveDelay,
-        nextMoveDelay
+        nextMoveDelay,
       );
     }
 
@@ -386,7 +386,7 @@ class ChessGame {
               },
             ],
             [makeSquare(move.from), undefined],
-          ])
+          ]),
         );
       } else if (
         move.to == this.chess_.epSquare &&
@@ -407,7 +407,7 @@ class ChessGame {
               makeSquare(move.to + (this.chess_.turn === "white" ? -8 : 8)),
               undefined,
             ],
-          ])
+          ]),
         );
       } else {
         this.boardApi_.move(makeSquare(move.from), makeSquare(move.to));
@@ -419,7 +419,7 @@ class ChessGame {
           role: move.role,
           color: this.chess_.turn,
         },
-        makeSquare(move.to)
+        makeSquare(move.to),
       );
     }
 
@@ -461,7 +461,7 @@ class ChessGame {
         const castling = castlingSide(this.chess_, move);
         pieceMovements.set(
           makeSquare(kingCastlesTo(this.chess_.turn, castling!)),
-          undefined
+          undefined,
         );
         pieceMovements.set(makeSquare(move.from), {
           color: this.chess_.turn,
@@ -470,14 +470,14 @@ class ChessGame {
 
         pieceMovements.set(
           makeSquare(rookCastlesTo(this.chess_.turn, castling!)),
-          undefined
+          undefined,
         );
         pieceMovements.set(
           makeSquare(ROOK_CASTLE_FROM[this.chess_.turn][castling!]),
           {
             color: this.chess_.turn,
             role: "rook",
-          }
+          },
         );
       } else if (
         this.chess_.epSquare == move.to &&
@@ -493,13 +493,13 @@ class ChessGame {
           {
             color: opposite(this.chess_.turn),
             role: "pawn",
-          }
+          },
         );
       } else {
         // regular move/capture
         pieceMovements.set(
           makeSquare(move.from),
-          this.chess_.board.get(move.from)
+          this.chess_.board.get(move.from),
         );
         pieceMovements.set(makeSquare(move.to), this.chess_.board.get(move.to));
       }
@@ -517,7 +517,7 @@ export function createChessGame(
   chessElement: HTMLElement,
   chessOptions: ChessBlockOptions,
   isPgn: boolean,
-  playbackSpeedMilliseconds: number
+  playbackSpeedMilliseconds: number,
 ) {
   new ChessGame(chessElement, chessOptions, isPgn, playbackSpeedMilliseconds);
 }
