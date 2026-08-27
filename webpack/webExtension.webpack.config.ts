@@ -11,7 +11,7 @@ const webExtensionConfig = {
     devtoolModuleFilenameTemplate: "../[resource-path]",
   },
   resolve: {
-    conditionNames: ["import", "require", "node", "default"], // Prefer ESM for CJS files under a "type": "module" package root.
+    conditionNames: ["import", "require", "worker", "browser", "default"], // Prefer ESM for CJS files under a "type": "module" package root.
     mainFields: ["browser", "module", "main"], // look for `browser` entry point in imported node modules
     extensions: [".ts", ".js"], // support ts-files and js-files
     alias: {
