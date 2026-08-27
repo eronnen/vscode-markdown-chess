@@ -1,7 +1,7 @@
-import { Game, PgnError } from "chessops/pgn";
-
 import vscode from "vscode";
 import { Utils } from "vscode-uri";
+
+import { Game, PgnError } from "chessops/pgn";
 import { PgnNodeData, PgnParser } from "chessops/pgn";
 
 import {
