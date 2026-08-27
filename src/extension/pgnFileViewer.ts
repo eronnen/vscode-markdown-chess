@@ -66,7 +66,7 @@ class PgnViewerRenderer extends Disposable {
     private readonly chessConfigGetter_: ChessgroundConfigGetter,
     private readonly webviewPanel_: vscode.WebviewPanel,
     private resource_: vscode.Uri,
-    private state_: unknown = {}
+    private state_: unknown = {},
   ) {
     super();
 
@@ -75,7 +75,7 @@ class PgnViewerRenderer extends Disposable {
         if (document.uri.toString() === this.resource_.toString()) {
           this.updateContent_();
         }
-      })
+      }),
     );
   }
 
@@ -166,17 +166,17 @@ ${chessBlockContent}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta id="pgn-file-viewer-data" data-state="${escapeAttribute(
-      JSON.stringify(this.state_)
+      JSON.stringify(this.state_),
     )}">
     <link rel="stylesheet" type="text/css" href="${this.extensionResourcePath_(
-      "pgnPreview.css"
+      "pgnPreview.css",
     )}" />
 </head>
 <body style="text-align: center; margin-left: auto; margin-right: auto;">
 <h1>${Utils.basename(this.resource_)}</h1>
 ${gamesHtml}
 <script async src="${this.extensionResourcePath_(
-      "pgnPreview.bundle.js"
+      "pgnPreview.bundle.js",
     )}" nonce="${nonce}" charset="UTF-8"></script>
 </body>
 </html>`;
@@ -185,7 +185,7 @@ ${gamesHtml}
   private extensionResourcePath_(fileName: string): string {
     return this.webviewPanel_.webview
       .asWebviewUri(
-        vscode.Uri.joinPath(this.context_.extensionUri, "dist", fileName)
+        vscode.Uri.joinPath(this.context_.extensionUri, "dist", fileName),
       )
       .toString();
   }
@@ -224,7 +224,7 @@ class PgnFilePreview extends Disposable implements PgnPreview {
     chessConfigGetter: ChessgroundConfigGetter,
     private readonly webviewPanel_: vscode.WebviewPanel,
     private resource_: vscode.Uri,
-    private readonly resourceColumn_: vscode.ViewColumn
+    private readonly resourceColumn_: vscode.ViewColumn,
   ) {
     super();
 
@@ -233,7 +233,7 @@ class PgnFilePreview extends Disposable implements PgnPreview {
       chessConfigGetter,
       webviewPanel_,
       resource_,
-      this.getStateObject_()
+      this.getStateObject_(),
     );
     this.disposables_.push(
       vscode.window.onDidChangeActiveTextEditor((editor) => {
@@ -248,13 +248,13 @@ class PgnFilePreview extends Disposable implements PgnPreview {
         ) {
           this.updateResource_(editor.document.uri);
         }
-      })
+      }),
     );
 
     this.webviewPanel_.onDidDispose(
       () => this.dispose(),
       null,
-      this.disposables_
+      this.disposables_,
     );
 
     this.updateResource_(resource_);
@@ -265,7 +265,7 @@ class PgnFilePreview extends Disposable implements PgnPreview {
     resource: vscode.Uri,
     resourceColumn: vscode.ViewColumn,
     previewColumn: vscode.ViewColumn,
-    chessConfigGetter: ChessgroundConfigGetter
+    chessConfigGetter: ChessgroundConfigGetter,
   ) {
     if (PgnFilePreview.current) {
       if (resource.toString() === PgnFilePreview.current.resource_.toString()) {
@@ -281,7 +281,7 @@ class PgnFilePreview extends Disposable implements PgnPreview {
       PGN_FILE_WEBVIEW_TYPE,
       "PGN Preview",
       previewColumn,
-      getWebviewOptions(context.extensionUri)
+      getWebviewOptions(context.extensionUri),
     );
 
     PgnFilePreview.current = new PgnFilePreview(
@@ -289,7 +289,7 @@ class PgnFilePreview extends Disposable implements PgnPreview {
       chessConfigGetter,
       webviewPanel,
       resource,
-      resourceColumn
+      resourceColumn,
     );
   }
 
@@ -297,7 +297,7 @@ class PgnFilePreview extends Disposable implements PgnPreview {
     context: vscode.ExtensionContext,
     chessConfigGetter: ChessgroundConfigGetter,
     webviewPanel: vscode.WebviewPanel,
-    state: PgnViewerState
+    state: PgnViewerState,
   ) {
     const resource = vscode.Uri.parse(state.resource);
     const resourceColumn = state.resourceColumn;
@@ -308,7 +308,7 @@ class PgnFilePreview extends Disposable implements PgnPreview {
       chessConfigGetter,
       webviewPanel,
       resource,
-      resourceColumn
+      resourceColumn,
     );
   }
 
@@ -354,7 +354,7 @@ class StaticPgnFilePreview extends Disposable implements PgnPreview {
     context: vscode.ExtensionContext,
     chessConfigGetter: ChessgroundConfigGetter,
     private readonly webviewPanel_: vscode.WebviewPanel,
-    private resource_: vscode.Uri
+    private resource_: vscode.Uri,
   ) {
     super();
     this.onDispose_ = new vscode.EventEmitter<void>();
@@ -367,13 +367,13 @@ class StaticPgnFilePreview extends Disposable implements PgnPreview {
       chessConfigGetter,
       webviewPanel_,
       resource_,
-      {}
+      {},
     );
 
     this.webviewPanel_.onDidDispose(
       () => this.dispose(),
       null,
-      this.disposables_
+      this.disposables_,
     );
 
     this.update();
@@ -406,18 +406,18 @@ export class PgnCustomEditorManager implements vscode.CustomTextEditorProvider {
 
   public constructor(
     private context_: vscode.ExtensionContext,
-    private chessConfigGetter_: ChessgroundConfigGetter
+    private chessConfigGetter_: ChessgroundConfigGetter,
   ) {}
 
   public async resolveCustomTextEditor(
     document: vscode.TextDocument,
-    webviewPanel: vscode.WebviewPanel
+    webviewPanel: vscode.WebviewPanel,
   ): Promise<void> {
     const preview = new StaticPgnFilePreview(
       this.context_,
       this.chessConfigGetter_,
       webviewPanel,
-      document.uri
+      document.uri,
     );
     PgnCustomEditorManager.currents.add(preview);
     preview.onDispose(() => {
@@ -429,7 +429,7 @@ export class PgnCustomEditorManager implements vscode.CustomTextEditorProvider {
 export function createOrShowPgnPreview(
   context: vscode.ExtensionContext,
   chessConfigGetter: ChessgroundConfigGetter,
-  sideBySide: boolean
+  sideBySide: boolean,
 ) {
   const resource = vscode.window.activeTextEditor?.document.uri;
   if (!resource) {
@@ -447,7 +447,7 @@ export function createOrShowPgnPreview(
     resource,
     resourceColumn,
     previewColumn,
-    chessConfigGetter
+    chessConfigGetter,
   );
 }
 
@@ -455,13 +455,13 @@ export function restorePgnPreview(
   context: vscode.ExtensionContext,
   chessConfigGetter: ChessgroundConfigGetter,
   webviewPanel: vscode.WebviewPanel,
-  state: PgnViewerState
+  state: PgnViewerState,
 ) {
   PgnFilePreview.restorePgnViewer(
     context,
     chessConfigGetter,
     webviewPanel,
-    state
+    state,
   );
 }
 

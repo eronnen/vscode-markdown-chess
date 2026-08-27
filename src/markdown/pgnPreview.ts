@@ -29,7 +29,7 @@ function initializeChessGroundInDocument() {
 
 window.addEventListener(
   "vscode.chess-viewer.pgn.updateContent",
-  initializeChessGroundInDocument
+  initializeChessGroundInDocument,
 );
 
 initializeChessGroundInDocument();

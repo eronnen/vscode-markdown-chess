@@ -8,7 +8,7 @@ window.chessViewerContext = "markdown";
 
 window.addEventListener(
   "vscode.markdown.updateContent",
-  initializeChessGroundInDocument
+  initializeChessGroundInDocument,
 );
 
 initializeChessGroundInDocument();

@@ -11,7 +11,7 @@ const localPiecesDir = join(
   "css",
   "chessboard",
   "assets",
-  "pieces"
+  "pieces",
 );
 const availablePiecesSets = ["cburnett", "merida", "alpha"];
 
@@ -26,9 +26,9 @@ async function fetchAllBoards() {
       (err) => {
         if (err)
           console.error(
-            `got error while writing board ${pieceSetName}: ${err}`
+            `got error while writing board ${pieceSetName}: ${err}`,
           );
-      }
+      },
     );
   }
 }
