@@ -35,7 +35,7 @@ squares: g5 f7
 
 ### Chess Games
 
-You can view full chess games by using the pgn code block and copying a game in pgn format:
+You can view full chess games by using the pgn code block and copying a game in pgn format. The game is rendered with lichess' [PGN viewer](https://github.com/lichess-org/pgn-viewer), so the move list, comments, variations, clocks and player names of the game are shown next to the board:
 
 ````markdown
 ```pgn
@@ -74,6 +74,15 @@ These properties are available both for chess and pgn blocks. when using in a pg
 | --------------- | --------------------------------------- | ------------------- | ----------- |
 | **orientation** | Which side to view the board            | white / black       | white       |
 | **size**        | Board width/height size in px (150-600) | 400px               | 280px       |
+
+#### Supported properties for pgn blocks
+
+These properties are only available for pgn blocks.
+
+| **Property**    | **Description**                                      | **Possible values** | **Default** |
+| --------------- | ---------------------------------------------------- | ------------------- | ----------- |
+| **initialMove** | Move to display as the initial position. -1 for last | -1,0,1,2,3,...      | 0           |
+| **drawable**    | Force to enable/disable drawing on the board         | true / false        | true        |
 
 #### Supported properties for chess blocks
 
@@ -119,11 +128,10 @@ You can change themes in the extension's settings, or via the `Markdown: Open Ch
 
 ## License
 
-This project is based on the [Chessground](https://github.com/lichess-org/chessground) and [Chessops](https://github.com/niklasf/chessops) libraries by lichess in order to render the chess board and play moves, so I had to use the GPL-3.0 license for this project too.
+This project is based on the [Chessground](https://github.com/lichess-org/chessground), [Chessops](https://github.com/niklasf/chessops) and [PGN viewer](https://github.com/lichess-org/pgn-viewer) libraries by lichess in order to render the chess board and play moves, so I had to use the GPL-3.0 license for this project too.
 
 ## TODO
 
-- [ ] show move number in PGN viewer
 - [ ] update PGN current move when clicking on move in editor
 - [ ] load themes and piece sets CSS in runtime
 - [ ] show FEN/PGN errors

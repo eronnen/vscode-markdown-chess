@@ -208,6 +208,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@lichess-org/chessground": "^10.1.1",
+    "@lichess-org/pgn-viewer": "^2.6.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.43",
     "@types/vscode": "^1.74.0",

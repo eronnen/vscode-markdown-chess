@@ -1,0 +1,56 @@
+@import "@lichess-org/pgn-viewer/scss/lichess-pgn-viewer.lib";
+
+.chessPgnViewer {
+  aspect-ratio: auto;
+  height: auto;
+  max-width: 100%;
+}
+
+.chessPgnViewerWide {
+  width: min(100%, 640px);
+}
+
+.chessPgnViewer .lpv {
+  --c-lpv-bg: var(--vscode-editorWidget-background, #262421);
+  --c-lpv-bg-player: var(--c-lpv-bg);
+  --c-lpv-bg-controls: var(--c-lpv-bg);
+  --c-lpv-bg-movelist: var(--c-lpv-bg);
+  --c-lpv-bg-variation: var(--vscode-editor-background, #201f1d);
+  --c-lpv-bg-pane: var(--vscode-editorWidget-background, #2f2c2a);
+  --c-lpv-pgn-text: var(--vscode-textCodeBlock-background, #201f1d);
+
+  --c-lpv-font: var(--vscode-editor-foreground, #aaaaaa);
+  --c-lpv-font-shy: var(--vscode-descriptionForeground, #888888);
+  --c-lpv-font-bg: var(--vscode-scrollbarSlider-background, #4a4845);
+  --c-lpv-past-moves: var(--c-lpv-font);
+
+  --c-lpv-accent: #537c23;
+  --c-lpv-accent-over: #ffffff;
+  --c-lpv-current-move: #537c23;
+  --c-lpv-move-hover: rgba(83, 124, 35, 0.6);
+  --c-lpv-fbt-hover: rgba(83, 124, 35, 0.6);
+
+  --c-lpv-border: var(--vscode-widget-border, rgba(128, 128, 128, 0.35));
+  --c-lpv-side-border: var(--c-lpv-border);
+
+  font-family: inherit;
+  text-align: left;
+
+  &.lpv--moves-auto,
+  &.lpv--moves-auto.lpv--players,
+  &.lpv--moves-false {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  &.lpv--moves-auto,
+  &.lpv--moves-auto.lpv--players {
+    @media (min-width: 451px) {
+      grid-template-columns: minmax(0, 1fr) minmax(160px, 0.6fr);
+    }
+  }
+}
+
+.chessPgnViewerError {
+  color: var(--vscode-errorForeground);
+  white-space: pre-wrap;
+}

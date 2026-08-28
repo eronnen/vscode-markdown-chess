@@ -6,7 +6,7 @@ import type { Position } from "chessops/chess";
 
 import { Chessground } from "@lichess-org/chessground";
 import { castlingSide, Chess } from "chessops/chess";
-import { PgnParser, startingPosition, parseVariant } from "chessops/pgn";
+import { parseVariant } from "chessops/pgn";
 import { makeFen, parseFen } from "chessops/fen";
 import { parseSan } from "chessops/san";
 import { isDrop, isNormal } from "chessops/types";
@@ -53,7 +53,6 @@ class ChessGame {
   constructor(
     private chessElement_: HTMLElement,
     chessOptions: ChessBlockOptions,
-    isPgn: boolean,
     private playbackSpeedMilliseconds_: number,
   ) {
     this.containerElement_ = chessElement_.parentElement!;
@@ -64,11 +63,7 @@ class ChessGame {
     }
 
     try {
-      if (isPgn) {
-        this.parsePgnBlock_();
-      } else {
-        this.parseChessBlock_(chessOptions);
-      }
+      this.parseChessBlock_(chessOptions);
     } finally {
       // TODO: show error
       if (!this.initialPosition_) {
@@ -85,31 +80,6 @@ class ChessGame {
     this.createMovesElement_();
     this.updateMoveButtons_();
     this.createChessBoard_(chessOptions);
-  }
-
-  private parsePgnBlock_() {
-    const blockText = this.chessElement_.textContent || "";
-    let pgnStart = blockText.indexOf("[");
-    if (pgnStart == -1) {
-      pgnStart = blockText.indexOf("1.");
-    }
-
-    if (pgnStart == -1) {
-      // No PGN
-      return null;
-    }
-
-    new PgnParser((game, err) => {
-      if (err) {
-        // Error parsing pgn
-        return;
-      }
-
-      this.initialPosition_ = startingPosition(game.headers).unwrap();
-      for (const move of game.moves.mainline()) {
-        this.sanMoves_.push(move.san);
-      }
-    }).parse(blockText.substring(pgnStart));
   }
 
   private parseChessBlock_(chessOptions: ChessBlockOptions) {
@@ -516,8 +486,7 @@ class ChessGame {
 export function createChessGame(
   chessElement: HTMLElement,
   chessOptions: ChessBlockOptions,
-  isPgn: boolean,
   playbackSpeedMilliseconds: number,
 ) {
-  new ChessGame(chessElement, chessOptions, isPgn, playbackSpeedMilliseconds);
+  new ChessGame(chessElement, chessOptions, playbackSpeedMilliseconds);
 }
