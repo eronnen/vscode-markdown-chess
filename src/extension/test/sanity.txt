@@ -25,6 +25,19 @@ ABCDEF
 .
 
 ---
+desc: Escape pgn
+---
+
+should escape PGN content
+.
+```pgn
+1. e4 { <script>alert("xss")</script> } e5
+```
+.
+<pre><code class="language-pgn"><div class="chessgroundMarkdownContainer brown cburnett" data-lang="pgn" data-pieceset="cburnett" data-playback-speed="450"><div class="chessgroundMarkdown">1. e4 { &lt;script&gt;alert("xss")&lt;/script&gt; } e5</div></div></code></pre>
+.
+
+---
 desc: Sanity lowercase
 ---
 

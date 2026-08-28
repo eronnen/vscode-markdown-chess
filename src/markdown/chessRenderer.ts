@@ -13,6 +13,7 @@ import {
 
 import { createChessPosition } from "./chessPosition";
 import { createChessGame } from "./chessGame";
+import { createPgnGameViewer } from "./pgnGameViewer";
 
 import "./css/markdownChess.css";
 import "./css/lichessFont.css";
@@ -112,6 +113,11 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
   let usedPieces = false;
   for (const chessElement of root.getElementsByClassName(CHESSGROUND_CLASS)) {
     if (chessElement instanceof HTMLElement) {
+      if (chessElement.dataset.chessRendered === "true") {
+        continue;
+      }
+      chessElement.dataset.chessRendered = "true";
+
       chessExists = true;
 
       const preParent = chessElement.closest("pre");
@@ -137,11 +143,10 @@ export function renderAllChessBlocksInElement(root: HTMLElement) {
       const chessOptions = parseChessBlockOptions(chessElement);
 
       if (chessElement.parentElement!.dataset.lang == "pgn") {
-        chessElement.classList.add(CHESSGROUND_CHESS_GAME_CLASS);
-        createChessGame(chessElement, chessOptions, true, playbackSpeed);
+        createPgnGameViewer(chessElement, chessOptions);
       } else if (chessOptions.moves) {
         chessElement.classList.add(CHESSGROUND_CHESS_GAME_CLASS);
-        createChessGame(chessElement, chessOptions, false, playbackSpeed);
+        createChessGame(chessElement, chessOptions, playbackSpeed);
       } else {
         chessElement.classList.add(CHESSGROUND_CHESS_POSITION_CLASS);
         createChessPosition(chessElement, chessOptions);

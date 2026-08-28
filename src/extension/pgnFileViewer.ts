@@ -2,7 +2,7 @@ import vscode from "vscode";
 import { Utils } from "vscode-uri";
 
 import { Game, PgnError } from "chessops/pgn";
-import { PgnNodeData, PgnParser } from "chessops/pgn";
+import { makePgn, PgnNodeData, PgnParser } from "chessops/pgn";
 
 import {
   CHESSGROUND_CONTAINER_CLASS,
@@ -22,6 +22,13 @@ function getNonce() {
 
 function escapeAttribute(value: string | vscode.Uri): string {
   return value.toString().replace(/"/g, "&quot;");
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
@@ -108,52 +115,41 @@ class PgnViewerRenderer extends Disposable {
 
   private getGameHTML_(game: Game<PgnNodeData> | PgnError) {
     if (game instanceof PgnError) {
-      return `<h1 style="color: red">Error: ${game.message}</h1>`;
+      return `<h1 style="color: red">Error: ${escapeHtml(game.message)}</h1>`;
     }
 
-    const moves: string[] = [];
-    for (const node of game.moves.mainline()) {
-      moves.push(node.san);
+    const header = (name: string) => {
+      const value = game.headers.get(name);
+      return value && value !== "?" ? value : undefined;
+    };
+
+    const details = [
+      header("Event"),
+      header("Date"),
+      header("Round") && `Round ${header("Round")}`,
+    ].filter((detail): detail is string => !!detail);
+
+    let blockContent = makePgn(game);
+
+    if (
+      this.chessConfig_.mainPlayerName &&
+      header("Black") === this.chessConfig_.mainPlayerName
+    ) {
+      blockContent = "orientation: black\n" + blockContent;
     }
 
-    const headersHTML = `<p>
-Event: ${game.headers.get("Event")}<br/>
-${game.headers.get("Date")}<br/>
-Round ${game.headers.get("Round")}<br/>
-Result: ${game.headers.get("Result")}<br/>
-</p>`;
-
-    let chessBlockContent =
-      moves.length > 0
-        ? `moves: ${moves.join(" ")}`
-        : `movable: false\ndrawable: false`;
-
-    if (game.headers.get("Variant")) {
-      chessBlockContent =
-        `variant: ${game.headers.get("Variant")}\n` + chessBlockContent;
-    }
-
-    if (game.headers.get("FEN")) {
-      chessBlockContent =
-        `fen: ${game.headers.get("FEN")}\n` + chessBlockContent;
-    }
-
-    if (this.chessConfig_.mainPlayerName) {
-      if (game.headers.get("Black") === this.chessConfig_.mainPlayerName) {
-        chessBlockContent = "orientation: black\n" + chessBlockContent;
-      }
-    }
-
-    return `<h2>${game.headers.get("White")} - ${game.headers.get("Black")}</h2>
-${headersHTML}
+    return `<h2>${escapeHtml(
+      `${header("White") ?? "?"} - ${header("Black") ?? "?"}`,
+    )}</h2>
+${details.length > 0 ? `<p>${escapeHtml(details.join(" | "))}</p>` : ""}
 <code><div class="${CHESSGROUND_CONTAINER_CLASS} ${
       this.chessConfig_.boardTheme
-    } ${this.chessConfig_.pieceSet}" data-lang="chess" data-pieceset="${
+    } ${this.chessConfig_.pieceSet}" data-lang="pgn" data-pieceset="${
       this.chessConfig_.pieceSet
     }" data-playback-speed="${
       this.chessConfig_.playbackSpeed
     }"><div class="${CHESSGROUND_CLASS}">
-${chessBlockContent}
+${escapeHtml(blockContent)}
 </div></div></code>`;
   }
 

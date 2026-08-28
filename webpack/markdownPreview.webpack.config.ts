@@ -13,6 +13,13 @@ const markdownConfig = {
         exclude: /node_modules/,
       },
       {
+        test: /\.js$/,
+        include: /node_modules[\\/]@lichess-org[\\/]pgn-viewer/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      {
         test: /\.css$/,
         exclude: /\.lazy\.css$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
@@ -31,7 +38,18 @@ const markdownConfig = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                loadPaths: [join(__dirname, "..", "node_modules")],
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.svg/,

@@ -14,6 +14,13 @@ const chessgroundConfigDefaultGetter = () => {
   };
 };
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 export function markdownItChessgroundPlugin(
   md: MarkdownIt,
   configGetter: ChessgroundConfigGetter = chessgroundConfigDefaultGetter,
@@ -29,7 +36,9 @@ export function markdownItChessgroundPlugin(
         config.pieceSet
       }" data-playback-speed="${
         config.playbackSpeed
-      }"><div class="${CHESSGROUND_CLASS}">${code.trim()}</div></div>`;
+      }"><div class="${CHESSGROUND_CLASS}">${escapeHtml(
+        code.trim(),
+      )}</div></div>`;
     } else if (highlight) {
       return highlight(code, lang, attrs);
     } else {
